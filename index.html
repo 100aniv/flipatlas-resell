@@ -571,6 +571,41 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
     background: color-mix(in srgb, var(--bg) 94%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 }
 
+/* status bar (추천 탭 맨 위): one line + expandable details */
+.statusbar { border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--r); background: var(--surface); margin: 0 0 8px; }
+.statusbar.lvl-ok { border-left-color: var(--pos); }
+.statusbar.lvl-warn { border-left-color: var(--warn); background: color-mix(in srgb, var(--warn-soft) 55%, var(--surface)); }
+.statusbar.lvl-bad { border-left-color: var(--neg); background: color-mix(in srgb, var(--neg-soft) 70%, var(--surface)); }
+.sb-head { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 4px 10px; border: 0; background: none; color: var(--text); text-align: left; font-size: 12.5px; line-height: 1.35; }
+.sb-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--pos); }
+.lvl-warn .sb-dot { background: var(--warn); }
+.lvl-bad .sb-dot { background: var(--neg); }
+.sb-line { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0 6px; align-items: baseline; }
+.sb-line > * + *::before { content: "·"; margin-right: 6px; color: var(--text-3); }
+.sb-lbl { font-weight: 800; }
+.lvl-warn .sb-lbl { color: var(--warn); } .lvl-bad .sb-lbl { color: var(--neg); }
+.sb-i { color: var(--text-2); white-space: nowrap; }
+.sb-i.stale { color: var(--warn); font-weight: 650; }
+.sb-more { display: inline-flex; align-items: center; gap: 2px; flex: none; font-size: 12px; font-weight: 650; color: var(--text-3); }
+.sb-more .chev { width: 14px; height: 14px; transition: transform .15s; }
+.sb-head[aria-expanded="true"] .sb-more .chev { transform: rotate(90deg); }
+.sb-panel { padding: 2px 10px 10px; border-top: 1px solid var(--border); }
+.sb-panel[hidden] { display: none; }
+.sb-panel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sb-panel li { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.45; background: var(--surface-2); }
+.sb-panel li > svg { width: 16px; height: 16px; flex: none; margin-top: 1px; }
+.sb-panel li.bad { background: var(--neg-soft); } .sb-panel li.bad > svg { color: var(--neg); }
+.sb-panel li.warn { background: var(--warn-soft); } .sb-panel li.warn > svg { color: var(--warn); }
+.sb-panel li.info > svg { color: var(--info); } .sb-panel li.ok > svg { color: var(--pos); }
+.sb-panel .btn.sm { min-height: 44px; }
+.snap.foot { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 11px; }
+@media (max-width: 699.98px) {
+  .dash { padding: 4px; margin-bottom: 6px; }
+  .dash-tiles { gap: 4px; }
+  .dash-meta { display: none; }
+  .dt { flex-direction: row; gap: 5px; min-height: 44px; }
+}
+
 /* desktop table */
 .rec-tblwrap { margin: 0; background: var(--surface); box-shadow: var(--shadow); }
 .rec-tbl { font-size: 13px; }
@@ -1170,6 +1205,7 @@ var S = {
   openCard: null,                          // 모바일·태블릿: 그 자리에서 펼쳐진 상품 하나 (새로고침하면 기억하지 않음)
   recView: null,                           // 데스크톱 보기: null/'table' = 표, 'cards' = 카드 (기억하지 않음)
   tsort: null,                             // 표 정렬 { k, dir } (null = 섹션 순)
+  statusOpen: false,                       // 상태 바 펼침 (메모리만, 새로고침하면 접힘)
   secOpen: {},                             // 추천 섹션 접힘 상태 (메모리만, 관찰은 폰에서 기본 접힘)
   storeView: LS.get('storeView', 'rank'),   // 'rank' = 방문 순위순(Store_Priority.visit_rank) · 'region' = 지역별
   sel: { rec: null, stores: null },
@@ -1864,6 +1900,7 @@ function setBadge(k, n) { var el = $('[data-badge="' + k + '"]'); if (!el) retur
 function latestCompute() { return M ? M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0) : 0; }
 function bannersHtml() {
   var h = '', retry = '<button class="btn sm" type="button" data-act="reload">다시 시도</button>';
+  if (S.tab === 'rec' && M) return '';   // 추천 탭은 상태 바 하나가 모든 안내를 맡는다
   if (!navigator.onLine) h += banner('warn', IC.warn, '<b>오프라인</b> — 연결되면 자동으로 다시 불러옵니다.');
   if (S.loadError) {
     if (S.fromCache && S.fetchedAt) h += banner('bad', IC.x, '<b>데이터 수신 실패 — 마지막 정상값</b> ' + esc(errKo(S.loadError)) + '<br>' + esc(dt(new Date(S.fetchedAt).toISOString(), true)) + ' 수신한 값을 표시 중입니다. 5분마다 자동으로 다시 시도합니다.', retry);
@@ -1874,7 +1911,47 @@ function bannersHtml() {
   return h;
 }
 function banner(kind, icon, html, action) { return '<div class="banner ' + kind + '" role="' + (kind === 'bad' ? 'alert' : 'status') + '">' + icon + '<div class="grow">' + html + '</div>' + (action || '') + '</div>'; }
-function renderBanners() { var el = $('#globalBanners'); if (el) el.innerHTML = bannersHtml(); }
+function renderBanners() { var el = $('#globalBanners'); if (el) el.innerHTML = bannersHtml(); renderStatusBar(); }
+
+/* ---- 추천 탭 상태 바: 한 줄 요약(● 정상 · 계산 12분 전 · KREAM 1시간 전) + 탭하면 모든 안내가 펼쳐짐. 펼침 상태는 메모리에만 둔다. ---- */
+function statusModel() {
+  var bad = M.sources.filter(function (s) { return srcState(s).c === 'bad'; });
+  var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
+  var ka = kreamAge();
+  var calcStale = !!latest && (Date.now() - latest) / 60000 > 60, kreamStale = !ka || ka.min > 60;
+  var recvBad = !!S.loadError, offline = !navigator.onLine;
+  var lvl = (bad.length || recvBad) ? 'bad' : (calcStale || kreamStale || offline) ? 'warn' : 'ok';
+  return { bad: bad, latest: latest, ka: ka, calcStale: calcStale, kreamStale: kreamStale, recvBad: recvBad, offline: offline, lvl: lvl };
+}
+function statusBarHtml() {
+  var m = statusModel(), open = !!S.statusOpen;
+  var label = m.recvBad ? '데이터 수신 실패' : m.bad.length ? '수집 실패 ' + m.bad.length + '개' : m.lvl === 'warn' ? (m.offline ? '오프라인' : '오래된 값') : '정상';
+  var calc = m.latest ? '계산 <time data-ago="' + new Date(m.latest).toISOString() + '">' + ago(new Date(m.latest).toISOString()) + '</time>' + (m.calcStale ? ' · 오래됨' : '') : '계산 기록 없음';
+  var kr = m.ka ? 'KREAM <time data-ago="' + esc(m.ka.at) + '">' + ago(m.ka.at) + '</time>' + (m.kreamStale ? ' · 오래됨' : '') : 'KREAM 기록 없음';
+  var line = '<b class="sb-lbl">' + esc(label) + '</b>' +
+    '<span class="sb-i' + (m.calcStale || !m.latest ? ' stale' : '') + '">' + calc + '</span>' +
+    '<span class="sb-i' + (m.kreamStale ? ' stale' : '') + '">' + kr + '</span>' + (S.fromCache && !m.recvBad ? '<span class="sb-i">저장된 사본</span>' : '');
+  var li = [];
+  if (m.recvBad) li.push(['bad', IC.x, '<b>서버 데이터를 불러오지 못했습니다.</b> ' + esc(errKo(S.loadError)) + (S.fromCache && S.fetchedAt ? '<br>마지막으로 받은 사본(' + esc(dt(new Date(S.fetchedAt).toISOString())) + ')을 표시 중입니다 — 최신 값이 아닐 수 있습니다.' : '<br>표시할 저장된 값이 없습니다.'), '<button class="btn sm" data-act="reload" type="button">다시 시도</button>']);
+  else if (S.fromCache) li.push(['info', IC.info, '저장된 사본 표시 중 · 최신 데이터 불러오는 중…']);
+  if (m.offline) li.push(['warn', IC.warn, '<b>오프라인</b> — 연결되면 자동으로 다시 불러옵니다.']);
+  if (m.bad.length) li.push(['bad', IC.x, '<b>수집 실패 ' + m.bad.length + '개</b> — ' + esc(m.bad.map(function (s) { return s.source; }).join(', ')) + '. 해당 정보는 마지막 정상값일 수 있습니다.', '<button class="btn sm" data-act="goto" data-tab="status" type="button">상태</button>']);
+  else li.push(['ok', IC.ok, '수집 실패 없음 — 등록된 수집원이 모두 정상으로 보고되었습니다.']);
+  li.push([m.kreamStale ? 'warn' : 'info', IC.clock, kreamNote() + '. ' + (m.kreamStale ? '60분 넘은 시세는 입찰·체결가가 바뀌었을 수 있습니다. ' : '') + 'PC가 꺼져 있으면 갱신되지 않습니다.']);
+  if (m.calcStale) li.push(['warn', IC.warn, '<b>추천 계산이 ' + ago(new Date(m.latest).toISOString()) + '에 마지막으로 갱신되었습니다.</b> 60분 이상 지난 값입니다. 가격·재고가 바뀌었을 수 있습니다.']);
+  else if (!m.latest) li.push(['warn', IC.warn, '<b>추천 계산 시각 기록 없음</b>']);
+  li.push(['info', IC.info, '<b>' + SNAP_SHORT + '</b> 실물을 확보하기 전에는 입찰에 판매하지 마세요.']);
+  return '<section class="statusbar lvl-' + m.lvl + '" role="status" aria-label="데이터 상태">' +
+    '<button class="sb-head" type="button" data-act="toggle-status" aria-expanded="' + open + '" aria-controls="sbPanel"><i class="sb-dot" aria-hidden="true"></i><span class="sb-line">' + line + '</span><span class="sb-more">자세히' + IC.chev + '</span></button>' +
+    '<div class="sb-panel" id="sbPanel"' + (open ? '' : ' hidden') + '><ul>' + li.map(function (x) {
+      return '<li class="' + x[0] + '">' + x[1] + '<div class="grow">' + x[2] + '</div>' + (x[3] || '') + '</li>';
+    }).join('') + '</ul></div></section>';
+}
+function renderStatusBar() {
+  var el = $('#statusBar'); if (!el || !M || S.tab !== 'rec') return;
+  var h = statusBarHtml();
+  if (el.getAttribute('data-sig') !== h) { el.innerHTML = h; el.setAttribute('data-sig', h); }
+}
 
 function renderAll() { renderChrome(); renderMain(); if (S.sheet && S.sheet.kind === 'rec') openRec(S.sheet.id, true); if (S.sheet && S.sheet.kind === 'store') renderSheetStore(); }
 function renderMain() {
@@ -2176,22 +2253,15 @@ function waitingState(h, why) {
 }
 function viewRec() {
   var info = sheetInfo('Reco_Products');
-  var h = '';
-  var bad = M.sources.filter(function (s) { return srcState(s).c === 'bad'; });
-  if (bad.length) h += banner('bad', IC.x, '<b>수집 실패 ' + bad.length + '개</b> — ' + esc(bad.map(function (s) { return s.source; }).join(', ')) + '. 해당 정보는 마지막 정상값일 수 있습니다.', '<button class="btn sm" data-act="goto" data-tab="status" type="button">상태</button>');
+  var sbHtml = statusBarHtml();
+  var h = '<div id="statusBar" data-sig="' + esc(sbHtml) + '">' + sbHtml + '</div>';   // 맨 위 상태 바 하나 (배너 5개 대체)
   if (info.state === 'missing') return waitingState(h, 'Reco_Products 시트가 아직 없습니다. API 프로젝트의 setup()을 실행한 뒤 스캐너를 새 버전으로 돌려 주세요.');
   if (!M.cards.length) return waitingState(h, M.opps.length ? 'Reco_Products(상품 1행 = 카드 1장)에 아직 행이 없습니다. 스캐너가 새 추천 체계로 한 번 실행되면 채워집니다.' : '스캐너가 아직 실행되지 않았거나 계산된 상품이 없습니다.');
-  var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
-  var ka = kreamAge();
-  if (!ka || ka.min > 60) h += banner('warn', IC.clock, kreamNote() + '. 60분 넘은 시세는 입찰·체결가가 바뀌었을 수 있습니다.');
-  if (latest && (Date.now() - latest) / 60000 > 60) h += banner('warn', IC.warn, '<b>추천 계산이 ' + ago(new Date(latest).toISOString()) + '에 마지막으로 갱신되었습니다.</b> 60분 이상 지난 값입니다. 가격·재고가 바뀌었을 수 있습니다.');
-  h += banner('info', IC.info, '<b>' + SNAP_SHORT + '</b> 실물을 확보하기 전에는 입찰에 판매하지 마세요.');
-
   var regions = uniq([].concat.apply([], M.cards.map(function (c) { return Object.keys(c.regions); })));
   var cats = uniq(M.cards.map(function (c) { return c.category; }));
   var nf = activeFilterCount();
   var tripSet = setting('trip_start') && setting('trip_end');
-  h = '<div id="recSummary">' + recSummaryHtml() + '</div>' + h;   // 요약 띠가 맨 위, 경고 배너는 그 아래
+  h += '<div id="recSummary">' + recSummaryHtml() + '</div>';   // 상태 바 바로 아래 요약 한 줄
   h += '<div class="toolbar"><label class="search"><span class="sr">검색</span>' + IC.search + '<input class="input" id="q" type="search" placeholder="상품·브랜드·사이즈·매장 검색" value="' + esc(S.f.q) + '" autocomplete="off" enterkeyhint="search"></label>' +
     '<button class="btn filter-btn" type="button" data-act="toggle-filters" aria-expanded="' + S.showFilters + '" aria-controls="filters">' + IC.filter + '필터' + (nf ? '<span class="count">' + nf + '</span>' : '') + '</button>' + viewToggle() + '</div>';
   h += gradeChips();
@@ -2238,8 +2308,6 @@ function recSummaryHtml(R) {
   var G = R.G, pool = G.rec.length ? G.rec : R.list, top = G.rec[0] || G.hp[0] || G.lot[0] || G.watch[0];
   var best = null; pool.forEach(function (c) { var v = N(c.rp.resell_score); if (v !== null && (best === null || v > N(best.rp.resell_score))) best = c; });
   var bestNet = maxOf(pool, function (c) { return c.repX && c.repX.net; });
-  var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
-  var ka = kreamAge();
   var tiles = [['rec', '추천', 'buy'], ['hp', '잠재', 'hp'], ['lot', '추첨·예약', 'lot'], ['watch', '관찰', 'watch']];
   var h = '<div class="dash" role="region" aria-label="추천 요약"><div class="dash-tiles">' + tiles.map(function (t) {
     var sec = SECTIONS.filter(function (s) { return s.k === t[0]; })[0];
@@ -2248,8 +2316,6 @@ function recSummaryHtml(R) {
     '<span class="dm"><span class="k">최고 점수</span> <b class="num">' + (best ? esc(scoreTxt({ mid: N(best.rp.resell_score), lo: N(best.rp.resell_score_low), hi: N(best.rp.resell_score_high), cov: N(best.rp.score_coverage) })) : '—') + '</b></span>' +
     '<span class="dm" title="상품 1개(대표 사이즈·최적 매장) 기준 최댓값입니다 — 여러 상품의 합이 아닙니다"><span class="k">최고 순이익</span> <b class="num ' + cls(bestNet) + '">' + kShort(bestNet, true) + '</b></span>' +
     budgetMeta(top) +
-    '<span class="dm' + (latest && (Date.now() - latest) / 60000 > 60 ? ' stale' : '') + '"><span class="k">계산</span> ' + (latest ? '<time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '<b>—</b>') + '</span>' +
-    '<span class="dm' + (!ka || ka.min > 60 ? ' stale' : '') + '"><span class="k">KREAM</span> ' + (ka ? '<time data-ago="' + esc(ka.at) + '">' + ago(ka.at) + '</time>' : '<b>기록 없음</b>') + '</span>' +
     '</div></div>';
   return h;
 }
@@ -2404,7 +2470,6 @@ function recBody(c, f) {
   h += gateLine(f);
   if (o.grade_cap_reason) h += '<p class="xs muted" style="margin:0">등급 상한 · ' + esc(o.grade_cap_reason) + '</p>';
   h += storePicker(c, f) + storeBox(c, f);
-  h += '<p class="snap">' + IC.clock + '<span>' + SNAP_SHORT + (mk.collected_at ? ' · ' + esc(ago(mk.collected_at)) + ' 수집' : '') + '</span></p>';
   if (open) h += '<div data-stop>' + sizeCmpTable(c, f, true) + '</div>';
   var rv = x && reviewOf(x);
   if (x && String(o.match_level).toUpperCase() !== 'EXACT' && !(rv && rv.reviewer === 'user')) h += matchBox(x, true);
@@ -2413,6 +2478,7 @@ function recBody(c, f) {
     '<button class="chip acc cmp-btn" type="button" data-act="toggle-cmp" data-id="' + esc(c.id) + '" aria-expanded="' + open + '">사이즈 비교표 ' + (open ? '접기' : '펼치기') + '</button>' +
     '</div>';
   h += '<button class="btn block" type="button" data-act="open-sheet" data-id="' + esc(c.id) + '">전체 상세 보기 (할인·쿠폰·시세·구매 방법)</button>';
+  h += '<p class="snap foot">' + IC.clock + '<span>' + SNAP_SHORT + (mk.collected_at ? ' · ' + esc(ago(mk.collected_at)) + ' 수집' : '') + '</span></p>';
   return h + '</div>';
 }
 function figHtml(l, v, sub) { return '<div class="fig"><label>' + l + '</label><b class="num">' + v + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
@@ -3246,6 +3312,7 @@ document.addEventListener('click', function (e) {
   var id = a.dataset.id, act = a.dataset.act;
   switch (act) {
     case 'reload': load(true); break;
+    case 'toggle-status': S.statusOpen = !S.statusOpen; var sbEl = $('#statusBar'); if (sbEl) { sbEl.removeAttribute('data-sig'); renderStatusBar(); } break;
     case 'goto': setTab(a.dataset.tab); break;
     case 'open-rec': openRec(id); break;
     case 'toggle-card': toggleCard(id); break;
@@ -3314,6 +3381,7 @@ setInterval(function () {
     target.textContent = (el.getAttribute('data-label') || '') + ago(iso) + (st ? ' · 오래됨' : '');
     el.classList.toggle('warn', st);
   });
+  renderStatusBar();
 }, 30000);
 
 /* =================================================================== boot */
