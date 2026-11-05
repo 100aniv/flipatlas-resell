@@ -32,19 +32,19 @@
 <style>
 /* ============================================================ tokens */
 :root {
-  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Segoe UI', sans-serif;
   --bg: #f3f4f7; --surface: #ffffff; --surface-2: #f1f3f6; --surface-3: #e7eaef;
-  --border: #e1e5eb; --border-strong: #c9cfd8;
+  --border: #e6e9ee; --border-strong: #c9cfd8;
   --text: #12161c; --text-2: #3f4753; --text-3: #626b78;
   --accent: #2350d4; --accent-ink: #ffffff; --accent-soft: #e7edfc; --accent-text: #1f45b8;
   --pos: #08703d; --pos-soft: #e1f4e8; --neg: #c0262d; --neg-soft: #fde7e7;
   --warn: #8a5300; --warn-soft: #fff2d3; --info: #1f5fa8; --info-soft: #e3effc;
-  --gS: #5b21b6; --gS-ink: #ffffff; --gA: #1f4fd0; --gA-soft: #e7edfc; --gB: #5d6673; --gB-soft: #eceff3;
+  --gS: #6d3fc0; --gS-ink: #ffffff; --gA: #1f4fd0; --gA-soft: #e7edfc; --gB: #5d6673; --gB-soft: #eceff3;
   --star: #c27c00;
-  --hp: #9a3412; --hp-soft: #ffedd5;
-  --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  --hp: #a8481f; --hp-soft: #ffedd5;
+  --shadow: 0 1px 1px rgba(16,24,40,.03);
   --shadow-lg: 0 12px 32px rgba(16,24,40,.18);
-  --r-sm: 8px; --r: 12px; --r-lg: 16px;
+  --r-sm: 8px; --r: 10px; --r-lg: 12px;
   --tap: 44px;
   --tabbar-h: 62px;
   --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px);
@@ -85,14 +85,15 @@
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
-  font: 15px/1.5 var(--font); letter-spacing: -0.01em;
+  font: 400 14px/1.5 var(--font); letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased; overflow-x: hidden;
   word-break: keep-all; overflow-wrap: anywhere;
 }
 button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
 button { cursor: pointer; }
 a { color: var(--accent-text); }
-h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.3; font-weight: 600; }
+b, strong, th { font-weight: 600; }
 .num, .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 .sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
@@ -114,7 +115,7 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 .tab {
   flex: 1; min-width: 0; border: 0; background: none; padding: 6px 2px 4px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  color: var(--text-3); font-size: 11.5px; font-weight: 600; position: relative;
+  color: var(--text-3); font-size: 11.5px; font-weight: 500; position: relative;
 }
 .tab svg { width: 24px; height: 24px; }
 .tab[aria-current="page"] { color: var(--accent-text); }
@@ -123,7 +124,7 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 }
 .tab .dot {
   position: absolute; top: 6px; left: calc(50% + 8px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
-  background: var(--neg); color: #fff; font-size: 11px; line-height: 18px; font-weight: 700; text-align: center;
+  background: var(--neg); color: #fff; font-size: 11px; line-height: 18px; font-weight: 600; text-align: center;
 }
 
 .topbar {
@@ -133,8 +134,8 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
   backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
   display: flex; align-items: center; gap: 8px; min-height: 56px;
 }
-.topbar h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.topbar .sub { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-3); letter-spacing: 0; }
+.topbar h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar .sub { display: block; font-size: 11.5px; font-weight: 500; color: var(--text-3); letter-spacing: 0; }
 
 .main {
   padding: 4px calc(14px + var(--sar)) calc(var(--tabbar-h) + var(--sab) + 28px) calc(14px + var(--sal));
@@ -151,7 +152,7 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
     backdrop-filter: none;
   }
   .nav-brand { display: block; padding: 4px 10px 22px; }
-  .nav-brand b { display: block; font-size: 15px; font-weight: 800; letter-spacing: 0.02em; }
+  .nav-brand b { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
   .nav-brand span { font-size: 12px; color: var(--text-3); }
   .nav-tabs { flex-direction: column; flex: 0; gap: 4px; }
   .tab {
@@ -175,7 +176,7 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: var(--tap); padding: 0 16px; border-radius: 10px;
   border: 1px solid var(--border-strong); background: var(--surface); color: var(--text);
-  font-weight: 650; font-size: 14.5px; white-space: nowrap; text-decoration: none;
+  font-weight: 500; font-size: 14.5px; white-space: nowrap; text-decoration: none;
   -webkit-tap-highlight-color: transparent;
 }
 .btn:hover { background: var(--surface-2); }
@@ -196,14 +197,14 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
-  box-shadow: var(--shadow); padding: 14px; min-width: 0;
+  box-shadow: none; padding: 12px; min-width: 0;
 }
 .card-h { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.card-h h2, .card-h h3 { font-size: 16px; font-weight: 750; flex: 1; min-width: 0; }
+.card-h h2, .card-h h3 { font-size: 16px; font-weight: 600; flex: 1; min-width: 0; }
 .muted { color: var(--text-3); }
 .small { font-size: 12.5px; }
 .xs { font-size: 11.5px; }
-.strong { font-weight: 700; }
+.strong { font-weight: 600; }
 .row { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .row.wrap { flex-wrap: wrap; }
 .grow { flex: 1; min-width: 0; }
@@ -212,8 +213,8 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 .divider { height: 1px; background: var(--border); margin: 12px 0; border: 0; }
 
 .chip {
-  display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; border-radius: 7px;
-  font-size: 12px; font-weight: 650; background: var(--surface-2); color: var(--text-2);
+  display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 7px; border-radius: 6px;
+  font-size: 11.5px; font-weight: 500; background: var(--surface-2); color: var(--text-2);
   border: 1px solid transparent; white-space: nowrap; max-width: 100%;
 }
 .chip svg { width: 13px; height: 13px; flex: none; }
@@ -223,19 +224,19 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 .chip.info { background: var(--info-soft); color: var(--info); }
 .chip.acc { background: var(--accent-soft); color: var(--accent-text); }
 .chip.line { background: transparent; border-color: var(--border-strong); }
-.chip.risk { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-2); font-weight: 600; }
+.chip.risk { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-2); font-weight: 500; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .grade {
-  flex: none; display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
-  font-weight: 850; font-size: 17px; letter-spacing: 0;
+  flex: none; display: inline-grid; place-items: center; min-width: 26px; padding: 0 7px; height: 22px; border-radius: 11px;
+  font-weight: 600; font-size: 12px; letter-spacing: 0;
 }
 .grade.S { background: var(--gS); color: var(--gS-ink); }
-.grade.A { background: var(--gA-soft); color: var(--gA); box-shadow: inset 0 0 0 1.5px var(--gA); }
-.grade.B { background: var(--gB-soft); color: var(--gB); box-shadow: inset 0 0 0 1.5px var(--border-strong); }
+.grade.A { background: var(--gA-soft); color: var(--gA); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gA) 40%, transparent); }
+.grade.B { background: var(--gB-soft); color: var(--gB); box-shadow: inset 0 0 0 1px var(--border); }
 .grade.EXCLUDE { background: var(--surface-2); color: var(--text-3); font-size: 11px; }
-.grade.sm { width: 26px; height: 26px; font-size: 13px; border-radius: 8px; }
-.grade.xs { width: 20px; height: 20px; font-size: 11px; border-radius: 6px; }
+.grade.sm { height: 20px; min-width: 22px; padding: 0 6px; font-size: 11.5px; border-radius: 10px; }
+.grade.xs { height: 18px; min-width: 18px; padding: 0 5px; font-size: 11px; border-radius: 9px; }
 
 .pos { color: var(--pos); }
 .neg { color: var(--neg); }
@@ -244,7 +245,7 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 
 .pill {
   display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px;
-  font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid var(--border-strong); color: var(--text-2);
+  font-size: 12px; font-weight: 600; white-space: nowrap; border: 1px solid var(--border-strong); color: var(--text-2);
 }
 .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .pill.ok { color: var(--pos); border-color: color-mix(in srgb, var(--pos) 40%, transparent); background: var(--pos-soft); }
@@ -262,13 +263,13 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
 .banner.warn { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
 .banner.bad { background: var(--neg-soft); color: var(--neg); border-color: color-mix(in srgb, var(--neg) 30%, transparent); }
 .banner.info { background: var(--info-soft); color: var(--info); border-color: color-mix(in srgb, var(--info) 30%, transparent); }
-.banner b { font-weight: 750; }
+.banner b { font-weight: 600; }
 .banner .grow { color: var(--text); }
 .banner .grow b { color: inherit; }
 
 /* forms */
 .field { display: block; min-width: 0; }
-.field > span { display: block; font-size: 12.5px; font-weight: 650; color: var(--text-2); margin-bottom: 4px; }
+.field > span { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-2); margin-bottom: 4px; }
 .field > span em { font-style: normal; font-weight: 500; color: var(--text-3); }
 .input, .select, textarea.input {
   width: 100%; min-height: var(--tap); padding: 0 12px; border-radius: 10px;
@@ -293,7 +294,7 @@ textarea.input { padding: 10px 12px; min-height: 96px; resize: vertical; line-he
 .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 11px; padding: 3px; gap: 2px; max-width: 100%; }
-.seg button { border: 0; background: transparent; min-height: 36px; padding: 0 12px; border-radius: 8px; font-weight: 650; font-size: 13.5px; color: var(--text-2); white-space: nowrap; }
+.seg button { border: 0; background: transparent; min-height: 36px; padding: 0 12px; border-radius: 8px; font-weight: 500; font-size: 13.5px; color: var(--text-2); white-space: nowrap; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
 
 /* ============================================================ toolbar / filters */
@@ -304,16 +305,16 @@ textarea.input { padding: 10px 12px; min-height: 96px; resize: vertical; line-he
 .filter-btn { position: relative; }
 .filter-btn .count { min-width: 20px; height: 20px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-size: 11.5px; line-height: 20px; padding: 0 6px; }
 .filters {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; margin-bottom: 10px;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
 }
 .filters .full { grid-column: 1 / -1; }
-.filters .switch { font-size: 14px; font-weight: 600; }
+.filters .switch { font-size: 14px; font-weight: 500; }
 /* grade chips: thumb-friendly segmented row; scrolls inside itself on very narrow phones, never the page */
-.gchips { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; margin: 0 0 12px; padding: 2px 1px; scrollbar-width: none; }
+.gchips { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; margin: 0 0 12px; padding: 2px 1px; scrollbar-width: none; }
 .gchips::-webkit-scrollbar { display: none; }
-.gchip { flex: 1 0 auto; min-width: 58px; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-2); font-size: 14px; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
-.gchip b { font-weight: 800; color: var(--text-3); font-size: 13px; }
+.gchip { flex: 1 0 auto; min-width: 52px; min-height: 44px; padding: 0 12px; border-radius: 22px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); font-size: 13px; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.gchip b { font-weight: 600; color: var(--text-3); font-size: 12px; }
 .gchip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .gchip[aria-pressed="true"] b { color: var(--accent-ink); }
 .gchip.g-S[aria-pressed="true"] { background: var(--gS); border-color: var(--gS); color: var(--gS-ink); }
@@ -332,22 +333,22 @@ textarea.input { padding: 10px 12px; min-height: 96px; resize: vertical; line-he
 /* summary strip */
 .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px 12px; min-width: 0; }
-.stat label { display: block; font-size: 12px; color: var(--text-3); font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.stat b { display: block; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat label { display: block; font-size: 12px; color: var(--text-3); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat b { display: block; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat > span { display: block; font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (min-width: 1024px) { .summary { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); } .stat b { font-size: 20px; } }
 
 /* ============================================================ sections & grid */
 .section { margin: 18px 0 8px; }
 .section-h { display: flex; align-items: center; gap: 8px; margin: 0 2px 10px; }
-.section-h h2 { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+.section-h h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
 .section-h .desc { font-size: 12.5px; color: var(--text-3); }
-.section-h .n { font-size: 13px; font-weight: 700; color: var(--text-3); }
+.section-h .n { font-size: 13px; font-weight: 600; color: var(--text-3); }
 details.section > summary { list-style: none; cursor: pointer; min-height: var(--tap); display: flex; align-items: center; gap: 8px; padding: 0 2px; margin-bottom: 8px; }
 details.section > summary::-webkit-details-marker { display: none; }
 details.section > summary .chev { transition: transform .15s; color: var(--text-3); width: 20px; height: 20px; }
 details.section[open] > summary .chev { transform: rotate(90deg); }
-details.section > summary h2 { font-size: 17px; font-weight: 800; }
+details.section > summary h2 { font-size: 17px; font-weight: 600; }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
@@ -373,18 +374,18 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 /* ============================================================ recommendation card */
 .rec { cursor: pointer; transition: border-color .12s, box-shadow .12s; position: relative; display: flex; flex-direction: column; gap: 10px; }
 .rec:hover { border-color: var(--border-strong); }
-.rec.selected { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
-.rec.g-S { border-top: 3px solid var(--gS); }
+.rec.selected { border-color: var(--accent); box-shadow: none; }
+.rec.g-S { border-top: 1px solid var(--border); box-shadow: inset 3px 0 0 var(--gS); }
 /* the action chip lives in the title column and may wrap there (long labels such as 고수익 잠재 · 현장 확인 필요) -- it can never reach the score block */
 .act-row .act, .d-head .act-row .act { height: auto; min-height: 24px; max-width: 100%; padding: 3px 10px; white-space: normal; line-height: 1.25; text-align: left; flex: 0 1 auto; }
-.eyebrow { font-size: 12px; color: var(--text-3); font-weight: 650; display: flex; gap: 6px; align-items: center; min-width: 0; }
+.eyebrow { font-size: 12px; color: var(--text-3); font-weight: 500; display: flex; gap: 6px; align-items: center; min-width: 0; }
 .eyebrow > span { white-space: nowrap; flex: none; }
 .eyebrow > .ellip { flex: 1 1 auto; min-width: 0; }
 .thumb-wrap { position: relative; flex: none; display: block; }
-.thumb-wrap > .grade { position: absolute; top: -6px; left: -6px; box-shadow: 0 0 0 2px var(--surface); }
+.thumb-wrap > .grade { position: absolute; top: -5px; left: -5px; box-shadow: 0 0 0 2px var(--surface); }
 .thumb { position: relative; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 12px; overflow: hidden; flex: none;
   background: var(--surface-2); border: 1px solid var(--border); }
-.thumb .ini { font-weight: 800; font-size: 24px; color: var(--text-3); }
+.thumb .ini { font-weight: 600; font-size: 24px; color: var(--text-3); }
 .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #f3f4f6; }
 .thumb.sm { width: 44px; height: 44px; border-radius: 10px; }
 .thumb.sm .ini { font-size: 16px; }
@@ -395,19 +396,19 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 @media (min-width: 1700px) { .thumb.lg { width: 140px; height: 140px; } }
 /* reco card: score, size/store pickers, engine figures */
 .score { flex: none; text-align: right; min-width: 66px; display: flex; flex-direction: column; align-items: flex-end; }
-.score b { font-size: 26px; font-weight: 850; letter-spacing: -0.03em; line-height: 1.05; color: var(--text); }
-.score i { font-style: normal; font-size: 12.5px; font-weight: 700; color: var(--text-2); margin-top: 1px; }
-.score small { font-size: 10.5px; font-weight: 650; color: var(--text-3); margin-top: 1px; white-space: nowrap; }
-.score.na b { font-size: 14px; font-weight: 800; color: var(--text-2); line-height: 1.25; max-width: 76px; }
+.score b { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; color: var(--text); }
+.score i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-top: 1px; }
+.score small { font-size: 10.5px; font-weight: 500; color: var(--text-3); margin-top: 1px; white-space: nowrap; }
+.score.na b { font-size: 14px; font-weight: 600; color: var(--text-2); line-height: 1.25; max-width: 76px; }
 .why { margin: 0; font-size: 12.5px; color: var(--text-2); background: var(--accent-soft); border-radius: 10px; padding: 7px 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.why b { color: var(--accent-text); font-weight: 750; margin-right: 4px; }
+.why b { color: var(--accent-text); font-weight: 600; margin-right: 4px; }
 .pick-wrap { min-width: 0; }
-.pick-h { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; font-weight: 700; color: var(--text-3); margin: 0 2px 5px; }
+.pick-h { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; font-weight: 600; color: var(--text-3); margin: 0 2px 5px; }
 .pick-h span:last-child { font-weight: 500; text-align: right; }
 .pick { display: flex; flex-wrap: wrap; gap: 6px; }
 .pk { display: flex; flex-direction: column; gap: 1px; align-items: flex-start; min-height: 46px; min-width: 64px; max-width: 100%; padding: 5px 10px; border-radius: 10px; text-align: left;
   border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); }
-.pk b { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 5px; max-width: 100%; }
+.pk b { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px; max-width: 100%; }
 .pk span { font-size: 11px; color: var(--text-3); max-width: 100%; }
 .pk:hover { background: var(--surface-2); }
 .pk[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
@@ -418,14 +419,14 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .pk.fail[aria-pressed="true"] b { color: var(--text-2); }
 .pk.st { min-width: 118px; max-width: 100%; }
 .pk.st.soldout { border-style: dashed; }
-.pk .tag { font-style: normal; flex: none; font-size: 10px; font-weight: 800; line-height: 1; padding: 2px 5px; border-radius: 5px; background: var(--pos-soft); color: var(--pos); }
+.pk .tag { font-style: normal; flex: none; font-size: 10px; font-weight: 600; line-height: 1; padding: 2px 5px; border-radius: 5px; background: var(--pos-soft); color: var(--pos); }
 .pk .tag.bad { background: var(--neg-soft); color: var(--neg); }
 .pk.rep .tag { background: var(--accent); color: var(--accent-ink); }
 .figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; }
 @media (min-width: 1024px) { .figs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .fig { min-width: 0; }
-.fig label { display: block; font-size: 11.5px; font-weight: 650; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.fig b { display: block; font-size: 14px; font-weight: 760; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fig label { display: block; font-size: 11.5px; font-weight: 500; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fig b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fig span { display: block; font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .note-hist { margin: 0; font-size: 12px; color: var(--warn); background: var(--warn-soft); border-radius: 10px; padding: 7px 10px; }
 .gate-line { display: flex; align-items: flex-start; gap: 6px; font-size: 12.5px; border-radius: 10px; padding: 6px 10px; }
@@ -445,12 +446,12 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .cmp-btn { cursor: pointer; border: 0; }
 .comps { display: grid; gap: 5px; }
 .comp { display: grid; grid-template-columns: 96px minmax(0, 1fr) 42px 58px; gap: 8px; align-items: center; font-size: 12.5px; }
-.comp .cl { color: var(--text-2); font-weight: 650; white-space: nowrap; }
+.comp .cl { color: var(--text-2); font-weight: 500; white-space: nowrap; }
 .comp .cl em { font-style: normal; color: var(--text-3); font-weight: 500; margin-left: 4px; font-size: 11px; }
 .comp .cb { height: 8px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
 .comp .cb i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
-.comp .cv { text-align: right; font-weight: 700; }
-.comp .cpt { text-align: right; color: var(--text-2); font-weight: 650; white-space: nowrap; font-size: 11.5px; }
+.comp .cv { text-align: right; font-weight: 600; }
+.comp .cpt { text-align: right; color: var(--text-2); font-weight: 500; white-space: nowrap; font-size: 11.5px; }
 .comp .cpt small { color: var(--text-3); font-weight: 500; font-size: 10.5px; }
 .d-head .score { margin-left: auto; }
 .d-head > .grow { min-width: 0; flex: 1 1 0; }
@@ -474,90 +475,92 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 
 .profit { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8px; }
 .kpi { background: var(--surface-2); border-radius: 10px; padding: 8px 10px; min-width: 0; }
-.kpi label { display: block; font-size: 11.5px; font-weight: 650; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.kpi b { display: block; font-size: 19px; font-weight: 820; letter-spacing: -0.02em; line-height: 1.25; white-space: nowrap; }
-.kpi .roi { font-size: 12.5px; font-weight: 700; }
+.kpi label { display: block; font-size: 11.5px; font-weight: 500; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpi b { display: block; font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; white-space: nowrap; }
+.kpi .roi { font-size: 12.5px; font-weight: 600; }
 .kpi.main { background: color-mix(in srgb, var(--pos-soft) 70%, var(--surface-2)); }
 .kpi.main.is-neg { background: var(--neg-soft); }
 .kpi.secondary b { font-size: 16px; }
 
 /* 현장 매입 상한 (engine max_pay_*): the tag price at which ROI stays at the target */
 .maxbuy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; background: var(--accent-soft); border-radius: 10px; padding: 8px 10px; min-width: 0; }
-.maxbuy label { font-size: 11.5px; font-weight: 700; color: var(--accent-text); }
+.maxbuy label { font-size: 11.5px; font-weight: 600; color: var(--accent-text); }
 .maxbuy .mb-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; }
-.maxbuy b { font-size: 19px; font-weight: 820; letter-spacing: -0.02em; line-height: 1.25; white-space: nowrap; }
-.maxbuy .mb-post { font-size: 12.5px; font-weight: 700; color: var(--text-2); white-space: nowrap; }
-.maxbuy .mb-vs { font-size: 12.5px; font-weight: 750; white-space: nowrap; }
+.maxbuy b { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; white-space: nowrap; }
+.maxbuy .mb-post { font-size: 12.5px; font-weight: 600; color: var(--text-2); white-space: nowrap; }
+.maxbuy .mb-vs { font-size: 12.5px; font-weight: 600; white-space: nowrap; }
 .maxbuy .mb-sub { font-size: 11.5px; color: var(--text-3); }
 .maxbuy.na { background: var(--surface-2); }
 .maxbuy.na label { color: var(--text-3); }
 .maxbuy.neg { background: var(--neg-soft); }
 .maxbuy.neg label { color: var(--neg); }
-.pk .mb { color: var(--accent-text); font-weight: 700; }
+.pk .mb { color: var(--accent-text); font-weight: 600; }
 /* 고수익 잠재: what to verify on site */
 .todo { border-radius: 10px; padding: 8px 10px; background: var(--hp-soft); border: 1px solid color-mix(in srgb, var(--hp) 35%, transparent); }
-.todo-h { font-size: 12px; font-weight: 800; color: var(--hp); margin-bottom: 4px; }
+.todo-h { font-size: 12px; font-weight: 600; color: var(--hp); margin-bottom: 4px; }
 .todo ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; }
-.todo li { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 650; color: var(--text); }
+.todo li { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: var(--text); }
 .todo li::before { content: ""; width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--hp); background: var(--surface); flex: none; }
 .todo .todo-n { margin: 4px 0 0; font-size: 11.5px; color: var(--text-2); }
-.rec.g-B.hp { border-top: 3px solid var(--hp); }
+.rec.g-B.hp { border-top: 1px solid var(--border); box-shadow: inset 3px 0 0 var(--hp); }
 
 /* ============================================================ compact recommendation list (T13d)
    phone / tablet: collapsed cards (~100px) that open in place · desktop: sortable table + side detail */
 :root { --tb: 64px; }
-.rec { cursor: default; gap: 0; padding: 8px 12px; scroll-margin-top: calc(var(--tb) + 64px); }
-.rec:not(.open) { padding-top: 7px; padding-bottom: 7px; }
+.rec { cursor: default; gap: 0; padding: 6px 10px; scroll-margin-top: calc(var(--tb) + 64px); }
+.rec:not(.open) { padding-top: 6px; padding-bottom: 6px; }
 .rec.open { padding-bottom: 12px; border-color: var(--accent); grid-column: 1 / -1; }
-.rc { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; column-gap: 10px; row-gap: 5px; align-items: start; min-width: 0; cursor: pointer; border-radius: 10px; -webkit-tap-highlight-color: transparent; }
-.rc.has-chev { grid-template-columns: 56px minmax(0, 1fr) auto 14px; }
-.rc .thumb { width: 56px; height: 56px; border-radius: 10px; }
-.rc .thumb .ini { font-size: 20px; }
+.rc { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; column-gap: 9px; row-gap: 3px; align-items: start; min-width: 0; cursor: pointer; border-radius: 10px; -webkit-tap-highlight-color: transparent; }
+.rc.has-chev { grid-template-columns: 44px minmax(0, 1fr) auto 14px; }
+.rc .thumb { width: 44px; height: 44px; border-radius: 8px; }
+.rc .thumb .ini { font-size: 16px; }
 .rc-main { min-width: 0; align-self: center; }
-.rc-main h3 { font-size: 14.5px; font-weight: 750; line-height: 1.28; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.rc-meta { display: flex; gap: 4px; align-items: baseline; min-width: 0; font-size: 12px; font-weight: 600; color: var(--text-3); margin-top: 2px; }
+.rc-main h3 { font-size: 13.5px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rc-meta { display: flex; gap: 4px; align-items: baseline; min-width: 0; font-size: 11.5px; font-weight: 400; color: var(--text-3); margin-top: 1px; }
 .rc-meta .bn { flex: 0 1 auto; min-width: 0; }
 .rc-meta .sz { flex: none; white-space: nowrap; }
 .rc .score { min-width: 0; align-self: center; }
-.rc .score b { font-size: 24px; }
+.rc .score b { font-size: 20px; }
 .rc-chev { width: 14px; height: 14px; align-self: center; color: var(--text-3); transition: transform .15s; }
 .rec.open .rc-chev { transform: rotate(90deg); color: var(--accent-text); }
-.rc-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 4px; min-width: 0; }
-.rc-chips .act { height: 21px; font-size: 11px; padding: 0 6px; flex: 0 1 auto; }
-.mc { display: inline-flex; align-items: center; gap: 3px; height: 21px; padding: 0 5px; border-radius: 7px; background: var(--surface-2); font-size: 11px; font-weight: 650; color: var(--text-2); white-space: nowrap; }
-.mc i { font-style: normal; font-size: 9.5px; font-weight: 650; color: var(--text-3); }
-.mc b { font-weight: 800; }
-.mc em { font-style: normal; font-size: 9.5px; font-weight: 700; color: var(--text-3); }
+.rc-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 3px; min-width: 0; }
+.rc-chips .act { height: 20px; font-size: 11px; padding: 0 6px; flex: 0 1 auto; }
+.mc { display: inline-flex; align-items: center; gap: 3px; height: 20px; padding: 0 5px; border-radius: 6px; background: var(--surface-2); font-size: 11px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+.mc i { font-style: normal; font-size: 9.5px; font-weight: 500; color: var(--text-3); }
+.mc b { font-weight: 600; }
+.mc em { font-style: normal; font-size: 9.5px; font-weight: 600; color: var(--text-3); }
 .mc.net.pos { background: var(--pos-soft); } .mc.net.pos b { color: var(--pos); }
 .mc.net.neg { background: var(--neg-soft); } .mc.net.neg b { color: var(--neg); }
 .mc.cap { background: var(--accent-soft); } .mc.cap i, .mc.cap b { color: var(--accent-text); }
 .mc.cap.na { background: var(--surface-2); } .mc.cap.na i, .mc.cap.na b { color: var(--text-3); }
+.mc.dem b { color: var(--text-2); } .mc.dem.g-S, .mc.dem.g-A { background: var(--accent-soft); } .mc.dem.g-S i, .mc.dem.g-S b, .mc.dem.g-A i, .mc.dem.g-A b { color: var(--accent-text); }
 .rec-body { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-.why-inline > h4 { font-size: 13px; font-weight: 750; color: var(--text-3); margin-bottom: 6px; }
+.why-inline > h4 { font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 6px; }
 .rec-body .rec-foot { border-top: 0; padding-top: 0; flex-wrap: wrap; }
 .rec-body .rec-foot .cmp-btn, .rec-body .rec-foot .btn.sm { min-height: 44px; }
 .rec-body .rec-foot .cmp-btn { padding: 0 12px; height: auto; }
 
 /* summary strip */
 .dash { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 6px; margin-bottom: 8px; }
-.dash-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dash-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .dt { min-height: 44px; border: 0; border-radius: 10px; background: var(--surface-2); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px 4px; color: var(--text-2); }
-.dt b { font-size: 18px; font-weight: 850; line-height: 1.1; letter-spacing: -0.02em; }
-.dt span { font-size: 11px; font-weight: 650; color: var(--text-3); white-space: nowrap; }
+.dt b { font-size: 18px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+.dt span { font-size: 11px; font-weight: 500; color: var(--text-3); white-space: nowrap; }
 .dt.buy b { color: var(--pos); } .dt.hp b { color: var(--hp); } .dt.lot b { color: var(--gS); } .dt.watch b { color: var(--warn); }
+.dt.gS b { color: var(--gS); } .dt.gA b { color: var(--gA); } .dt.gB b { color: var(--gB); } .dt.ok b { color: var(--pos); }
 .dt.none { opacity: .55; }
 .dt:hover { background: var(--surface-3); }
 .dash-meta { display: flex; flex-wrap: wrap; gap: 0 12px; padding: 6px 4px 2px; font-size: 12px; line-height: 1.55; }
 .dm { white-space: nowrap; color: var(--text-2); }
-.dm .k { color: var(--text-3); font-weight: 600; }
-.dm b { font-weight: 800; }
+.dm .k { color: var(--text-3); font-weight: 500; }
+.dm b { font-weight: 600; }
 .dm.stale, .dm.stale .k { color: var(--warn); }
 .details-desc, summary .desc, .sec-toggle .desc { font-size: 12px; color: var(--text-3); line-height: 1.3; display: none; }
 @media (min-width: 700px) { summary .desc, .sec-toggle .desc { display: block; } }
 details.section.sec-rec, .section { margin: 8px 0 4px; }
 @media (min-width: 1024px) {
   .dash { display: flex; align-items: center; gap: 16px; padding: 8px 10px; margin-bottom: 12px; }
-  .dash-tiles { grid-template-columns: repeat(4, 84px); }
+  .dash-tiles { grid-template-columns: repeat(5, 84px); }
   .dash-meta { flex: 1; padding: 0; gap: 4px 16px; font-size: 13px; }
   .view-toggle { flex: none; }
 }
@@ -566,8 +569,8 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
   .banner svg { width: 16px; height: 16px; }
   .banner .btn.sm { min-height: 44px; }
 }
-@media (max-width: 1023.98px) {   /* grade chips stay under the header while the list scrolls */
-  .gchips { position: sticky; top: var(--tb); z-index: 15; margin: 0 calc(-14px - var(--sar)) 6px calc(-14px - var(--sal)); padding: 6px calc(14px + var(--sar)) 6px calc(14px + var(--sal));
+@media (max-width: 1023.98px) {   /* grade + tag chips (one block) stay under the header while the list scrolls */
+  .chiprows { position: sticky; top: var(--tb); z-index: 15; margin: 0 calc(-14px - var(--sar)) 6px calc(-14px - var(--sal)); padding: 6px calc(14px + var(--sar)) 6px calc(14px + var(--sal));
     background: color-mix(in srgb, var(--bg) 94%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 }
 
@@ -582,11 +585,11 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .lvl-bad .sb-dot { background: var(--neg); }
 .sb-line { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0 6px; align-items: baseline; }
 .sb-line > * + *::before { content: "·"; margin-right: 6px; color: var(--text-3); }
-.sb-lbl { font-weight: 800; }
+.sb-lbl { font-weight: 600; }
 .lvl-warn .sb-lbl { color: var(--warn); } .lvl-bad .sb-lbl { color: var(--neg); }
 .sb-i { color: var(--text-2); white-space: nowrap; }
-.sb-i.stale { color: var(--warn); font-weight: 650; }
-.sb-more { display: inline-flex; align-items: center; gap: 2px; flex: none; font-size: 12px; font-weight: 650; color: var(--text-3); }
+.sb-i.stale { color: var(--warn); font-weight: 500; }
+.sb-more { display: inline-flex; align-items: center; gap: 2px; flex: none; font-size: 12px; font-weight: 500; color: var(--text-3); }
 .sb-more .chev { width: 14px; height: 14px; transition: transform .15s; }
 .sb-head[aria-expanded="true"] .sb-more .chev { transform: rotate(90deg); }
 .sb-panel { padding: 2px 10px 10px; border-top: 1px solid var(--border); }
@@ -614,7 +617,7 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .rec-tbl th.c-grade, .rec-tbl td.c-grade { text-align: center; width: 46px; }
 .rec-tbl th.c-name, .rec-tbl td.c-name, .rec-tbl th.c-act, .rec-tbl td.c-act { text-align: left; }
 .rec-tbl th.c-opt, .rec-tbl td.c-opt { text-align: center; }
-.th-sort { border: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 2px; border-radius: 6px; white-space: normal; overflow-wrap: normal; word-break: keep-all; line-height: 1.2; min-height: 32px; text-align: inherit; }
+.th-sort { border: 0; background: transparent; color: inherit; font: inherit; font-weight: 600; cursor: pointer; padding: 6px 2px; border-radius: 6px; white-space: normal; overflow-wrap: normal; word-break: keep-all; line-height: 1.2; min-height: 32px; text-align: inherit; }
 .th-sort:hover { color: var(--text); background: var(--surface-2); }
 .rec-tbl th[aria-sort="ascending"] .th-sort::after { content: " \25B2"; font-size: 9px; }
 .rec-tbl th[aria-sort="descending"] .th-sort::after { content: " \25BC"; font-size: 9px; }
@@ -627,7 +630,7 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .rec-tbl td.c-name .tn { display: flex; align-items: center; gap: 8px; width: 0; min-width: 100%; }
 .rec-tbl .thumb.sm { width: 36px; height: 36px; border-radius: 8px; }
 .rec-tbl .tt { min-width: 0; flex: 1; text-align: left; }
-.rec-tbl .tt .t2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; font-weight: 700; line-height: 1.3; white-space: normal; }
+.rec-tbl .tt .t2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; font-weight: 600; line-height: 1.3; white-space: normal; }
 .rec-tbl .tt .sub { display: block; }
 .rec-tbl .gi, .rec-tbl .oi { display: none; }
 .rec-tbl td.c-act { white-space: normal; }
@@ -642,7 +645,7 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .sec-toggle .chev { transition: transform .15s; color: var(--text-3); width: 20px; height: 20px; flex: none; }
 .sec-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
 .sec-toggle .act { height: 28px; font-size: 13.5px; padding: 0 11px; }
-.sec-toggle .n { font-size: 13px; font-weight: 700; color: var(--text-3); }
+.sec-toggle .n { font-size: 13px; font-weight: 600; color: var(--text-3); }
 /* columns drop out as the list column narrows (the side panel always shows everything) */
 @media (max-width: 1439.98px) { .rec-tbl .c-ns, .rec-tbl .c-t7, .rec-tbl .c-opt { display: none; } .rec-tbl .oi { display: inline; } }
 @media (max-width: 1279.98px) { .rec-tbl .c-cap { display: none; } }
@@ -660,17 +663,17 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .scen { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .scen > div { padding: 6px 4px 7px; text-align: center; min-width: 0; border-left: 1px solid var(--border); }
 .scen > div:first-child { border-left: 0; }
-.scen .t { display: block; font-size: 10.5px; font-weight: 700; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.scen .p { display: block; font-size: 12.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.scen .n { display: block; font-size: 11.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scen .t { display: block; font-size: 10.5px; font-weight: 600; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scen .p { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scen .n { display: block; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .scen .be { background: var(--surface-2); }
 .scen-unit { font-size: 10.5px; color: var(--text-3); text-align: right; margin-top: -6px; }
 
 .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .cmp > div { border: 1px solid var(--border); border-radius: 10px; padding: 7px 10px; min-width: 0; }
-.cmp .h { font-size: 11.5px; font-weight: 700; color: var(--text-3); display: flex; justify-content: space-between; gap: 4px; }
+.cmp .h { font-size: 11.5px; font-weight: 600; color: var(--text-3); display: flex; justify-content: space-between; gap: 4px; }
 .cmp .h span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cmp b { font-size: 14.5px; font-weight: 780; white-space: nowrap; }
+.cmp b { font-size: 14.5px; font-weight: 600; white-space: nowrap; }
 .cmp .d { font-size: 11.5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .rec-foot { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 2px; }
@@ -684,7 +687,7 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .pr-main .lbl { font-size: 12.5px; color: var(--text-3); }
 .pr-main s { color: var(--text-3); font-size: 13px; }
 .pr-main .arrow { color: var(--text-3); font-size: 13px; }
-.pr-main b { font-size: 16px; font-weight: 800; }
+.pr-main b { font-size: 16px; font-weight: 600; }
 .pr-main .k { font-size: 12.5px; color: var(--text-3); }
 .pr-main .chip { align-self: center; }
 .cp-line { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); min-width: 0; }
@@ -693,25 +696,25 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .cp.applied { border-color: color-mix(in srgb, var(--pos) 45%, transparent); background: color-mix(in srgb, var(--pos-soft) 55%, var(--surface)); }
 .cp.not { background: var(--surface-2); }
 .cp-h { display: flex; align-items: center; gap: 8px; font-size: 14px; }
-.cp-h b.grow { font-weight: 750; }
+.cp-h b.grow { font-weight: 600; }
 .cp-kv { margin-top: 8px; font-size: 12.5px; }
 .cp-kv dd { text-align: left; color: var(--text-2); }
 .cp .steps li { font-size: 13px; }
 /* action badge (primary) + lottery plan */
-.act { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 12px; font-size: 12.5px; font-weight: 800; white-space: nowrap; flex: none; }
+.act { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 12px; font-size: 12.5px; font-weight: 600; white-space: nowrap; flex: none; }
 .act.buy { background: var(--pos); color: var(--surface); }
 .act.lot { background: var(--gS); color: var(--gS-ink); }
-.act.watch { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--warn) 50%, transparent); }
+.act.watch { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 50%, transparent); }
 .act.none { background: var(--surface-2); color: var(--text-3); }
-.act.hunt { background: var(--info-soft); color: var(--info); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--info) 45%, transparent); }
-.act.hp { background: var(--hp-soft); color: var(--hp); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--hp) 55%, transparent); }
-.act.wait { background: var(--accent-soft); color: var(--accent-text); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 45%, transparent); }
+.act.hunt { background: var(--info-soft); color: var(--info); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--info) 45%, transparent); }
+.act.hp { background: var(--hp-soft); color: var(--hp); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hp) 55%, transparent); }
+.act.wait { background: var(--accent-soft); color: var(--accent-text); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent); }
 .act-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; flex-wrap: wrap; }
 .section-h .act, details.section > summary .act { height: 28px; font-size: 13.5px; padding: 0 11px; }
 .lot-box { border-radius: 10px; padding: 8px 10px; background: color-mix(in srgb, var(--gS) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--gS) 30%, transparent); }
 .lot-box.big { margin-bottom: 10px; }
 .lot-row { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 6px; font-size: 12.5px; padding: 2px 0; }
-.lot-k { color: var(--text-3); font-weight: 700; }
+.lot-k { color: var(--text-3); font-weight: 600; }
 .lot-v { min-width: 0; }
 .warnc { color: var(--warn); }
 /* match review */
@@ -720,11 +723,11 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .mb-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .mb-col { min-width: 0; background: var(--surface-2); border-radius: 10px; padding: 8px; }
 .match-box.compact .mb-col { background: var(--surface); }
-.mb-l { display: block; font-size: 11px; font-weight: 750; color: var(--text-3); margin-bottom: 4px; letter-spacing: .02em; }
-.mb-t { font-size: 13px; font-weight: 650; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.mb-l { display: block; font-size: 11px; font-weight: 600; color: var(--text-3); margin-bottom: 4px; letter-spacing: .02em; }
+.mb-t { font-size: 13px; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .mb-col .thumb.sm { width: 40px; height: 40px; }
 .mb-ln { font-size: 12.5px; color: var(--text-2); margin-top: 2px; overflow-wrap: anywhere; }
-.mb-k { color: var(--text-3); font-size: 11.5px; font-weight: 650; margin-right: 4px; }
+.mb-k { color: var(--text-3); font-size: 11.5px; font-weight: 500; margin-right: 4px; }
 .mb-info { margin-top: 8px; display: grid; gap: 6px; }
 .mb-inforow { font-size: 12.5px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
 .mb-why { margin: 2px 0 0; padding-left: 18px; flex-basis: 100%; color: var(--text-2); }
@@ -739,23 +742,23 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .match-box .input { min-height: 40px; }
 /* ============================================================ detail content */
 .d-head { display: flex; gap: 12px; align-items: flex-start; }
-.d-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+.d-head h2 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
 .d-sec { margin-top: 18px; }
-.d-sec > h4 { font-size: 13px; font-weight: 750; color: var(--text-3); margin-bottom: 8px; letter-spacing: 0; }
+.d-sec > h4 { font-size: 13px; font-weight: 600; color: var(--text-3); margin-bottom: 8px; letter-spacing: 0; }
 .kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; font-size: 13.5px; }
 .kv dt { color: var(--text-3); white-space: nowrap; }
 .kv dd { margin: 0; text-align: right; min-width: 0; }
 .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-.tbl th { text-align: right; font-weight: 650; color: var(--text-3); font-size: 11.5px; padding: 6px 4px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.tbl th { text-align: right; font-weight: 500; color: var(--text-3); font-size: 11.5px; padding: 6px 4px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .tbl th:first-child, .tbl td:first-child { text-align: left; }
 .tbl td { text-align: right; padding: 8px 4px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .tbl tr:last-child td { border-bottom: 0; }
 .tbl td .sub { display: block; font-size: 11px; color: var(--text-3); font-weight: 500; }
-.tbl td b { font-weight: 750; }
+.tbl td b { font-weight: 600; }
 .note { font-size: 12.5px; color: var(--text-2); background: var(--surface-2); padding: 10px 12px; border-radius: 10px; }
 .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
 .steps li { counter-increment: s; position: relative; padding: 4px 0 4px 32px; font-size: 13.5px; min-height: 28px; }
-.steps li::before { content: counter(s); position: absolute; left: 0; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-text); font-size: 12px; font-weight: 600; display: grid; place-items: center; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .actions .btn { flex: 1 1 auto; }
 
@@ -764,45 +767,45 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .map-svg { width: 100%; height: auto; max-height: 330px; display: block; margin: 0 auto; }
 .map-svg .loop { fill: none; stroke: var(--border-strong); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
 .map-svg .st circle { fill: var(--surface); stroke: var(--text-3); stroke-width: 1.5; }
-.map-svg .st text { fill: var(--text-3); font-size: 11px; font-weight: 600; }
+.map-svg .st text { fill: var(--text-3); font-size: 11px; font-weight: 500; }
 .map-svg .b circle { fill: var(--accent); fill-opacity: .2; stroke: var(--accent); stroke-width: 2; }
 .map-svg .b.hasS circle { fill: var(--gS); stroke: var(--gS); fill-opacity: 1; }
-.map-svg .b text { fill: var(--text); font-size: 12px; font-weight: 750; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
-.map-svg .b text.c { fill: var(--accent-text); stroke: none; font-size: 11px; font-weight: 800; }
+.map-svg .b text { fill: var(--text); font-size: 12px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.map-svg .b text.c { fill: var(--accent-text); stroke: none; font-size: 11px; font-weight: 600; }
 .map-svg .b.hasS text.c { fill: var(--gS-ink); }
 .map-svg .b { cursor: pointer; }
 .map-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-3); padding: 4px 4px 0; }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
 
 .region-h { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; margin: 20px 2px 10px; }
-.region-h h2 { font-size: 17px; font-weight: 800; }
+.region-h h2 { font-size: 17px; font-weight: 600; }
 .bld { cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
 .bld.selected { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
 .bld-top { display: flex; gap: 10px; align-items: flex-start; }
 .prio { flex: none; width: 44px; text-align: center; border-radius: 10px; background: var(--surface-2); padding: 4px 0; }
-.prio b { display: block; font-size: 18px; font-weight: 850; line-height: 1.1; }
-.prio span { font-size: 10.5px; color: var(--text-3); font-weight: 700; }
+.prio b { display: block; font-size: 18px; font-weight: 600; line-height: 1.1; }
+.prio span { font-size: 10.5px; color: var(--text-3); font-weight: 600; }
 .prio.p1 { background: var(--accent); color: var(--accent-ink); }
 .prio.p1 span { color: inherit; opacity: .85; }
-.bld h3 { font-size: 16px; font-weight: 780; }
+.bld h3 { font-size: 16px; font-weight: 600; }
 .bld .ja { font-size: 12px; color: var(--text-3); }
 .bld-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .bld-stats > div { background: var(--surface-2); border-radius: 9px; padding: 6px 8px; min-width: 0; }
-.bld-stats label { display: block; font-size: 11px; color: var(--text-3); font-weight: 650; }
-.bld-stats b { font-size: 14.5px; font-weight: 780; white-space: nowrap; }
+.bld-stats label { display: block; font-size: 11px; color: var(--text-3); font-weight: 500; }
+.bld-stats b { font-size: 14.5px; font-weight: 600; white-space: nowrap; }
 
 details.floor { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); margin-top: 8px; }
 details.floor > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 12px; }
 details.floor > summary::-webkit-details-marker { display: none; }
-details.floor > summary .fl { flex: none; min-width: 44px; height: 30px; padding: 0 8px; border-radius: 8px; background: var(--text); color: var(--bg); font-weight: 850; font-size: 14px; display: grid; place-items: center; }
+details.floor > summary .fl { flex: none; min-width: 44px; height: 30px; padding: 0 8px; border-radius: 8px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 14px; display: grid; place-items: center; }
 details.floor > summary .chev { margin-left: auto; width: 18px; height: 18px; color: var(--text-3); transition: transform .15s; flex: none; }
 details.floor[open] > summary .chev { transform: rotate(90deg); }
 .floor-body { padding: 4px 12px 12px; border-top: 1px solid var(--border); }
 .shop { padding: 10px 0; border-bottom: 1px dashed var(--border); }
 .shop:last-child { border-bottom: 0; }
-.shop-h { font-weight: 750; font-size: 14px; display: flex; gap: 6px; align-items: center; }
+.shop-h { font-weight: 600; font-size: 14px; display: flex; gap: 6px; align-items: center; }
 .mini-rec { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0 0; min-width: 0; width: 100%; border: 0; background: none; text-align: left; cursor: pointer; }
-.mini-rec .t { flex: 1; min-width: 0; font-size: 14px; font-weight: 650; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mini-rec .t { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mini-rec .m { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 3px; font-size: 12px; color: var(--text-3); }
 .mini-rec b { white-space: nowrap; font-size: 15px; margin-left: auto; }
 
@@ -817,7 +820,7 @@ details.floor[open] > summary .chev { transform: rotate(90deg); }
 .check .txt { flex: 1; min-width: 0; font-size: 13.5px; }
 .check .txt small { display: block; color: var(--text-3); font-size: 12px; }
 .check input:checked ~ .txt { color: var(--text-3); text-decoration: line-through; }
-.check .kind { flex: none; font-size: 11px; font-weight: 750; color: var(--text-3); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; margin-top: 3px; }
+.check .kind { flex: none; font-size: 11px; font-weight: 600; color: var(--text-3); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; margin-top: 3px; }
 .progress { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
 .progress > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 .progress.over > i { background: var(--neg); }
@@ -830,20 +833,20 @@ pre.memo { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/
 .sync-strip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 12px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--border); margin: 12px 0; font-size: 13px; }
 .led { display: flex; flex-direction: column; gap: 10px; }
 .led-top { display: flex; gap: 10px; align-items: flex-start; }
-.led h3 { font-size: 15px; font-weight: 750; }
+.led h3 { font-size: 15px; font-weight: 600; }
 .stepper { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; }
 .stepper i { height: 5px; border-radius: 3px; background: var(--surface-3); }
 .stepper i.on { background: var(--accent); }
 .stepper.cancel i { background: var(--neg-soft); }
 .stepper-l { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-3); margin-top: 4px; }
-.stepper-l b { color: var(--text); font-weight: 750; }
+.stepper-l b { color: var(--text); font-weight: 600; }
 .led-nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .led-nums > div { background: var(--surface-2); border-radius: 9px; padding: 6px 8px; min-width: 0; }
-.led-nums label { display: block; font-size: 11px; color: var(--text-3); font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.led-nums b { display: block; font-size: 13.5px; font-weight: 780; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.led-nums label { display: block; font-size: 11px; color: var(--text-3); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.led-nums b { display: block; font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .led-nums span { display: block; font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .status-filter { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
-.status-filter button { min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 13px; font-weight: 650; color: var(--text-2); }
+.status-filter button { min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 13px; font-weight: 500; color: var(--text-2); }
 .status-filter button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
 .sticky-cta {
   position: fixed; z-index: 25; right: calc(14px + var(--sar));
@@ -855,7 +858,7 @@ pre.memo { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/
 /* ============================================================ status */
 .src { display: flex; gap: 10px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .src:last-child { border-bottom: 0; }
-.src .grow b { font-weight: 750; }
+.src .grow b { font-weight: 600; }
 .src .err { margin-top: 6px; font: 12.5px/1.45 var(--font); color: var(--neg); background: var(--neg-soft); padding: 6px 8px; border-radius: 8px; word-break: break-all; }
 .alert-i { display: flex; gap: 10px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .alert-i:last-child { border-bottom: 0; }
@@ -869,7 +872,7 @@ pre.memo { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/
 /* ============================================================ empty / skeleton */
 .empty { text-align: center; padding: 36px 20px; color: var(--text-2); }
 .empty > svg { width: 44px; height: 44px; color: var(--text-3); margin-bottom: 10px; }
-.empty h3 { font-size: 16px; font-weight: 750; color: var(--text); margin-bottom: 6px; }
+.empty h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 .empty p { font-size: 13.5px; margin: 0 auto 14px; max-width: 360px; color: var(--text-3); }
 .sk { background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: sk 1.3s ease infinite; border-radius: 8px; }
 @keyframes sk { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
@@ -885,7 +888,7 @@ pre.memo { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/
 }
 .sheet-h { display: flex; align-items: center; gap: 6px; padding: 8px 8px 6px 16px; border-bottom: 1px solid var(--border); flex: none; }
 .sheet-h::before { content: ""; position: absolute; top: 6px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 2px; background: var(--border-strong); }
-.sheet-h h2 { flex: 1; min-width: 0; font-size: 16px; font-weight: 750; padding-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-h h2 { flex: 1; min-width: 0; font-size: 16px; font-weight: 600; padding-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sheet-b { overflow: auto; padding: 14px 16px calc(20px + var(--sab)); overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .sheet-f { flex: none; display: flex; gap: 8px; padding: 10px 16px calc(10px + var(--sab)); border-top: 1px solid var(--border); background: var(--surface); }
 .sheet-f .btn { flex: 1; min-height: 50px; }
@@ -900,14 +903,14 @@ pre.memo { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/
 
 .toast {
   position: fixed; z-index: 80; left: 50%; transform: translateX(-50%); bottom: calc(var(--tabbar-h) + var(--sab) + 72px);
-  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
+  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 500;
   box-shadow: var(--shadow-lg); max-width: calc(100vw - 32px); text-align: center;
 }
 @media (min-width: 1024px) { .toast { bottom: 28px; } }
-.sample-tag { position: fixed; z-index: 90; bottom: calc(var(--tabbar-h) + var(--sab) + 12px); left: 10px; background: #d4380d; color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; pointer-events: none; letter-spacing: .02em; }
+.sample-tag { position: fixed; z-index: 90; bottom: calc(var(--tabbar-h) + var(--sab) + 12px); left: 10px; background: #d4380d; color: #fff; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; pointer-events: none; letter-spacing: .02em; }
 @media (min-width: 1024px) { .sample-tag { bottom: auto; left: auto; top: 26px; right: 84px; } }
 /* ============================================================ 평가 기준 탭 · 왜 이 순위인가 · 방문 상태 */
-.brand-eyebrow { display: block; font-size: 10.5px; font-weight: 850; letter-spacing: .14em; color: var(--accent-text); line-height: 1.2; }
+.brand-eyebrow { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; color: var(--accent-text); line-height: 1.2; }
 @media (min-width: 1024px) { .brand-eyebrow { display: none; } }
 .bld-vis { margin-top: -2px; }
 .crit-wrap { display: grid; gap: 12px; max-width: 1040px; min-width: 0; }
@@ -917,14 +920,14 @@ details.crit > summary { list-style: none; cursor: pointer; display: flex; align
 details.crit > summary::-webkit-details-marker { display: none; }
 details.crit > summary .chev { transition: transform .15s; color: var(--text-3); width: 20px; height: 20px; flex: none; }
 details.crit[open] > summary .chev { transform: rotate(90deg); }
-details.crit > summary h2 { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+details.crit > summary h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
 .crit-b { padding: 2px 14px 16px; display: grid; gap: 10px; min-width: 0; }
 .model3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: stretch; }
 .m3 { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; min-width: 0; }
-.m3 b { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 780; }
-.m3 b i { font-style: normal; color: var(--accent-text); font-weight: 850; }
+.m3 b { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; }
+.m3 b i { font-style: normal; color: var(--accent-text); font-weight: 600; }
 .m3 span { display: block; margin-top: 3px; font-size: 12.5px; color: var(--text-2); }
-.m3-arrow { text-align: center; color: var(--text-3); font-weight: 800; transform: rotate(90deg); line-height: 1; height: 14px; }
+.m3-arrow { text-align: center; color: var(--text-3); font-weight: 600; transform: rotate(90deg); line-height: 1; height: 14px; }
 @media (min-width: 900px) { .model3 { grid-template-columns: 1fr auto 1fr auto 1fr; } .m3-arrow { transform: none; align-self: center; height: auto; } }
 .code { font: 12.5px/1.55 ui-monospace, "SFMono-Regular", Consolas, "Malgun Gothic", monospace; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; color: var(--text); overflow-wrap: anywhere; letter-spacing: 0; }
 .code.sm { font-size: 12px; }
@@ -937,23 +940,23 @@ details.crit > summary h2 { font-size: 16px; font-weight: 800; letter-spacing: -
 :root[data-theme="dark"] .w0, :root[data-theme="dark"] .wc0 { --wc: #7ea4ff; } :root[data-theme="dark"] .w1, :root[data-theme="dark"] .wc1 { --wc: #4fd1c5; } :root[data-theme="dark"] .w2, :root[data-theme="dark"] .wc2 { --wc: #b79bff; } :root[data-theme="dark"] .w3, :root[data-theme="dark"] .wc3 { --wc: #ffc247; } :root[data-theme="dark"] .w4, :root[data-theme="dark"] .wc4 { --wc: #ff8cc0; } :root[data-theme="dark"] .w5, :root[data-theme="dark"] .wc5 { --wc: #9aa4b2; }
 .crit-item { border: 1px solid var(--border); border-radius: 12px; padding: 9px 11px; min-width: 0; }
 .ci-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-.ci-h b { font-size: 14px; font-weight: 750; }
+.ci-h b { font-size: 14px; font-weight: 600; }
 .ci-b { margin-top: 6px; font-size: 13px; color: var(--text-2); overflow-wrap: anywhere; }
 .ci-b > div + div { margin-top: 3px; }
 .crit-steps { margin: 0; padding: 0; list-style: none; counter-reset: cs; display: grid; gap: 8px; }
 .crit-steps li { counter-increment: cs; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 13.5px; align-items: start; }
-.crit-steps li::before { content: counter(cs); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-text); font-weight: 800; font-size: 12.5px; }
+.crit-steps li::before { content: counter(cs); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-text); font-weight: 600; font-size: 12.5px; }
 .crit-list { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 13px; color: var(--text-2); }
 .tbl.wrap th, .tbl.wrap td { white-space: normal; text-align: left; vertical-align: top; padding: 8px 10px; }
 .tbl.wrap { min-width: 360px; }
-.wb-h { font-size: 12px; font-weight: 750; color: var(--text-3); margin-top: 6px; letter-spacing: 0; }
+.wb-h { font-size: 12px; font-weight: 600; color: var(--text-3); margin-top: 6px; letter-spacing: 0; }
 .crit-b > .wb-h:first-child { margin-top: 0; }
 .why-block { display: grid; gap: 8px; min-width: 0; }
 .gchk, .gdrop { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .gchk li { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 9px; border-radius: 9px; background: var(--surface-2); min-width: 0; }
 .gchk li svg { width: 16px; height: 16px; flex: none; }
 .gchk li span { flex: 1; min-width: 0; }
-.gchk li b { font-size: 12px; font-weight: 750; flex: none; }
+.gchk li b { font-size: 12px; font-weight: 600; flex: none; }
 .gchk li.ok { background: var(--pos-soft); color: var(--pos); }
 .gchk li.fail { background: var(--neg-soft); color: var(--neg); }
 .gchk li.na { color: var(--text-3); }
@@ -963,10 +966,48 @@ details.crit > summary h2 { font-size: 16px; font-weight: 800; letter-spacing: -
 @media (min-width: 1280px) { .why3 { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; } }
 .why-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; background: var(--surface); }
 .wc-h { display: flex; gap: 10px; align-items: flex-start; min-width: 0; }
-.wc-h h3 { font-size: 15.5px; font-weight: 780; line-height: 1.3; }
-.wc-t { font-size: 13px; font-weight: 800; color: var(--accent-text); }
+.wc-h h3 { font-size: 15.5px; font-weight: 600; line-height: 1.3; }
+.wc-t { font-size: 13px; font-weight: 600; color: var(--accent-text); }
 .seg-row { margin: 12px 0 0; }
 .seg.lg button { min-height: 44px; padding: 0 16px; }
+/* H-11: grade chips + tag chips, buy-verdict chip, method / potential / verify tags, '가정' mark (engine columns, display only) */
+.chiprows { margin: 0 0 12px; }
+.chiprows .gchips { margin: 0 0 6px; position: static; padding: 2px 1px; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.chiprows .gchips:last-child { margin-bottom: 0; }
+.gchips.tchips .gchip { flex: 0 0 auto; min-height: 44px; min-width: 48px; padding: 0 11px; font-size: 12.5px; }
+.gchip.tag[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.gchip.tag.t-HP[aria-pressed="true"] { background: var(--hp); border-color: var(--hp); color: var(--surface); }
+.gchip.tag.t-HP[aria-pressed="true"] b { color: var(--surface); }
+.gchip.tag.t-CM[aria-pressed="true"] { background: var(--pos); border-color: var(--pos); color: var(--surface); }
+.gchip.tag.t-CM[aria-pressed="true"] b { color: var(--surface); }
+.gchip.g-A[aria-pressed="true"] { background: var(--gA); border-color: var(--gA); color: var(--surface); }
+.gchip.g-A[aria-pressed="true"] b { color: var(--surface); }
+.gchip.g-B[aria-pressed="true"] { background: var(--gB); border-color: var(--gB); color: var(--surface); }
+.gchip.g-B[aria-pressed="true"] b { color: var(--surface); }
+@media (min-width: 1024px) { .chiprows { margin-bottom: 10px; } .gchips.tchips .gchip { min-height: 34px; } }
+.vd { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 11px; font-size: 11.5px; font-weight: 600; white-space: nowrap; flex: none; }
+.vd.ok { background: var(--pos); color: var(--surface); }
+.vd.chk { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 50%, transparent); }
+.vd.undet { background: var(--surface-2); color: var(--text-3); box-shadow: inset 0 0 0 1px var(--border-strong); }
+.vd-why { margin: 6px 0 0; font-size: 12.5px; color: var(--text-2); }
+.vd-why b { font-weight: 600; }
+.tg { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; flex: none;
+  background: var(--info-soft); color: var(--info); }
+.tg.m-LOTTERY, .tg.m-RESERVATION { background: var(--gA-soft); color: var(--gA); }
+.tg.m-FIELD_SEARCH { background: var(--info-soft); color: var(--info); }
+.tg.m-NORMAL, .tg.m-NUMBERED_TICKET, .tg.m-OPEN_RUN { background: var(--surface-2); color: var(--text-2); box-shadow: inset 0 0 0 1px var(--border-strong); }
+.tg.pot { background: var(--hp-soft); color: var(--hp); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hp) 55%, transparent); }
+.tg.v { background: transparent; color: var(--text-3); font-weight: 500; box-shadow: inset 0 0 0 1px var(--border); }
+.act-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.rc-chips .vd, .rc-chips .tg { height: 20px; }
+.ga { font-size: 9.5px; font-weight: 600; color: var(--warn); letter-spacing: -0.01em; white-space: nowrap; }
+.thumb-wrap > .ga { position: absolute; left: -6px; bottom: -5px; padding: 1px 4px; border-radius: 6px; background: var(--warn-soft); box-shadow: 0 0 0 2px var(--surface); line-height: 1.3; }
+.rec-tbl td.c-grade .ga.blk { display: block; margin-top: 2px; text-align: center; }
+.rec-tbl td.c-act .tgs { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+.rec-tbl td.c-act .vd { height: auto; padding: 3px 8px; line-height: 1.25; }
+.rec-tbl td.c-act .tg { height: 19px; font-size: 10.5px; }
+/* restyle: light collapsed card on phone/tablet -- keep net + cap + tags; ROI / demand chips live in the opened card */
+@media (max-width: 1023px) { .rc-chips .mc.roi, .rc-chips .mc.dem, .rc-chips .mc.cap { display: none; } }
 </style>
 <style>
 /* ---- public site: forced LIGHT theme (the dashboard's own light palette, blue accent). data-theme="light" also disables the dashboard's prefers-color-scheme: dark block. ---- */
@@ -1194,19 +1235,29 @@ var IC = {
 };
 
 /* =================================================================== state */
+/* H-11: grade chip (single) + tag chips (multi, AND). Old saved filters: action HIGH_POTENTIAL -> tag HP, LOTTERY -> tag LOTTERY, every other action is dropped. */
+function loadFilters() {
+  var sv = LS.get('filters', {}) || {}, f = { q: '', region: '', category: '', grade: '', tags: [], trip: false, watch: false };
+  ['region', 'category', 'trip', 'watch'].forEach(function (k) { if (sv[k] !== undefined) f[k] = sv[k]; });
+  if (sv.grade === 'S' || sv.grade === 'A' || sv.grade === 'B') f.grade = sv.grade;
+  if (Array.isArray(sv.tags)) f.tags = sv.tags.filter(function (t) { return typeof t === 'string'; });
+  if (sv.action === 'HIGH_POTENTIAL' && f.tags.indexOf('HP') < 0) f.tags.push('HP');
+  if (sv.action === 'LOTTERY' && f.tags.indexOf('LOTTERY') < 0) f.tags.push('LOTTERY');
+  return f;
+}
+function saveFilters() { LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, tags: S.f.tags, trip: S.f.trip, watch: S.f.watch }); }
 var S = {
   raw: null, fetchedAt: null, loading: false, loadError: null, fromCache: false,
   tab: LS.get('tab', 'rec'),
-  f: Object.assign({ q: '', region: '', category: '', grade: '', action: '', trip: false, watch: false }, LS.get('filters', {})),
+  f: loadFilters(),
   sort: LS.get('sort2', 'score'),          // 기본 정렬 = 리셀 점수순 (구 'sort' 키의 순이익 기본값은 버린다)
   pick: {},                                // product_id -> { o: 선택 사이즈, s: 선택 구매처 store_id }
   cmp: {},                                 // product_id -> 카드 안 사이즈 비교표 펼침 (기본 접힘)
   showFilters: false,
   openCard: null,                          // 모바일·태블릿: 그 자리에서 펼쳐진 상품 하나 (새로고침하면 기억하지 않음)
   recView: null,                           // 데스크톱 보기: null/'table' = 표, 'cards' = 카드 (기억하지 않음)
-  tsort: null,                             // 표 정렬 { k, dir } (null = 섹션 순)
+  tsort: null,                             // 표 정렬 { k, dir } (null = 점수순)
   statusOpen: false,                       // 상태 바 펼침 (메모리만, 새로고침하면 접힘)
-  secOpen: {},                             // 추천 섹션 접힘 상태 (메모리만, 관찰은 폰에서 기본 접힘)
   storeView: LS.get('storeView', 'rank'),   // 'rank' = 방문 순위순(Store_Priority.visit_rank) · 'region' = 지역별
   sel: { rec: null, stores: null },
   open: LS.get('open', {}),
@@ -1237,7 +1288,8 @@ var RISK = {
   SPREAD_WIDE: '호가 차이 큼', ASK_OVERHANG: '판매 물량 과다', VOLATILE: '가격 변동 큼', NEW_RELEASE_LT14D: '발매 14일 미만',
   QTY_LIMIT: '구매 수량 제한', LOTTERY: '추첨 필요', DATA_PARTIAL: '시세 일부 누락', TRADE_COUNT_UNAVAILABLE: '체결 수 미제공',
   OLD_SCHEME: '구 면세 방식', BELOW_STORE_DAY_MIN: '면세 최소액 미달', SERIAL_REGISTRATION: '시리얼 등록 필요',
-  NO_TAXFREE_RULE: '면세 규칙 미확인', NO_TAXFREE: '면세 불가', COUPON_EXCLUDES_TAXFREE: '쿠폰·면세 중복 불가'
+  NO_TAXFREE_RULE: '면세 규칙 미확인', NO_TAXFREE: '면세 불가', COUPON_EXCLUDES_TAXFREE: '쿠폰·면세 중복 불가',
+  PRICE_CONFLICT: '정가 근거 충돌(KREAM 발매가와 다름)'
 };
 var CONF = {
   verified: { l: '실재고 확인', c: 'ok', i: 'ok' },
@@ -1325,7 +1377,7 @@ function matchBox(x, compact) {
   h += '</div>';
   return h;
 }
-/* 6 action labels (RECO_DESIGN D) + 고수익 잠재 (H-6). Date/trip independent. Old BUY_NOW etc. are mapped to 관찰 temporarily (F-5). */
+/* 6 action labels (RECO_DESIGN D, H-6). H-11: legacy values, kept only for old rows / the 호환 criteria list -- the list is NOT sectioned, sorted or filtered by them. */
 var ACTION = {
   SELL_NOW: { l: '즉시 매도 유리', c: 'buy', sec: 'rec' },
   STORE_HUNT: { l: '현장 탐색 추천', c: 'hunt', sec: 'rec' },
@@ -1335,12 +1387,6 @@ var ACTION = {
   WATCH: { l: '관찰', c: 'watch', sec: 'watch' },
   EXCLUDE: { l: '제외', c: 'none', sec: 'excl' }
 };
-var SECTIONS = [
-  { k: 'rec', t: '추천', c: 'buy', d: '게이트와 점수 기준을 통과한 상품 — 즉시 매도 유리 · 현장 탐색 추천 · 매도 대기' },
-  { k: 'hp', t: '고수익 잠재 후보 · 현장 확인 필요', c: 'hp', d: 'ROI가 높고 거래는 충분하지만 모델·정가·재고를 현장에서 확인해야 하는 후보 — 확인 전에는 구매 근거로 쓰지 마세요' },
-  { k: 'lot', t: '추첨·예약', c: 'lot', d: '응모·예약 후 구매 — 수령 일정이 여행과 맞는지 확인' },
-  { k: 'watch', t: '관찰', c: 'watch', d: '게이트 미달·정보 부족·과거 정가 기준 — 변화를 지켜볼 상품' }
-];
 function actCode(a, grade) {
   a = String(a === null || a === undefined ? '' : a).toUpperCase().trim();
   if (ACTION[a]) return a;
@@ -1348,11 +1394,67 @@ function actCode(a, grade) {
   return 'WATCH';
 }
 function actBadge(code) { var a = ACTION[code]; return a ? '<span class="act ' + a.c + '">' + a.l + '</span>' : ''; }
+/* ---- H-11: the single `action` is split into independent engine columns. Display only -- nothing here recomputes them.
+   grade (S/A/B) · grade_assumed ("가정") · buy_verdict · method_tags · verify_tags · potential_tag.
+   Old rows without the new columns: action HIGH_POTENTIAL -> 잠재, LOTTERY -> 추첨, no buy_verdict -> no verdict chip (never guessed). ---- */
+var METHOD_TAG_KO = { LOTTERY: '추첨', RESERVATION: '예약', NUMBERED_TICKET: '번호표', OPEN_RUN: '오픈런', NORMAL: '일반 구매', FIELD_SEARCH: '현장 탐색' };
+var VERIFY_TAG_KO = { MSRP_ASSUMED: '정가 가정', COST_ASSUMED: '원가 가정', MATCH_CHECK: '매칭 확인 필요', STOCK_UNKNOWN: '재고 미확인', BID_INFO_THIN: '입찰 정보 부족' };
+var VERIFY_TAG_TIP = {
+  MSRP_ASSUMED: '일본 정가가 현재 공식 확인값이 아니라 최근·과거 자료 또는 추정입니다', COST_ASSUMED: '쿠폰·할인 또는 가격이 추정입니다',
+  MATCH_CHECK: 'KREAM 상품과 일본 상품이 같은지 아직 확정되지 않았습니다', STOCK_UNKNOWN: '온라인 구매 가능 또는 매장 재고 확인이 되지 않았습니다',
+  BID_INFO_THIN: '입찰 깊이·체결 수·시세 신선도 정보가 부족합니다'
+};
+var BUY_VERDICT = { CONDITIONS_MET: { l: '조건 충족', c: 'ok' }, CHECK_ON_SITE: { l: '현장 확인 필요', c: 'chk' }, UNDETERMINED: { l: '확정 불가', c: 'undet' } };
+var VERDICT_ORDER = ['CONDITIONS_MET', 'CHECK_ON_SITE', 'UNDETERMINED'];
+var TAG_CHIPS = [['HP', '잠재'], ['LOTTERY', '추첨'], ['RESERVATION', '예약'], ['NUMBERED_TICKET', '번호표'], ['OPEN_RUN', '오픈런'], ['FIELD_SEARCH', '현장 탐색'], ['NORMAL', '일반'], ['CM', '조건 충족']];
+function tagKo(kind, code) {   // labels come from Reco_Criteria "tags" when the engine published them
+  var t = crVal('tags'), m = t && t[kind + '_ko'];
+  return (m && m[code]) || ({ method: METHOD_TAG_KO, verify: VERIFY_TAG_KO }[kind] || {})[code] || code;
+}
+function tagList(v) { return String(v === null || v === undefined ? '' : v).split(/[,\s]+/).filter(Boolean); }
+function axesOf(o, act) {
+  o = o || {};
+  var a = String(act === null || act === undefined ? '' : act).toUpperCase();
+  var mt = tagList(o.method_tags), pt = String(o.potential_tag || '').toUpperCase() === 'HIGH_POTENTIAL';
+  if (!o.potential_tag && a === 'HIGH_POTENTIAL') pt = true;
+  if (!mt.length && a === 'LOTTERY') mt = ['LOTTERY'];
+  var bv = String(o.buy_verdict || '').toUpperCase();
+  return { ga: bool(o.grade_assumed), mt: mt, vt: tagList(o.verify_tags), pt: pt, bv: BUY_VERDICT[bv] ? bv : '', bvr: o.buy_verdict_reason ? String(o.buy_verdict_reason) : '' };
+}
+function isLot(ax) { return !!ax && (ax.mt.indexOf('LOTTERY') >= 0 || ax.mt.indexOf('RESERVATION') >= 0); }
+function assumedWhy(ax) {
+  var w = ax.vt.filter(function (k) { return k === 'MSRP_ASSUMED' || k === 'COST_ASSUMED'; }).map(function (k) { return tagKo('verify', k); });
+  return '이 등급은 확정되지 않은 가격으로 계산되었습니다' + (w.length ? ' (' + w.join(' · ') + ')' : '') + ' — 등급 값 자체는 바뀌지 않았습니다.';
+}
+function gaMark(ax, cls) { return ax && ax.ga ? '<small class="ga' + (cls ? ' ' + cls : '') + '" title="' + esc(assumedWhy(ax)) + '">·가정</small>' : ''; }
+function buyChip(ax, tip) {
+  if (!ax || !BUY_VERDICT[ax.bv]) return '';
+  var v = BUY_VERDICT[ax.bv];
+  return '<span class="vd ' + v.c + '" title="' + esc('구매 판정 · ' + v.l + (ax.bvr ? ' — ' + ax.bvr : '') + (tip || '')) + '">' + v.l + '</span>';
+}
+function methodChips(ax) {
+  return ax.mt.map(function (k) { return '<span class="tg m-' + k + '" title="구매 방식 · 등급과 무관한 표시입니다">' + esc(tagKo('method', k)) + '</span>'; }).join('');
+}
+function potChip(ax) { return ax.pt ? '<span class="tg pot" title="고수익 잠재 · ROI·순이익 기준 이상이고 KREAM 판매 게이트를 통과했습니다 (추첨 포함, 확인 전에는 구매 근거로 쓰지 마세요)">잠재</span>' : ''; }
+function verifyChips(ax, max) {
+  var l = ax.vt, n = max === undefined ? l.length : max, h = l.slice(0, n).map(function (k) { return '<span class="tg v" title="' + esc(VERIFY_TAG_TIP[k] || '') + '">' + esc(tagKo('verify', k)) + '</span>'; }).join('');
+  if (l.length > n) h += '<span class="tg v" title="' + esc(l.slice(n).map(function (k) { return tagKo('verify', k); }).join(' · ')) + '">외 ' + (l.length - n) + '</span>';
+  return h;
+}
+/* the card's axis chips: 구매 판정 (main state) · 방식 · 잠재 · 확인 태그 (max 3 + 외 N). They follow the SELECTED size / store row. */
+function axisChips(f, maxVerify) { return buyChip(f.ax) + methodChips(f.ax) + potChip(f.ax) + verifyChips(f.ax, maxVerify === undefined ? 3 : maxVerify); }
+function cardHasTag(c, t) {
+  var ax = c.ax;
+  if (t === 'HP') return ax.pt;
+  if (t === 'CM') return ax.bv === 'CONDITIONS_MET';
+  return ax.mt.indexOf(t) >= 0;
+}
 var PCLS = {
   OFFICIAL_CURRENT: { l: '현재 정가', c: 'ok', t: '공식·리테일러 현재 가격' },
   OFFICIAL_CURRENT_UNVERIFIED_AVAILABILITY: { l: '현재 정가 · 판매 미확인', c: 'info', t: '올해 정가 확인, 현재 판매 여부는 미확인' },
   THIRD_PARTY_ESTIMATE: { l: '정가 추정', c: 'warn', t: '공식 확인 전 추정 정가 (등급 상한 A)' },
   JP_RESALE_PRICE: { l: '일본 중고가', c: 'warn', t: '일본 중고·리셀 리스팅 가격 (등급 상한 B)' },
+  OFFICIAL_RECENT: { l: '정가(최근 자료)', c: 'warn', t: '최근 연도 공식·판매처·보도 정가 — 현재 정가 변동 가능 (등급 상한 A)' },
   HISTORICAL_LAUNCH: { l: '정가 매입 가정', c: 'warn', t: '과거 발매 정가를 참고 원가로 쓴 가정 ROI (등급 상한 B)' },
   UNKNOWN: { l: '가격 미확인', c: 'bad', t: '가격 정보 없음' }
 };
@@ -1446,8 +1548,9 @@ function imgTile(prod, name, brand, size) {
   return '<span class="thumb ' + (size || '') + '"><span class="ini" aria-hidden="true">' + init + '</span>' +
     (ok ? '<img src="' + esc(url) + '" alt="' + esc(name || '') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '<span class="sr">' + esc((name || '') + ' 이미지 없음') + '</span>') + '</span>';
 }
-function thumbWrap(x, size, gsize) {
-  return '<span class="thumb-wrap">' + imgTile(x.p, x.name, x.brand, size) + '<span class="grade ' + (gsize || 'sm') + ' ' + x.grade + '" aria-label="등급 ' + x.grade + '">' + (x.grade === 'EXCLUDE' ? '제외' : x.grade) + '</span></span>';
+function thumbWrap(x, size, gsize, f) {   // f (optional) = figs(): the SELECTED row's grade / 가정 instead of the product's representative one
+  var g = (f && f.grade) || x.grade, ax = f ? f.ax : x.ax;
+  return '<span class="thumb-wrap">' + imgTile(x.p, x.name, x.brand, size) + '<span class="grade ' + (gsize || 'sm') + ' ' + g + '" aria-label="등급 ' + g + (ax && ax.ga ? ' 가정' : '') + '">' + (g === 'EXCLUDE' ? '제외' : g) + '</span>' + gaMark(ax, 'tw') + '</span>';
 }
 function stockL(v) { if (!v) return '재고 불명'; return STOCK[String(v).toLowerCase()] || String(v); }
 
@@ -1694,7 +1797,8 @@ function build() {
     var sizes = (Array.isArray(raw) ? raw : []).filter(function (z) { return z && z.o !== undefined && z.o !== null; }).map(function (z) {
       var opt = optKey(z.o);
       return { opt: opt, s: N(z.s), lo: N(z.lo), hi: N(z.hi), g: z.g || '', a: z.a || '', t7: N(z.t7), t30: N(z.t30), h: N(z.h), bid: N(z.bid), q: N(z.q),
-        roi: N(z.roi), net: N(z.net), gate: z.gate || '', stores: storesFor(pid, opt) };
+        roi: N(z.roi), net: N(z.net), gate: z.gate || '', stores: storesFor(pid, opt),
+        ax: axesOf({ grade_assumed: z.ga, method_tags: z.mt, verify_tags: z.vt, potential_tag: z.pt, buy_verdict: z.bv }, z.a) };   // H-11 short keys
     });
     if (!sizes.length) {   // sizes_json missing/broken: list the sizes that have Opportunities rows, using the engine columns of their best store
       var seenO = {};
@@ -1702,7 +1806,7 @@ function build() {
         var opt = optKey(x.o.option); if (seenO[opt]) return; seenO[opt] = 1;
         var st = storesFor(pid, opt), b = st[0] || x, o = b.o, mk = b.mk || {};
         sizes.push({ opt: opt, s: N(o.resell_score), lo: N(o.resell_score_low), hi: N(o.resell_score_high), g: o.grade || '', a: o.action || '', t7: N(mk.trades_7d), t30: N(mk.trades_30d), h: null,
-          bid: N(o.price_bid), q: N(o.bid_qty_at_target), roi: N(o.roi_basis_post), net: N(o.net_basis), gate: o.gate_failed || '', stores: st });
+          bid: N(o.price_bid), q: N(o.bid_qty_at_target), roi: N(o.roi_basis_post), net: N(o.net_basis), gate: o.gate_failed || '', stores: st, ax: axesOf(o, o.action) });
       });
     }
     sizes.sort(function (a, b) { return optSort(a.opt, b.opt); });
@@ -1716,7 +1820,7 @@ function build() {
     var regions = {}, hay = [];
     sizes.forEach(function (z) { hay.push(z.opt); z.stores.forEach(function (x) { regions[x.region] = 1; hay.push(x.bName, x.shopName); }); });
     var c = {
-      id: pid, rp: r, p: p, sizes: sizes, rep: rep, repX: repX, grade: grade, act: actCode(r.action, grade), regions: regions,
+      id: pid, rp: r, p: p, sizes: sizes, rep: rep, repX: repX, grade: grade, act: actCode(r.action, grade), ax: axesOf(r, r.action), regions: regions,
       name: p.name_ko || p.name_en || p.name_ja || pid, brand: p.brand || '', category: p.category || '',
       watch: bool(p.priority_watch) || (repX ? repX.watch : false)
     };
@@ -1729,7 +1833,7 @@ function build() {
      No per-size and no per-shop repeats, so one product is never counted twice inside a building. */
   var PS = {};
   opps.forEach(function (x) {
-    var c = cardById[optKey(x.o.product_id)]; if (!c || c.act === 'EXCLUDE') return;
+    var c = cardById[optKey(x.o.product_id)]; if (!c || c.grade === 'EXCLUDE') return;
     x.card = c;
     var k = optKey(x.o.product_id) + '|' + x.bid; (PS[k] || (PS[k] = [])).push(x);
   });
@@ -1861,10 +1965,10 @@ function renderChrome() {
   var sub = '';
   if (M) {
     if (S.tab === 'rec') {
-      var n = { rec: 0, hp: 0, lot: 0, watch: 0 };
-      M.cards.forEach(function (c) { var k = ACTION[c.act] && ACTION[c.act].sec; if (n[k] !== undefined) n[k]++; });
+      var n = { S: 0, A: 0, B: 0, hp: 0 };
+      M.cards.forEach(function (c) { if (n[c.grade] !== undefined) n[c.grade]++; if (c.grade !== 'EXCLUDE' && c.ax.pt) n.hp++; });
       var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
-      sub = M.cards.length ? '추천 ' + n.rec + (n.hp ? ' · 고수익 잠재 ' + n.hp : '') + ' · 추첨·예약 ' + n.lot + ' · 관찰 ' + n.watch + (latest ? ' · 계산 <time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '') : '추천 데이터 갱신 대기 중';
+      sub = M.cards.length ? 'S ' + n.S + ' · A ' + n.A + ' · B ' + n.B + (n.hp ? ' · 잠재 ' + n.hp : '') + (latest ? ' · 계산 <time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '') : '추천 데이터 갱신 대기 중';
     } else if (S.tab === 'stores') sub = '건물 ' + M.blds.length + '곳 · 상품 ' + uniqProducts(M.blds).length + '개 (중복 제외) · 방문 순위순';
     else if (S.tab === 'criteria') { var cv = crVal('version'), cu = crUpdated(); sub = cv ? '기준 ' + esc(cv) + (cu ? ' · 갱신 ' + ago(cu) : '') : 'Reco_Criteria 대기 중'; }
     else sub = S.fetchedAt ? '수신 <time data-ago="' + new Date(S.fetchedAt).toISOString() + '">' + ago(new Date(S.fetchedAt).toISOString()) + '</time>' : '';
@@ -2036,7 +2140,12 @@ function figs(c, repOnly) {
   f.target = x ? N(o.price_target) : null;
   f.gates = x ? gateList(o.gate_failed) : gateList(z.gate);
   f.gateStatus = x ? String(o.gate_status || '').toUpperCase() : '';
-  f.act = x && o.action ? actCode(o.action, c.grade) : (z.a ? actCode(z.a, c.grade) : c.act);
+  f.act = x && o.action ? actCode(o.action, c.grade) : (z.a ? actCode(z.a, c.grade) : c.act);   // legacy value: kept for old rows only
+  /* H-11: grade + axes of the SELECTED (size, store) row; a size without a store row reads sizes_json, then the representative row */
+  var gx = String((x && o.grade) || z.g || '').toUpperCase();
+  f.grade = GRADES[gx] ? gx : c.grade;
+  f.ax = x ? axesOf(o, o.action) : (z.ax || c.ax);
+  if (!f.ax.bvr && !x && z === c.rep) f.ax = Object.assign({}, f.ax, { bvr: c.ax.bvr });
   f.pc = String((x && o.price_class) || c.rp.price_class || '').toUpperCase();
   f.avail = String((x && o.availability) || c.rp.availability || '').toUpperCase();
   f.hist = f.pc === 'HISTORICAL_LAUNCH' || (x && bool(o.cost_is_reference));
@@ -2081,10 +2190,10 @@ function todoList(c, f) {
   var t = (f && f.o && f.o.todo_checks) || (c && c.rp && c.rp.todo_checks) || '';
   return String(t).split(/\s*\/\s*/).filter(Boolean);
 }
-function todoBox(c, f) {
-  if (f.act !== 'HIGH_POTENTIAL') return '';
+function todoBox(c, f) {   // H-11: shown for every grade whenever the engine listed something to verify
   var l = todoList(c, f);
-  return '<div class="todo"><div class="todo-h">현장에서 확인할 것</div>' + (l.length ? '<ul>' + l.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '<p class="todo-n" style="margin:0">확인 항목이 기록되지 않았습니다.</p>') +
+  if (!l.length) return '';
+  return '<div class="todo"><div class="todo-h">현장에서 확인할 것</div><ul>' + l.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
     '<p class="todo-n">확인되기 전에는 구매·판매 결정의 근거로 쓰지 마세요. 매입 상한 이하일 때만 의미가 있습니다.</p></div>';
 }
 
@@ -2200,39 +2309,50 @@ function storeCmpTable(c, f) {
 }
 
 /* ---- list ---- */
-function filteredTopCard() {   // highest 리셀 점수 among recommended (S/A) products, for the budget hint
-  var l = M.cards.filter(function (c) { return c.act !== 'EXCLUDE' && c.act !== 'WATCH' && c.act !== 'HIGH_POTENTIAL' && c.repX; });
+function filteredTopCard() {   // highest 리셀 점수 among S/A products, for the budget hint
+  var l = M.cards.filter(function (c) { return (c.grade === 'S' || c.grade === 'A') && c.repX; });
   l.sort(function (a, b) { return (N(b.rp.resell_score) === null ? -1 : N(b.rp.resell_score)) - (N(a.rp.resell_score) === null ? -1 : N(a.rp.resell_score)); });
   return l[0] || null;
 }
-/* grade chips (전체 · S · A · B · 잠재): one state shared with the 행동 dropdown -- 잠재 = action HIGH_POTENTIAL, S/A/B = grade */
-function gradeChipKey() { return S.f.grade ? S.f.grade : (S.f.action === 'HIGH_POTENTIAL' ? 'HP' : ''); }
-function gradeChipCounts() {   // counts honour every OTHER filter (region, category, search ...), never the chip itself
-  var f2 = Object.assign({}, S.f, { grade: '', action: S.f.action === 'HIGH_POTENTIAL' ? '' : S.f.action });
-  var n = { '': 0, S: 0, A: 0, B: 0, HP: 0 };
-  filteredCards(f2).forEach(function (c) { n['']++; if (n[c.grade] !== undefined) n[c.grade]++; if (c.act === 'HIGH_POTENTIAL') n.HP++; });
+/* H-11 chips, sticky as one block: row 1 = grade (전체 · S · A · B, single choice), row 2 = tags (잠재 · 추첨 · 예약 · 번호표 · 오픈런 · 현장 탐색 · 일반 · 조건 충족,
+   multi choice -- a card must carry ALL selected tags). Grade and tags combine independently. Each count is "what you would see with this chip
+   applied and every other filter kept" (= the other filters, minus this chip's own choice). */
+function chipCounts() {
+  var n = { g: {}, t: {} };
+  ['', 'S', 'A', 'B'].forEach(function (g) { n.g[g] = filteredCards(Object.assign({}, S.f, { grade: g }), true).length; });
+  TAG_CHIPS.forEach(function (t) {
+    var tags = S.f.tags.filter(function (x) { return x !== t[0]; }).concat([t[0]]);
+    n.t[t[0]] = filteredCards(Object.assign({}, S.f, { tags: tags }), true).length;
+  });
   return n;
 }
-function gradeChips() {
-  var n = gradeChipCounts(), cur = gradeChipKey();
-  return '<div class="gchips" role="group" aria-label="등급 필터">' + [['', '전체'], ['S', 'S'], ['A', 'A'], ['B', 'B'], ['HP', '잠재']].map(function (o) {
-    return '<button type="button" class="gchip' + (o[0] ? ' g-' + o[0] : '') + '" data-act="chip-grade" data-v="' + o[0] + '" aria-pressed="' + (cur === o[0]) + '"' +
-      (o[0] === 'HP' ? ' title="고수익 잠재 · 현장 확인 필요"' : '') + '>' + o[1] + ' <b class="num">' + n[o[0]] + '</b></button>';
+var TAG_TIP = { HP: '고수익 잠재 · ROI·순이익 기준 이상이고 판매 게이트 통과 (추첨 포함)', CM: '구매 판정이 조건 충족인 상품' };
+function chipRows() {
+  var n = chipCounts();
+  var g = '<div class="gchips" role="group" aria-label="등급 필터">' + [['', '전체'], ['S', 'S'], ['A', 'A'], ['B', 'B']].map(function (o) {
+    return '<button type="button" class="gchip' + (o[0] ? ' g-' + o[0] : '') + '" data-act="chip-grade" data-v="' + o[0] + '" aria-pressed="' + (S.f.grade === o[0]) + '">' + o[1] + ' <b class="num">' + n.g[o[0]] + '</b></button>';
   }).join('') + '</div>';
+  var t = '<div class="gchips tchips" role="group" aria-label="태그 필터 (여러 개 선택하면 모두 가진 상품만)">' + TAG_CHIPS.map(function (o) {
+    var on = S.f.tags.indexOf(o[0]) >= 0, label = o[0] === 'HP' || o[0] === 'CM' ? o[1] : tagKo('method', o[0]);
+    if (o[0] === 'NORMAL') label = '일반';
+    return '<button type="button" class="gchip tag t-' + o[0] + '" data-act="chip-tag" data-v="' + o[0] + '" aria-pressed="' + on + '"' + (TAG_TIP[o[0]] ? ' title="' + esc(TAG_TIP[o[0]]) + '"' : '') + '>' + esc(label) + ' <b class="num">' + n.t[o[0]] + '</b></button>';
+  }).join('') + '</div>';
+  return '<div class="chiprows">' + g + t + '</div>';
 }
-function filteredCards(fOverride) {
-  var f = fOverride || S.f, q = f.q.trim().toLowerCase();
+function filteredCards(fOverride, noSort) {
+  var f = fOverride || S.f, q = f.q.trim().toLowerCase(), tags = f.tags || [];
   var list = M.cards.filter(function (c) {
-    if (c.act === 'EXCLUDE') return false;
+    if (c.grade === 'EXCLUDE') return false;   // H-11: EXCLUDE is hidden (only counted)
     if (f.region && !c.regions[f.region]) return false;
     if (f.category && c.category !== f.category) return false;
     if (f.grade && c.grade !== f.grade) return false;
-    if (f.action && c.act !== f.action) return false;
+    if (tags.length && !tags.every(function (t) { return cardHasTag(c, t); })) return false;
     if (f.watch && !c.watch) return false;
     if (f.trip && !(c.repX && tripOk(c.repX) === true)) return false;
     if (q && c.hay.indexOf(q) < 0) return false;
     return true;
   });
+  if (noSort) return list;
   var key = S.sort;
   function sc(c) { var v = N(c.rp.resell_score); return v === null ? -1 : v; }
   function lo(c) { var v = N(c.rp.resell_score_low); return v === null ? -1 : v; }
@@ -2246,7 +2366,7 @@ function filteredCards(fOverride) {
   });
   return list;
 }
-function activeFilterCount() { var f = S.f, n = 0; ['region', 'category', 'grade', 'action'].forEach(function (k) { if (f[k]) n++; }); if (f.trip) n++; if (f.watch) n++; return n; }
+function activeFilterCount() { var f = S.f, n = 0; ['region', 'category', 'grade'].forEach(function (k) { if (f[k]) n++; }); n += f.tags.length; if (f.trip) n++; if (f.watch) n++; return n; }
 function uniq(arr) { var o = {}; arr.forEach(function (v) { if (v) o[v] = 1; }); return Object.keys(o).sort(); }
 function waitingState(h, why) {
   return h + emptyState('추천 데이터 갱신 대기 중', why + ' 이전 방식의 카드는 점수·게이트 기준이 달라 표시하지 않습니다 — 없는 값을 만들어 채우지 않습니다.', '<button class="btn" data-act="goto" data-tab="status" type="button">수집 상태 보기</button>');
@@ -2264,10 +2384,9 @@ function viewRec() {
   h += '<div id="recSummary">' + recSummaryHtml() + '</div>';   // 상태 바 바로 아래 요약 한 줄
   h += '<div class="toolbar"><label class="search"><span class="sr">검색</span>' + IC.search + '<input class="input" id="q" type="search" placeholder="상품·브랜드·사이즈·매장 검색" value="' + esc(S.f.q) + '" autocomplete="off" enterkeyhint="search"></label>' +
     '<button class="btn filter-btn" type="button" data-act="toggle-filters" aria-expanded="' + S.showFilters + '" aria-controls="filters">' + IC.filter + '필터' + (nf ? '<span class="count">' + nf + '</span>' : '') + '</button>' + viewToggle() + '</div>';
-  h += gradeChips();
+  h += chipRows();
   h += '<div class="filters" id="filters"' + (S.showFilters ? '' : ' hidden') + '>' +
     sel_('region', '지역', regions, S.f.region) + sel_('category', '카테고리', cats, S.f.category, catL) +
-    sel_('action', '행동', ['SELL_NOW', 'STORE_HUNT', 'LIST_WAIT', 'HIGH_POTENTIAL', 'LOTTERY', 'WATCH'], S.f.action, function (k) { return ACTION[k].l; }) +
     '<label class="field"><span>정렬</span><select class="select" data-sort>' +
     [['score', '추천 점수순'], ['profit', '순이익 높은 순'], ['roi', 'ROI 높은 순'], ['fresh', '최근 계산 순']].map(function (o) { return '<option value="' + o[0] + '"' + (S.sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>' +
     '<label class="switch full"><input type="checkbox" data-filter="watch"' + (S.f.watch ? ' checked' : '') + '><span class="track"></span><span><span class="star">★</span> 우선감시만</span></label>' +
@@ -2279,7 +2398,8 @@ function viewRec() {
 function activeChips() {
   var f = S.f, out = [];
   if (f.region) out.push(f.region); if (f.category) out.push(catL(f.category)); if (f.grade) out.push('등급 ' + f.grade);
-  if (f.action && ACTION[f.action]) out.push(ACTION[f.action].l); if (f.trip) out.push('여행기간 중 구매 가능'); if (f.watch) out.push('우선감시');
+  f.tags.forEach(function (t) { out.push(t === 'HP' ? '잠재' : t === 'CM' ? '조건 충족' : tagKo('method', t)); });
+  if (f.trip) out.push('여행기간 중 구매 가능'); if (f.watch) out.push('우선감시');
   return out.map(function (t) { return '<span class="chip acc">' + esc(t) + '</span>'; }).join('');
 }
 function sel_(k, label, opts, v, lab) {
@@ -2289,29 +2409,26 @@ function sel_(k, label, opts, v, lab) {
 function stat(label, val, sub) { return '<div class="stat"><label>' + label + '</label><b class="num">' + val + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
 
 /* ---- 추천 목록: 접힌 카드(모바일·태블릿, 탭하면 그 자리에서 펼침) / 표 + 상세 패널(데스크톱) ---- */
-var ACT_ORDER = ['SELL_NOW', 'STORE_HUNT', 'LIST_WAIT', 'HIGH_POTENTIAL', 'LOTTERY', 'WATCH'];
-function secIsOpen(k) { return S.secOpen[k] !== undefined ? S.secOpen[k] : !(k === 'watch' && !isDesk()); }   // 관찰은 폰에서 기본 접힘 (기억하지 않음)
 function recViewMode() { return isDesk() && S.recView !== 'cards' ? 'table' : 'cards'; }
-function recGroups() {
+function recGroups() {   // H-11: ONE list, already sorted (default = 리셀 점수순); EXCLUDE is only counted
   var list = filteredCards();
-  var G = { rec: [], hp: [], lot: [], watch: [] };
-  list.forEach(function (c) { var s = ACTION[c.act] && ACTION[c.act].sec; if (G[s]) G[s].push(c); });
-  var excl = M.cards.filter(function (c) { return c.act === 'EXCLUDE'; }).length;
-  if (isDesk() && !S.sel.rec && list.length) S.sel.rec = (G.rec[0] || G.hp[0] || G.lot[0] || G.watch[0]).id;
-  return { list: list, G: G, excl: excl };
+  var excl = M.cards.filter(function (c) { return c.grade === 'EXCLUDE'; }).length;
+  if (isDesk() && !S.sel.rec && list.length) S.sel.rec = list[0].id;
+  return { list: list, excl: excl };
 }
 function kShort(v, signed) { return isDesk() ? tKrw(v, signed) : (N(v) === null ? '—' : sgn(N(v), signed) + '₩' + sKrw(Math.abs(N(v)))); }   // 폰: ₩176.7만
 function budgetMeta(top) { return ''; }
-/* compact dashboard strip: counts per section, best score, top net profit of ONE product (never a sum), freshness */
+/* compact dashboard strip: S·A·B counts · 잠재 · 조건 충족 (tap = apply that chip), best score, top net profit of ONE product (never a sum), freshness */
 function recSummaryHtml(R) {
   R = R || recGroups();
-  var G = R.G, pool = G.rec.length ? G.rec : R.list, top = G.rec[0] || G.hp[0] || G.lot[0] || G.watch[0];
+  var list = R.list, cnt = { S: 0, A: 0, B: 0, HP: 0, CM: 0 };
+  list.forEach(function (c) { if (cnt[c.grade] !== undefined) cnt[c.grade]++; if (c.ax.pt) cnt.HP++; if (c.ax.bv === 'CONDITIONS_MET') cnt.CM++; });
+  var sa = list.filter(function (c) { return c.grade === 'S' || c.grade === 'A'; }), pool = sa.length ? sa : list, top = sa[0] || list[0];
   var best = null; pool.forEach(function (c) { var v = N(c.rp.resell_score); if (v !== null && (best === null || v > N(best.rp.resell_score))) best = c; });
   var bestNet = maxOf(pool, function (c) { return c.repX && c.repX.net; });
-  var tiles = [['rec', '추천', 'buy'], ['hp', '잠재', 'hp'], ['lot', '추첨·예약', 'lot'], ['watch', '관찰', 'watch']];
+  var tiles = [['S', 'S', 'gS'], ['A', 'A', 'gA'], ['B', 'B', 'gB'], ['HP', '잠재', 'hp'], ['CM', '조건 충족', 'ok']];
   var h = '<div class="dash" role="region" aria-label="추천 요약"><div class="dash-tiles">' + tiles.map(function (t) {
-    var sec = SECTIONS.filter(function (s) { return s.k === t[0]; })[0];
-    return '<button type="button" class="dt ' + t[2] + (G[t[0]].length ? '' : ' none') + '" data-act="goto-sec" data-k="' + t[0] + '" title="' + esc(sec.t) + '"><b class="num">' + G[t[0]].length + '</b><span>' + t[1] + '</span></button>';
+    return '<button type="button" class="dt ' + t[2] + (cnt[t[0]] ? '' : ' none') + '" data-act="tile-chip" data-k="' + t[0] + '" title="' + esc(t[1] + ' 필터 적용') + '"><b class="num">' + cnt[t[0]] + '</b><span>' + t[1] + '</span></button>';
   }).join('') + '</div><div class="dash-meta">' +
     '<span class="dm"><span class="k">최고 점수</span> <b class="num">' + (best ? esc(scoreTxt({ mid: N(best.rp.resell_score), lo: N(best.rp.resell_score_low), hi: N(best.rp.resell_score_high), cov: N(best.rp.score_coverage) })) : '—') + '</b></span>' +
     '<span class="dm" title="상품 1개(대표 사이즈·최적 매장) 기준 최댓값입니다 — 여러 상품의 합이 아닙니다"><span class="k">최고 순이익</span> <b class="num ' + cls(bestNet) + '">' + kShort(bestNet, true) + '</b></span>' +
@@ -2319,18 +2436,12 @@ function recSummaryHtml(R) {
     '</div></div>';
   return h;
 }
-function secHead(sec, n) { return '<span class="act ' + sec.c + '">' + sec.t + '</span><div class="grow"><div class="desc">' + sec.d + '</div></div><span class="n">' + n + '</span>'; }
 function recListHtml(R) {
   R = R || recGroups();
-  var G = R.G, list = R.list, excl = R.excl, h = '';
+  var list = R.list, excl = R.excl, h = '';
   if (!list.length) return emptyState('조건에 맞는 추천이 없습니다', '필터나 검색어를 바꿔 보세요.' + (S.f.trip ? ' "여행기간 중 구매 가능"은 판매·응모 일정이 확인된 상품만 남깁니다.' : ''), '<button class="btn" data-act="clear-filters" type="button">필터 초기화</button>');
   if (recViewMode() === 'table') h += recTableHtml(R);
-  else SECTIONS.forEach(function (sec) {
-    var L = G[sec.k];
-    if (!L.length && sec.k !== 'rec') return;
-    h += '<details class="section sec-' + sec.k + '" data-sec="' + sec.k + '"' + (secIsOpen(sec.k) ? ' open' : '') + '><summary>' + IC.chev + secHead(sec, L.length) + '</summary>' +
-      (L.length ? '<div class="grid">' + L.map(recCard).join('') + '</div>' : '<div class="card empty" style="padding:20px"><p style="margin:0">기준을 통과한 추천 상품이 없습니다.</p></div>') + '</details>';
-  });
+  else h += '<div class="grid">' + list.map(recCard).join('') + '</div>';
   if (excl) h += '<p class="muted small" style="margin:16px 4px">수익·매칭 기준 미달로 제외된 ' + excl + '개는 표시하지 않습니다.</p>';
   return h;
 }
@@ -2339,7 +2450,7 @@ function refreshRecList() {
   var R = recGroups();
   var sm = $('#recSummary'); if (sm) sm.innerHTML = recSummaryHtml(R);
   var rl = $('#recList'); if (rl) rl.innerHTML = recListHtml(R);
-  var gc = $('.gchips'); if (gc) gc.outerHTML = gradeChips();
+  var gc = $('.chiprows'); if (gc) gc.outerHTML = chipRows();
 }
 function viewToggle() {
   if (!isDesk()) return '';
@@ -2358,7 +2469,7 @@ var TCOLS = [
   { k: 'grade', l: '등급', cls: 'c-grade', dir: 'asc', v: function (r) { return 'SAB'.indexOf(r.c.grade); } },
   { k: 'name', l: '상품', cls: 'c-name', dir: 'asc', v: function (r) { return r.c.name; } },
   { k: 'opt', l: '대표 사이즈', cls: 'c-opt', dir: 'asc', v: function (r) { return r.c.rep ? r.c.rep.opt : null; } },
-  { k: 'act', l: '추천 상태', cls: 'c-act', dir: 'asc', v: function (r) { var i = ACT_ORDER.indexOf(r.f.act); return i < 0 ? null : i; } },
+  { k: 'bv', l: '판정', cls: 'c-act', dir: 'asc', v: function (r) { var i = VERDICT_ORDER.indexOf(r.f.ax.bv); return i < 0 ? null : i; } },
   { k: 'score', l: '점수', cls: 'c-score', dir: 'desc', v: function (r) { return N(r.c.rp.resell_score); } },
   { k: 'net', l: '순이익', cls: 'c-net', dir: 'desc', v: function (r) { return r.f.net; } },
   { k: 'roi', l: 'ROI', cls: 'c-roi', dir: 'desc', v: function (r) { return r.f.roi; } },
@@ -2385,19 +2496,19 @@ function tableSort(k) {
   var cur = S.tsort, opp = col.dir === 'asc' ? 'desc' : 'asc';
   if (!cur || cur.k !== k) S.tsort = { k: k, dir: col.dir };
   else if (cur.dir === col.dir) S.tsort = { k: k, dir: opp };
-  else S.tsort = null;   // 세 번째 클릭 = 섹션 순으로 되돌림
+  else S.tsort = null;   // 세 번째 클릭 = 점수순으로 되돌림
   refreshRecList();
   var b = $('.th-sort[data-k="' + k + '"]'); if (b) b.focus({ preventScroll: true });
 }
 function tRow(c, f) {
   var o = f.o, k = capInfo(o), net = f.net, basis = f.hist ? '가정' : (f.basis === 'BID' ? '입찰' : f.basis === 'CONSERVATIVE' ? '보수' : '');
   var sp = scoreParts(f.score);
-  return '<tr class="rec-row g-' + c.grade + (f.act === 'HIGH_POTENTIAL' ? ' hp' : '') + (S.sel.rec === c.id ? ' selected' : '') + '" data-act="open-rec" data-id="' + esc(c.id) + '" data-pid="' + esc(c.id) + '" tabindex="0" role="button" aria-label="' + esc(c.name + ' 상세 보기') + '"' +
+  return '<tr class="rec-row g-' + c.grade + (f.ax.pt ? ' hp' : '') + (S.sel.rec === c.id ? ' selected' : '') + '" data-act="open-rec" data-id="' + esc(c.id) + '" data-pid="' + esc(c.id) + '" tabindex="0" role="button" aria-label="' + esc(c.name + ' 상세 보기') + '"' +
     ' data-score="' + (N(c.rp.resell_score) === null ? '' : N(c.rp.resell_score)) + '" data-net="' + (net === null ? '' : net) + '" data-roi="' + (f.roi === null ? '' : f.roi) + '">' +
-    '<td class="c-grade"><span class="grade sm ' + c.grade + '" aria-label="등급 ' + c.grade + '">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span></td>' +
-    '<td class="c-name"><div class="tn">' + imgTile(c.p, c.name, c.brand, 'sm') + '<div class="tt"><b class="t2"><span class="grade xs gi ' + c.grade + '" aria-hidden="true">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + (c.watch ? '<span class="star" title="우선감시">★</span> ' : '') + esc(c.name) + '</b><span class="sub ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ') || '브랜드 미확인') + '<span class="oi"> · 대표 ' + esc(c.rep ? c.rep.opt || '—' : '—') + '</span></span></div></div></td>' +
+    '<td class="c-grade"><span class="grade sm ' + c.grade + '" aria-label="등급 ' + c.grade + (f.ax.ga ? ' 가정' : '') + '">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + gaMark(f.ax, 'blk') + '</td>' +
+    '<td class="c-name"><div class="tn">' + imgTile(c.p, c.name, c.brand, 'sm') + '<div class="tt"><b class="t2"><span class="grade xs gi ' + c.grade + '" aria-hidden="true">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + gaMark(f.ax, 'gi') + (c.watch ? '<span class="star" title="우선감시">★</span> ' : '') + esc(c.name) + '</b><span class="sub ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ') || '브랜드 미확인') + '<span class="oi"> · 대표 ' + esc(c.rep ? c.rep.opt || '—' : '—') + '</span></span></div></div></td>' +
     '<td class="c-opt">' + esc(c.rep ? c.rep.opt || '—' : '—') + '</td>' +
-    '<td class="c-act">' + actBadge(f.act) + '</td>' +
+    '<td class="c-act">' + (buyChip(f.ax) || DASH) + '<span class="tgs">' + methodChips(f.ax) + potChip(f.ax) + '</span></td>' +
     '<td class="c-score num"><b>' + esc(sp.main) + '</b>' + (sp.range ? '<span class="sub">' + esc(sp.range) + '</span>' : '') + '</td>' +
     '<td class="c-net">' + (net === null ? DASH : '<b class="num ' + cls(net) + '">' + tKrw(net, true) + '</b>') + (basis ? '<span class="sub">' + basis + '</span>' : '') + '</td>' +
     '<td class="c-roi">' + hPct(f.roi, true) + '</td>' +
@@ -2406,23 +2517,26 @@ function tRow(c, f) {
     '<td class="c-ns num">' + storeCount(c) + '</td></tr>';
 }
 function recTableHtml(R) {
-  var G = R.G;
   var head = '<tr>' + TCOLS.map(function (col) {
     var on = S.tsort && S.tsort.k === col.k, ar = on ? (S.tsort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
     return '<th scope="col" class="' + col.cls + '" aria-sort="' + ar + '"><button type="button" class="th-sort" data-act="tsort" data-k="' + col.k + '" title="' + col.l + ' 순으로 정렬">' + col.l + '</button></th>';
   }).join('') + '</tr>';
-  var body = '';
-  if (S.tsort) body = tableRowsSorted(R.list).map(function (r) { return tRow(r.c, r.f); }).join('');
-  else SECTIONS.forEach(function (sec) {
-    var L = G[sec.k];
-    if (!L.length && sec.k !== 'rec') return;
-    var open = secIsOpen(sec.k);
-    body += '<tr class="sec-row" data-sec="' + sec.k + '"><td colspan="' + TCOLS.length + '"><button type="button" class="sec-toggle" data-act="toggle-sec" data-k="' + sec.k + '" aria-expanded="' + open + '">' + IC.chev + secHead(sec, L.length) + '</button></td></tr>';
-    if (!open) return;
-    body += L.length ? L.map(function (c) { return tRow(c, figs(c, true)); }).join('') : '<tr class="empty-row"><td colspan="' + TCOLS.length + '">기준을 통과한 추천 상품이 없습니다.</td></tr>';
-  });
+  var body = (S.tsort ? tableRowsSorted(R.list) : R.list.map(function (c) { return { c: c, f: figs(c, true) }; })).map(function (r) { return tRow(r.c, r.f); }).join('');
   return '<div class="tbl-scroll rec-tblwrap"><table class="tbl rec-tbl"><caption class="sr">추천 상품 표 — 열 제목을 누르면 정렬됩니다</caption><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>' +
-    '<p class="muted xs" style="margin:6px 2px 0">값은 상품별 대표 사이즈·최적 구매처 기준(엔진 계산)입니다. 열 제목을 누르면 정렬, 한 번 더 누르면 반대 순서, 세 번째는 섹션 순으로 돌아갑니다. 행을 누르면 오른쪽에 상세가 열립니다.</p>';
+    '<p class="muted xs" style="margin:6px 2px 0">값은 상품별 대표 사이즈·최적 구매처 기준(엔진 계산)입니다. 열 제목을 누르면 정렬, 한 번 더 누르면 반대 순서, 세 번째는 점수순으로 돌아갑니다. 행을 누르면 오른쪽에 상세가 열립니다. 등급 옆 “가정”은 정가·원가가 확정되지 않은 가격으로 계산됐다는 뜻입니다.</p>';
+}
+
+/* H-10 axis separation (engine columns, display only): KREAM 수요 등급 (S/A/B from liquidity + ROI alone) and 구매 상태.
+   The S/A/B badge keeps every price-class cap; this chip says how well the item SELLS and how sure the retail price is. */
+var BUY_ST = { READY: '구매 준비', BUYABLE_CHECK_PRICE: '현장 가격 확인 필요', ASSUMED_MSRP_ROI: '정가 기준 가정 ROI' };
+var MSRP_CONF = { HIGH: '정가 신뢰 높음', MED: '정가 신뢰 보통', LOW: '정가 신뢰 낮음', HISTORICAL: '과거 정가' };
+function demandChip(c, f) {
+  var o = (f && f.o) || {}, rp = c.rp || {};
+  var g = String(o.kream_demand_grade || rp.kream_demand_grade || '').toUpperCase();
+  var bs = String(o.buy_status || rp.buy_status || '').toUpperCase(), cf = String(o.msrp_confidence || rp.msrp_confidence || '').toUpperCase();
+  if (!g && !bs) return '';
+  return mchip('dem' + (g ? ' g-' + g : ''), '수요', '<b>' + (g || '—') + '</b>' + (bs ? '<em>' + esc(BUY_ST[bs] || bs) + '</em>' : ''),
+    'KREAM 판매 적합도 ' + (g || '해당 없음') + '(유동성·입찰 깊이·ROI 기준, 정가 출처 상한 제외)' + (bs ? ' · ' + (BUY_ST[bs] || bs) : '') + (cf ? ' · ' + (MSRP_CONF[cf] || cf) : ''));
 }
 
 /* collapsed card (default): thumbnail + grade, name, brand · size, score, ONE chip row (label · net profit · ROI · 매입 상한).
@@ -2432,15 +2546,16 @@ function recCard(c) {
   var desk = isDesk(), open = !desk && S.openCard === c.id;
   var f = figs(c, !open), x = f.x, o = f.o, k = capInfo(o);
   var net = f.net, tag = f.hist ? '가정' : (f.basis === 'BID' ? '입찰' : f.basis === 'CONSERVATIVE' ? '보수' : '');
-  var h = '<article class="card rec g-' + c.grade + (f.act === 'HIGH_POTENTIAL' ? ' hp' : '') + (S.sel.rec === c.id && desk ? ' selected' : '') + (open ? ' open' : '') + '" data-pid="' + esc(c.id) + '">';
+  var h = '<article class="card rec g-' + f.grade + (f.ax.pt ? ' hp' : '') + (S.sel.rec === c.id && desk ? ' selected' : '') + (open ? ' open' : '') + '" data-pid="' + esc(c.id) + '">';
   h += '<div class="rc' + (desk ? '' : ' has-chev') + '" data-act="' + (desk ? 'open-rec' : 'toggle-card') + '" data-id="' + esc(c.id) + '" tabindex="0" role="button"' + (desk ? '' : ' aria-expanded="' + open + '"') + ' aria-label="' + esc(c.name + (desk ? ' 상세 보기' : (open ? ' 접기' : ' 펼치기'))) + '">' +
-    thumbWrap(c, '', 'sm') +
+    thumbWrap(c, '', 'sm', f) +
     '<div class="rc-main"><h3>' + esc(c.name) + '</h3><div class="rc-meta">' + (c.watch ? '<span class="star" title="우선감시">★</span>' : '') + '<span class="bn ellip">' + esc(c.brand || '브랜드 미확인') + '</span><span class="sz">· ' + (f.z === c.rep || !open ? '대표 ' : '선택 ') + esc(f.z.opt || '—') + '</span></div></div>' +
     scoreBox(f.score) + (desk ? '' : IC.chev.replace('class="chev"', 'class="chev rc-chev"')) +
-    '<div class="rc-chips">' + actBadge(f.act) +
+    '<div class="rc-chips">' + axisChips(f, 1) +
     mchip('net ' + (net === null ? 'muted' : net < 0 ? 'neg' : 'pos'), '', '<b class="num">' + (net === null ? '순이익 —' : sKrw(net, true)) + '</b>' + (tag && net !== null ? '<em>' + tag + '</em>' : ''), '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + (net === null ? '' : ' · ' + tKrw(net, true))) +
     mchip('roi', 'ROI', '<b class="num ' + cls(f.roi) + '">' + tPct(f.roi, true) + '</b>', 'ROI · 환급 후' + (f.roiPre !== null ? ' (환급 전 ' + tPct(f.roiPre, true) + ')' : '')) +
     (x || k ? mchip('cap' + (k ? '' : ' na'), '매입 상한', '<b class="num">' + (k ? '¥' + fmt(k.pre) : '—') + '</b>', k ? '이 금액(태그 가격, 쿠폰·게스트카드 할인 전) 이하로 사야 ' + capRoiNote() + '와 최소 이익이 남습니다' + (k.post !== null ? ' · 면세 환급 시 ¥' + fmt(k.post) : '') : '입찰·보수적 예상가가 없어 상한을 계산하지 않았습니다') : '') +
+    demandChip(c, f) +
     '</div></div>';
   if (open) h += recBody(c, f);
   return h + '</article>';
@@ -2453,12 +2568,12 @@ function recBody(c, f) {
   if (c.rp.why_top) h += '<p class="why" title="' + esc(c.rp.why_top) + '"><b>대표 근거</b> ' + esc(c.rp.why_top) + '</p>';
   h += '<div class="chips">' + statusChips(c, f) + '</div>';
   h += sizePicker(c, f);
-  if (f.act === 'LOTTERY' && x) h += lotteryHtml(x, false, true);
+  if (isLot(f.ax) && x) h += lotteryHtml(x, false, true);
   // numbers of the selected (size, store) — all engine values
   var pre = f.hist ? '정가 매입 가정 · ' : '';
   h += '<div class="profit"><div class="kpi main' + (f.net !== null && f.net < 0 ? ' is-neg' : '') + '"><label>' + pre + '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + '</label><b class="num ' + cls(f.net) + '">' + tKrw(f.net, true) + '</b><span class="roi num ' + cls(f.roi) + '">ROI ' + tPct(f.roi, true) + '</span></div>' +
     '<div class="kpi secondary"><label>' + pre + 'ROI 환급 전</label><b class="num ' + cls(f.roiPre) + '">' + tPct(f.roiPre, true) + '</b><span class="roi muted">환급 후 ' + tPct(f.roi, true) + '</span></div></div>';
-  h += capBox(o, f.act === 'HIGH_POTENTIAL') + todoBox(c, f);
+  h += capBox(o, f.ax.pt) + todoBox(c, f);
   if (f.hist) h += '<p class="note-hist">과거 발매 정가를 참고 원가로 계산한 가정입니다. 현재 정가로 살 수 있다는 뜻이 아니며, 실구매 가능성은 별도로 확인해야 합니다.</p>';
   h += '<div class="figs">' +
     figHtml('KREAM 입찰가', f.bid === null ? '입찰 없음' : tKrw(f.bid), f.target !== null ? '목표가 ' + sKrw(f.target) : '') +
@@ -2537,8 +2652,9 @@ function whyBlock(c, f) {
 }
 function recDetail(c) {
   var f = figs(c), x = f.x, o = f.o, z = f.z, mk = f.mk || {}, off = x ? x.off || {} : {}, pm = x ? x.pm : null, sd = f.sd;
-  var h = '<div class="d-head">' + thumbWrap(c, 'lg', '') + '<div class="grow"><div class="act-row">' + actBadge(f.act) + '</div><div class="eyebrow">' + (c.watch ? '<span class="star">★</span> 우선감시 · ' : '') + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ')) + '</div><h2>' + esc(c.name) + '</h2>' +
+  var h = '<div class="d-head">' + thumbWrap(c, 'lg', '', f) + '<div class="grow"><div class="act-row">' + axisChips(f, 99) + '</div><div class="eyebrow">' + (c.watch ? '<span class="star">★</span> 우선감시 · ' : '') + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ')) + '</div><h2>' + esc(c.name) + '</h2>' +
     '<div class="opt small" style="margin-top:4px">선택 <b>' + esc(z.opt || '—') + '</b>' + (z === c.rep ? ' <span class="chip ok">대표 사이즈</span>' : '') + (x ? ' · ' + esc(stripSample(x.shopName)) : '') + '</div></div>' + scoreBox(f.score) + '</div>';
+  if (f.ax.bv && f.ax.bvr) h += '<p class="vd-why"><b>' + esc(BUY_VERDICT[f.ax.bv].l) + '</b> · ' + esc(f.ax.bvr) + '</p>';
   h += '<div class="chips" style="margin-top:10px">' + statusChips(c, f) + '</div>';
   h += '<div class="d-sec" id="whySec"><h4>왜 이 순위인가</h4>' + whyBlock(c, f) + '</div>';
   h += '<div class="d-sec" id="sizeSec"><h4>사이즈 비교 · ' + c.sizes.length + '개</h4>' + sizeCmpTable(c, f, false) + '</div>';
@@ -2547,7 +2663,7 @@ function recDetail(c) {
   h += '<div class="d-sec" id="matchSec">' + matchBox(x, false) + '</div>';
 
   h += capDetail(x, f);
-  if (f.act === 'HIGH_POTENTIAL') h += '<div class="d-sec" id="todoSec"><h4>고수익 잠재 · 현장 확인 필요</h4>' + todoBox(c, f) + '</div>';
+  if (todoList(c, f).length) h += '<div class="d-sec" id="todoSec"><h4>' + (f.ax.pt ? '고수익 잠재 · ' : '') + '현장 확인 필요</h4>' + todoBox(c, f) + '</div>';
   var rows = [['현재 입찰<span class="sub">빠른 매도</span>', o.price_bid, o.net_bid, o.roi_bid_post, o.roi_bid_pre], ['최근 체결', o.price_recent, o.net_recent, o.roi_recent_post, null],
     ['보수적 예상<span class="sub">일반 매도</span>', o.price_conservative, o.net_conservative, o.roi_conservative_post, o.roi_conservative_pre], ['스트레스', o.price_stress, o.net_stress, o.roi_stress_post, null]];
   h += '<div class="d-sec"><h4>판매가 시나리오 · 순이익 (통관비 제외)</h4>' + (f.basis ? '<p class="xs muted" style="margin:0 0 6px">카드에 표시한 값 = <b>' + BASIS_L[f.basis] + '</b>' + (f.target !== null ? ' · 목표가(ROI·최소이익 충족 최저 판매가) ' + tKrw(f.target) : '') + '</p>' : '') +
@@ -2587,7 +2703,7 @@ function recDetail(c) {
     '<div class="actions" style="margin-top:10px"><button class="btn sm" type="button" data-act="open-store" data-id="' + esc(x.bid) + '">' + IC.pin + '매장·동선에서 보기</button>' +
     (off.offer_url ? '<a class="btn sm" href="' + esc(safeUrl(off.offer_url)) + '" target="_blank" rel="noopener">판매 페이지 ' + IC.ext + '</a>' : '') + '</div></div>';
 
-  h += '<div class="d-sec"><h4>구매 방법 · ' + esc(METHOD[x.mkey].l) + '</h4>' + lotteryHtml(x, true, f.act === 'LOTTERY') + pmHtml(pm, x) + '</div>';
+  h += '<div class="d-sec"><h4>구매 방법 · ' + esc(METHOD[x.mkey].l) + '</h4>' + lotteryHtml(x, true, isLot(f.ax)) + pmHtml(pm, x) + '</div>';
   h += '<div class="d-sec"><h4>입찰 스냅샷 고지</h4><div class="note">' + esc(snapFull()) + '</div></div>';
   h += '<div class="d-sec"><h4>통관 안내</h4><div class="note">' + esc(o.customs_note || CUSTOMS_NOTE) + '</div></div>';
   h += '<p class="muted xs" style="margin-top:12px">계산 ' + esc(dt(o.computed_at, true)) + (o.run_id ? ' · run ' + esc(o.run_id) : '') + '</p>';
@@ -2692,16 +2808,8 @@ function toggleCard(pid) {
 /* open one card from elsewhere (평가 기준 -> 상품), also opening its section */
 function focusCard(pid) {
   var c = M && M.cardById[pid]; if (!c || isDesk()) return;
-  var sec = ACTION[c.act] && ACTION[c.act].sec; if (sec) S.secOpen[sec] = true;
   S.openCard = pid; renderMain();
   var el = $('.rec[data-pid="' + CSS.escape(pid) + '"]'); if (el) el.scrollIntoView(scrollOpts());
-}
-function gotoSection(k) {
-  S.secOpen[k] = true;
-  var d = $('details[data-sec="' + k + '"]');
-  if (d) d.open = true; else refreshRecList();
-  var t = $('details[data-sec="' + k + '"], tr[data-sec="' + k + '"]');
-  if (t) t.scrollIntoView(scrollOpts());
 }
 /* from the 매장·동선 tab: open the product detail with that row's size and store selected */
 function openRecForOpp(oppId) {
@@ -2988,12 +3096,12 @@ var FULL_KEYS = [['trades_7d', '7일 체결 만점 기준'], ['trades_30d', '30�
 var CONF_PTS = { completeness_full: '정보 완전', market_fresh: 'KREAM 시세 최신', fx_fresh: '환율 최신', price_official_current: '공식 현재가',
   price_official_unverified: '공식가 · 재고 미확인', match_exact_evidence: '정확 매칭 근거' };
 var GATE_EFFECT = { HG_PRICE: '등급 상한', HG_SELLABLE: '제외' };
-var ACT_RULE = {
+var ACT_RULE = {   // H-11: legacy values only (알림·지도 메모 호환). The list no longer sorts or filters by them.
   EXCLUDE: '등급이 제외인 상품', WATCH: '등급 B (관찰)', LOTTERY: '등급 S·A 이면서 추첨·예약 판매',
   SELL_NOW: '등급 S·A · 현재 입찰이 목표가 이상 · 판매 중 확인 또는 매장 재고 확인',
   STORE_HUNT: '등급 S·A · 판매 근거는 있으나 확보 경로 미확인 → 현장 탐색',
   LIST_WAIT: '등급 S·A · 보수적 예상 기준(입찰이 목표가 미만) · 판매 중 확인 또는 매장 재고 확인',
-  HIGH_POTENTIAL: '등급 B · ROI 기준 이상 · 체결·입찰깊이 게이트 통과 · 남은 항목은 현장 확인뿐 (모델·정가·매장·사이즈·재고)'
+  HIGH_POTENTIAL: '등급 B · 잠재 태그(ROI·순이익 기준 이상 · 판매 게이트 통과) — 추첨이어도 해당'
 };
 function crUpdated() {
   var m = null; Object.keys(M.CR || {}).forEach(function (k) { var t = ts(M.CR[k].updated_at); if (t !== null && (m === null || t > m)) m = t; });
@@ -3080,17 +3188,34 @@ function critGates() {
     return crItem('<span class="chip line">' + esc(k) + '</span><b class="grow">' + esc(reasons[k] || GATE_KO[k] || k) + '</b><span class="chip ' + (k === 'HG_SELLABLE' ? 'bad' : 'warn') + '">' + esc(GATE_EFFECT[k] || '최대 B') + '</span>', RULES[k] || '');
   }).join('') + '<p class="muted xs" style="margin:0">하드 게이트에 걸린 사이즈는 점수가 높아도 S·A가 될 수 없습니다. 각 상품의 게이트 통과 현황은 아래 “이 상품이 1순위인 이유”와 카드 상세에서 볼 수 있습니다.</p>';
 }
+/* H-11 tag vocabulary (Reco_Criteria "tags": labels, keywords and the judging rules come from the engine settings) */
+function critTags() {
+  var t = crVal('tags'), h = '<div class="wb-h">구매 판정 · 방식 · 확인 태그 (등급과 별개)</div>';
+  if (!t) return h + crNa('tags');
+  h += '<div class="note"><b>구매 판정</b><ul class="crit-list">' + Object.keys(t.verdict_ko || {}).map(function (k) {
+    return '<li>' + (BUY_VERDICT[k] ? '<span class="vd ' + BUY_VERDICT[k].c + '">' + esc(t.verdict_ko[k]) + '</span> ' : '') + esc((t.verdict_rules_ko || {})[k] || '') + '</li>';
+  }).join('') + '</ul><p class="muted xs" style="margin:6px 0 0">구매 시점을 단정하는 표현은 쓰지 않습니다. 등급 옆 “가정”은 정가·원가가 확정되지 않은 가격으로 계산된 등급이라는 표시입니다.</p></div>';
+  h += '<div class="note"><b>구매 방식 태그</b> — 등급을 낮추지 않습니다<ul class="crit-list">' + Object.keys(t.method_ko || {}).map(function (k) {
+    var kw = (t.keywords || {})[k];
+    return '<li><span class="tg m-' + k + '">' + esc(t.method_ko[k]) + '</span>' + (kw && kw.length ? ' <span class="muted xs">키워드 ' + esc(kw.join(' · ')) + '</span>' : '') + '</li>';
+  }).join('') + '</ul>' + (t.method_rules_ko || []).map(function (x) { return '<p class="muted xs" style="margin:4px 0 0">' + esc(x) + '</p>'; }).join('') + '</div>';
+  h += '<div class="note"><b>확인 태그</b><ul class="crit-list">' + Object.keys(t.verify_ko || {}).map(function (k) {
+    return '<li><span class="tg v">' + esc(t.verify_ko[k]) + '</span> <span class="muted xs">' + esc((t.verify_rules_ko || {})[k] || '') + '</span></li>';
+  }).join('') + '</ul></div>';
+  return h;
+}
 function critDefs() {
   var g = crVal('grade'), L = crVal('labels') || {}, pcd = crVal('price_class'), av = crVal('availability'), h = '';
   h += '<div class="wb-h">등급 기준</div>';
   if (g) h += ['S', 'A', 'B', 'EXCLUDE'].map(function (k) { return g.rules_ko && g.rules_ko[k] ? crItem('<span class="grade sm ' + k + '">' + (k === 'EXCLUDE' ? '제외' : k) + '</span><span class="grow small">' + esc(g.rules_ko[k]) + '</span>') : ''; }).join(''); else h += crNa('grade');
-  h += '<div class="wb-h">행동 라벨 · 날짜·여행기간과 무관</div>';
-  h += Object.keys(ACTION).map(function (k) {
-    return crItem(actBadge(k) + '<b class="grow">' + esc(L[k] || ACTION[k].l) + '</b><span class="chip line">' + ({ rec: '추천', hp: '고수익 잠재', lot: '추첨·예약', watch: '관찰', excl: '숨김' }[ACTION[k].sec]) + ' 구역</span>', esc(ACT_RULE[k] || ''));
-  }).join('');
+  h += critTags();
   var hpc = crVal('high_potential');
-  if (hpc && hpc.rules_ko) h += '<div class="note"><b>고수익 잠재 기준</b><ul class="crit-list">' + hpc.rules_ko.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
-  h += '<p class="muted xs" style="margin:0">여행 기간은 추첨 수령 가능 여부 표시와 “여행기간 중 구매 가능” 필터에만 쓰이고 행동 라벨에는 쓰이지 않습니다.</p>';
+  if (hpc && hpc.rules_ko) h += '<div class="note"><b>고수익 잠재 기준 (태그)</b><ul class="crit-list">' + hpc.rules_ko.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
+  h += '<div class="wb-h">호환용 행동 라벨 · 알림·지도 메모에만 사용</div>';
+  h += Object.keys(ACTION).map(function (k) {
+    return crItem(actBadge(k) + '<b class="grow">' + esc(L[k] || ACTION[k].l) + '</b><span class="chip line">호환 값</span>', esc(ACT_RULE[k] || ''));
+  }).join('');
+  h += '<p class="muted xs" style="margin:0">추천 목록은 행동 라벨로 나누거나 정렬하지 않습니다 — 점수순 한 줄 목록입니다. 여행 기간은 추첨 수령 가능 여부 표시와 “여행기간 중 구매 가능” 필터에만 쓰입니다.</p>';
   h += '<div class="wb-h">정가(원가) 분류</div>';
   if (pcd && pcd.definitions_ko) h += Object.keys(pcd.definitions_ko).map(function (k) {
     var cp = g && g.price_class_cap && g.price_class_cap[k], p = PCLS[k];
@@ -3160,7 +3285,7 @@ function critVisit() {
   return h + '<p class="muted xs" style="margin:0">건물 하나에서 상품은 가장 점수 높은 줄 1개만 세므로 사이즈·매장이 여러 개여도 중복되지 않고, 건물·층·지역 화면에는 이익 합산이 없습니다 (상품 수와 상품 1개 기준 최고 순이익만 표시).</p>';
 }
 function critTop3() {
-  var list = M.cards.filter(function (c) { return c.act !== 'EXCLUDE'; }).slice().sort(function (a, b) {
+  var list = M.cards.filter(function (c) { return c.grade !== 'EXCLUDE'; }).slice().sort(function (a, b) {
     var ra = N(a.rp.product_rank), rb = N(b.rp.product_rank);
     if (ra !== null || rb !== null) { if (ra === null) return 1; if (rb === null) return -1; if (ra !== rb) return ra - rb; }
     return (N(b.rp.resell_score) === null ? -1 : N(b.rp.resell_score)) - (N(a.rp.resell_score) === null ? -1 : N(a.rp.resell_score));
@@ -3168,7 +3293,7 @@ function critTop3() {
   if (!list.length) return '<p class="muted small" style="margin:0">추천 상품(Reco_Products)이 아직 없습니다.</p>';
   return '<p class="muted xs" style="margin:0">Reco_Products의 why_top과 대표 사이즈 · 최적 구매처 행의 엔진 값을 그대로 보여 줍니다. 카드 상세에서는 선택한 사이즈 기준으로 같은 설명을 볼 수 있습니다.</p><div class="why3">' + list.map(function (c, i) {
     var f = figs(c, true), rk = N(c.rp.product_rank) !== null ? N(c.rp.product_rank) : i + 1;
-    return '<article class="why-card"><div class="wc-h"><div class="prio' + (i === 0 ? ' p1' : '') + '"><b class="num">' + rk + '</b><span>순위</span></div><div class="grow"><div class="act-row">' + actBadge(f.act) + '</div><h3>' + esc(c.name) + '</h3><div class="xs muted ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ')) + '</div></div>' + scoreBox(f.score) + '</div>' +
+    return '<article class="why-card"><div class="wc-h"><div class="prio' + (i === 0 ? ' p1' : '') + '"><b class="num">' + rk + '</b><span>순위</span></div><div class="grow"><div class="act-row">' + axisChips(f, 3) + '</div><h3>' + esc(c.name) + '</h3><div class="xs muted ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ')) + '</div></div>' + scoreBox(f.score) + '</div>' +
       '<div class="wc-t">이 상품이 ' + rk + '순위인 이유</div>' + whyBlock(c, f) +
       '<div class="actions"><button class="btn" type="button" data-act="crit-open" data-id="' + esc(c.id) + '">카드 상세 열기</button></div></article>';
   }).join('') + '</div>';
@@ -3319,8 +3444,12 @@ document.addEventListener('click', function (e) {
     case 'open-sheet': openRec(id); break;
     case 'rec-view': S.recView = a.dataset.v === 'cards' ? 'cards' : 'table'; renderMain(); break;
     case 'tsort': tableSort(a.dataset.k); break;
-    case 'toggle-sec': S.secOpen[a.dataset.k] = !secIsOpen(a.dataset.k); refreshRecList(); break;
-    case 'goto-sec': gotoSection(a.dataset.k); break;
+    case 'tile-chip': {   // summary tile = apply that chip (S/A/B again clears the grade; 잠재 / 조건 충족 add the tag)
+      var k = a.dataset.k;
+      if (k === 'S' || k === 'A' || k === 'B') S.f.grade = S.f.grade === k ? '' : k;
+      else if (S.f.tags.indexOf(k) < 0) S.f.tags.push(k);
+      saveFilters(); S.sel.rec = null; renderMain(); break;
+    }
     case 'open-rec-sheet': openRecForOpp(id); break;
     case 'pick-size': e.stopPropagation(); pickSize(id, a.dataset.o); break;
     case 'pick-store': e.stopPropagation(); pickStore(id, a.dataset.s); break;
@@ -3329,14 +3458,13 @@ document.addEventListener('click', function (e) {
     case 'store-view': S.storeView = a.dataset.v === 'region' ? 'region' : 'rank'; LS.set('storeView', S.storeView); renderMain(); break;
     case 'crit-open': S.sel.rec = id; setTab('rec'); if (!isDesk()) focusCard(id); break;
     case 'toggle-filters': S.showFilters = !S.showFilters; renderMain(); break;
-    case 'chip-grade': {
-      var v = a.dataset.v || '';
-      if (v === 'HP') { S.f.grade = ''; S.f.action = 'HIGH_POTENTIAL'; }
-      else { S.f.grade = v; if (S.f.action === 'HIGH_POTENTIAL') S.f.action = ''; }
-      LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, action: S.f.action, trip: S.f.trip, watch: S.f.watch });
-      S.sel.rec = null; renderMain(); break;
+    case 'chip-grade': S.f.grade = a.dataset.v || ''; saveFilters(); S.sel.rec = null; renderMain(); break;
+    case 'chip-tag': {
+      var tv = a.dataset.v, ti = S.f.tags.indexOf(tv);
+      if (ti >= 0) S.f.tags.splice(ti, 1); else S.f.tags.push(tv);
+      saveFilters(); S.sel.rec = null; renderMain(); break;
     }
-    case 'clear-filters': S.f = { q: '', region: '', category: '', grade: '', action: '', trip: false, watch: false }; LS.set('filters', S.f); renderMain(); break;
+    case 'clear-filters': S.f = { q: '', region: '', category: '', grade: '', tags: [], trip: false, watch: false }; saveFilters(); renderMain(); break;
     case 'copy-memo': { var g = M.bmap[id]; if (!g) break; var ta = $('#note-' + CSS.escape(id)); copyText(composeNote(g, ta ? ta.value : personalNote(g))); break; }
     case 'reset-check': {
       var g3 = M.bmap[id]; if (!g3) break; var ck = LS.get('check', {});
@@ -3353,7 +3481,7 @@ document.addEventListener('input', function (e) {
 });
 document.addEventListener('change', function (e) {
   var t = e.target;
-  if (t.dataset.filter) { S.f[t.dataset.filter] = t.type === 'checkbox' ? t.checked : t.value; if (t.dataset.filter === 'action' && t.value === 'HIGH_POTENTIAL') S.f.grade = '';   /* chips and 행동 share one state */ LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, action: S.f.action, trip: S.f.trip, watch: S.f.watch }); S.sel.rec = null; renderMain(); return; }
+  if (t.dataset.filter) { S.f[t.dataset.filter] = t.type === 'checkbox' ? t.checked : t.value; saveFilters(); S.sel.rec = null; renderMain(); return; }
   if (t.hasAttribute('data-sort')) { S.sort = t.value; S.tsort = null; LS.set('sort2', S.sort); renderMain(); return; }
   if (t.dataset.check) {
     var ck = LS.get('check', {}); if (t.checked) ck[t.dataset.check] = 1; else delete ck[t.dataset.check]; LS.set('check', ck);
@@ -3364,7 +3492,6 @@ document.addEventListener('change', function (e) {
 });
 document.addEventListener('toggle', function (e) {
   var d = e.target; if (!d.dataset) return;
-  if (d.dataset.sec) { S.secOpen[d.dataset.sec] = d.open; return; }   // 추천 섹션 접힘은 메모리에만 둔다
   if (!d.dataset.openKey) return;
   S.open[d.dataset.openKey] = d.open; LS.set('open', S.open);
 }, true);
