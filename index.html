@@ -41,6 +41,7 @@
   --warn: #8a5300; --warn-soft: #fff2d3; --info: #1f5fa8; --info-soft: #e3effc;
   --gS: #5b21b6; --gS-ink: #ffffff; --gA: #1f4fd0; --gA-soft: #e7edfc; --gB: #5d6673; --gB-soft: #eceff3;
   --star: #c27c00;
+  --hp: #9a3412; --hp-soft: #ffedd5;
   --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
   --shadow-lg: 0 12px 32px rgba(16,24,40,.18);
   --r-sm: 8px; --r: 12px; --r-lg: 16px;
@@ -60,6 +61,7 @@
     --warn: #f5bd4a; --warn-soft: #33280f; --info: #8cc0ff; --info-soft: #14253b;
     --gS: #9b6cff; --gS-ink: #12081f; --gA: #7ea4ff; --gA-soft: #1b2640; --gB: #9aa4b2; --gB-soft: #232933;
     --star: #ffc247;
+    --hp: #ffa45c; --hp-soft: #36210f;
     --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow-lg: 0 16px 40px rgba(0,0,0,.6);
     color-scheme: dark;
   }
@@ -73,6 +75,7 @@
   --warn: #f5bd4a; --warn-soft: #33280f; --info: #8cc0ff; --info-soft: #14253b;
   --gS: #9b6cff; --gS-ink: #12081f; --gA: #7ea4ff; --gA-soft: #1b2640; --gB: #9aa4b2; --gB-soft: #232933;
   --star: #ffc247;
+  --hp: #ffa45c; --hp-soft: #36210f;
   --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow-lg: 0 16px 40px rgba(0,0,0,.6);
   color-scheme: dark;
 }
@@ -306,11 +309,22 @@ textarea.input { padding: 10px 12px; min-height: 96px; resize: vertical; line-he
 }
 .filters .full { grid-column: 1 / -1; }
 .filters .switch { font-size: 14px; font-weight: 600; }
+/* grade chips: thumb-friendly segmented row; scrolls inside itself on very narrow phones, never the page */
+.gchips { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; margin: 0 0 12px; padding: 2px 1px; scrollbar-width: none; }
+.gchips::-webkit-scrollbar { display: none; }
+.gchip { flex: 1 0 auto; min-width: 58px; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-2); font-size: 14px; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.gchip b { font-weight: 800; color: var(--text-3); font-size: 13px; }
+.gchip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.gchip[aria-pressed="true"] b { color: var(--accent-ink); }
+.gchip.g-S[aria-pressed="true"] { background: var(--gS); border-color: var(--gS); color: var(--gS-ink); }
+.gchip.g-S[aria-pressed="true"] b { color: var(--gS-ink); }
+.gchip.g-HP[aria-pressed="true"] { background: var(--hp); border-color: var(--hp); color: var(--surface); }
+.gchip.g-HP[aria-pressed="true"] b { color: var(--surface); }
 .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: -2px 0 12px; }
 .active-filters button { border: 0; }
 @media (min-width: 1024px) {
-  .filters { grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto; align-items: end; }
-  .filters .full { grid-column: auto; }
+  .filters { grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); align-items: end; }
+  .filters .full { grid-column: span 2; }
   .filter-btn { display: none !important; }
   .filters[hidden] { display: grid !important; }
 }
@@ -321,7 +335,7 @@ textarea.input { padding: 10px 12px; min-height: 96px; resize: vertical; line-he
 .stat label { display: block; font-size: 12px; color: var(--text-3); font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat b { display: block; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat > span { display: block; font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (min-width: 1024px) { .summary { grid-template-columns: repeat(4, minmax(0, 1fr)); } .stat b { font-size: 20px; } }
+@media (min-width: 1024px) { .summary { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); } .stat b { font-size: 20px; } }
 
 /* ============================================================ sections & grid */
 .section { margin: 18px 0 8px; }
@@ -340,19 +354,19 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .split { display: block; }
 .detail-pane { display: none; }
 @media (min-width: 1024px) {
-  .split { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px; align-items: start; }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) clamp(340px, 34vw, 420px); gap: 24px; align-items: start; }
   .detail-pane {
     display: block; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto;
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow);
     overscroll-behavior: contain;
   }
   .detail-pane .detail-body { padding: 18px; }
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* list column = viewport - nav rail - detail pane: one card per row until two cards (>= ~340px each) fit */
+  .grid { grid-template-columns: minmax(0, 1fr); }
 }
-@media (min-width: 1700px) {
-  .split { grid-template-columns: minmax(0, 1fr) 460px; }
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+@media (min-width: 1400px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1700px) { .split { grid-template-columns: minmax(0, 1fr) 460px; } }
+@media (min-width: 2000px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .detail-empty { padding: 48px 24px; text-align: center; color: var(--text-3); }
 .detail-empty svg { width: 40px; height: 40px; margin-bottom: 8px; opacity: .6; }
 
@@ -361,13 +375,11 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .rec:hover { border-color: var(--border-strong); }
 .rec.selected { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
 .rec.g-S { border-top: 3px solid var(--gS); }
-.rec-top { display: flex; gap: 10px; align-items: flex-start; }
-.rec-title { flex: 1; min-width: 0; }
+/* the action chip lives in the title column and may wrap there (long labels such as 고수익 잠재 · 현장 확인 필요) -- it can never reach the score block */
+.act-row .act, .d-head .act-row .act { height: auto; min-height: 24px; max-width: 100%; padding: 3px 10px; white-space: normal; line-height: 1.25; text-align: left; flex: 0 1 auto; }
 .eyebrow { font-size: 12px; color: var(--text-3); font-weight: 650; display: flex; gap: 6px; align-items: center; min-width: 0; }
 .eyebrow > span { white-space: nowrap; flex: none; }
 .eyebrow > .ellip { flex: 1 1 auto; min-width: 0; }
-.rec-title h3 { font-size: 15.5px; font-weight: 750; margin-top: 1px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.rec-title .opt { font-size: 12.5px; color: var(--text-2); margin-top: 2px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .thumb-wrap { position: relative; flex: none; display: block; }
 .thumb-wrap > .grade { position: absolute; top: -6px; left: -6px; box-shadow: 0 0 0 2px var(--surface); }
 .thumb { position: relative; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 12px; overflow: hidden; flex: none;
@@ -378,7 +390,9 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .thumb.sm .ini { font-size: 16px; }
 .thumb.lg { width: 112px; height: 112px; border-radius: 16px; }
 .thumb.lg .ini { font-size: 38px; }
-@media (min-width: 1024px) { .rec .rec-top .thumb { width: 96px; height: 96px; } .thumb.lg { width: 140px; height: 140px; } }
+@media (min-width: 1024px) { .thumb.lg { width: 80px; height: 80px; border-radius: 14px; } }
+@media (min-width: 1400px) { .thumb.lg { width: 112px; height: 112px; border-radius: 16px; } }
+@media (min-width: 1700px) { .thumb.lg { width: 140px; height: 140px; } }
 /* reco card: score, size/store pickers, engine figures */
 .score { flex: none; text-align: right; min-width: 66px; display: flex; flex-direction: column; align-items: flex-end; }
 .score b { font-size: 26px; font-weight: 850; letter-spacing: -0.03em; line-height: 1.05; color: var(--text); }
@@ -439,7 +453,8 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .comp .cpt { text-align: right; color: var(--text-2); font-weight: 650; white-space: nowrap; font-size: 11.5px; }
 .comp .cpt small { color: var(--text-3); font-weight: 500; font-size: 10.5px; }
 .d-head .score { margin-left: auto; }
-.store-tbl { min-width: 520px; font-size: 12.5px; }
+.d-head > .grow { min-width: 0; flex: 1 1 0; }
+.store-tbl { min-width: 600px; font-size: 12.5px; }
 .store-tbl th, .store-tbl td { padding: 8px 6px; }
 .store-tbl tr[data-act] { cursor: pointer; }
 .store-tbl tr.best td { background: color-mix(in srgb, var(--pos-soft) 60%, var(--surface)); }
@@ -465,6 +480,142 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .kpi.main { background: color-mix(in srgb, var(--pos-soft) 70%, var(--surface-2)); }
 .kpi.main.is-neg { background: var(--neg-soft); }
 .kpi.secondary b { font-size: 16px; }
+
+/* 현장 매입 상한 (engine max_pay_*): the tag price at which ROI stays at the target */
+.maxbuy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; background: var(--accent-soft); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+.maxbuy label { font-size: 11.5px; font-weight: 700; color: var(--accent-text); }
+.maxbuy .mb-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; }
+.maxbuy b { font-size: 19px; font-weight: 820; letter-spacing: -0.02em; line-height: 1.25; white-space: nowrap; }
+.maxbuy .mb-post { font-size: 12.5px; font-weight: 700; color: var(--text-2); white-space: nowrap; }
+.maxbuy .mb-vs { font-size: 12.5px; font-weight: 750; white-space: nowrap; }
+.maxbuy .mb-sub { font-size: 11.5px; color: var(--text-3); }
+.maxbuy.na { background: var(--surface-2); }
+.maxbuy.na label { color: var(--text-3); }
+.maxbuy.neg { background: var(--neg-soft); }
+.maxbuy.neg label { color: var(--neg); }
+.pk .mb { color: var(--accent-text); font-weight: 700; }
+/* 고수익 잠재: what to verify on site */
+.todo { border-radius: 10px; padding: 8px 10px; background: var(--hp-soft); border: 1px solid color-mix(in srgb, var(--hp) 35%, transparent); }
+.todo-h { font-size: 12px; font-weight: 800; color: var(--hp); margin-bottom: 4px; }
+.todo ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.todo li { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 650; color: var(--text); }
+.todo li::before { content: ""; width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--hp); background: var(--surface); flex: none; }
+.todo .todo-n { margin: 4px 0 0; font-size: 11.5px; color: var(--text-2); }
+.rec.g-B.hp { border-top: 3px solid var(--hp); }
+
+/* ============================================================ compact recommendation list (T13d)
+   phone / tablet: collapsed cards (~100px) that open in place · desktop: sortable table + side detail */
+:root { --tb: 64px; }
+.rec { cursor: default; gap: 0; padding: 8px 12px; scroll-margin-top: calc(var(--tb) + 64px); }
+.rec:not(.open) { padding-top: 7px; padding-bottom: 7px; }
+.rec.open { padding-bottom: 12px; border-color: var(--accent); grid-column: 1 / -1; }
+.rc { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; column-gap: 10px; row-gap: 5px; align-items: start; min-width: 0; cursor: pointer; border-radius: 10px; -webkit-tap-highlight-color: transparent; }
+.rc.has-chev { grid-template-columns: 56px minmax(0, 1fr) auto 14px; }
+.rc .thumb { width: 56px; height: 56px; border-radius: 10px; }
+.rc .thumb .ini { font-size: 20px; }
+.rc-main { min-width: 0; align-self: center; }
+.rc-main h3 { font-size: 14.5px; font-weight: 750; line-height: 1.28; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rc-meta { display: flex; gap: 4px; align-items: baseline; min-width: 0; font-size: 12px; font-weight: 600; color: var(--text-3); margin-top: 2px; }
+.rc-meta .bn { flex: 0 1 auto; min-width: 0; }
+.rc-meta .sz { flex: none; white-space: nowrap; }
+.rc .score { min-width: 0; align-self: center; }
+.rc .score b { font-size: 24px; }
+.rc-chev { width: 14px; height: 14px; align-self: center; color: var(--text-3); transition: transform .15s; }
+.rec.open .rc-chev { transform: rotate(90deg); color: var(--accent-text); }
+.rc-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 4px; min-width: 0; }
+.rc-chips .act { height: 21px; font-size: 11px; padding: 0 6px; flex: 0 1 auto; }
+.mc { display: inline-flex; align-items: center; gap: 3px; height: 21px; padding: 0 5px; border-radius: 7px; background: var(--surface-2); font-size: 11px; font-weight: 650; color: var(--text-2); white-space: nowrap; }
+.mc i { font-style: normal; font-size: 9.5px; font-weight: 650; color: var(--text-3); }
+.mc b { font-weight: 800; }
+.mc em { font-style: normal; font-size: 9.5px; font-weight: 700; color: var(--text-3); }
+.mc.net.pos { background: var(--pos-soft); } .mc.net.pos b { color: var(--pos); }
+.mc.net.neg { background: var(--neg-soft); } .mc.net.neg b { color: var(--neg); }
+.mc.cap { background: var(--accent-soft); } .mc.cap i, .mc.cap b { color: var(--accent-text); }
+.mc.cap.na { background: var(--surface-2); } .mc.cap.na i, .mc.cap.na b { color: var(--text-3); }
+.rec-body { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.why-inline > h4 { font-size: 13px; font-weight: 750; color: var(--text-3); margin-bottom: 6px; }
+.rec-body .rec-foot { border-top: 0; padding-top: 0; flex-wrap: wrap; }
+.rec-body .rec-foot .cmp-btn, .rec-body .rec-foot .btn.sm { min-height: 44px; }
+.rec-body .rec-foot .cmp-btn { padding: 0 12px; height: auto; }
+
+/* summary strip */
+.dash { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 6px; margin-bottom: 8px; }
+.dash-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dt { min-height: 44px; border: 0; border-radius: 10px; background: var(--surface-2); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px 4px; color: var(--text-2); }
+.dt b { font-size: 18px; font-weight: 850; line-height: 1.1; letter-spacing: -0.02em; }
+.dt span { font-size: 11px; font-weight: 650; color: var(--text-3); white-space: nowrap; }
+.dt.buy b { color: var(--pos); } .dt.hp b { color: var(--hp); } .dt.lot b { color: var(--gS); } .dt.watch b { color: var(--warn); }
+.dt.none { opacity: .55; }
+.dt:hover { background: var(--surface-3); }
+.dash-meta { display: flex; flex-wrap: wrap; gap: 0 12px; padding: 6px 4px 2px; font-size: 12px; line-height: 1.55; }
+.dm { white-space: nowrap; color: var(--text-2); }
+.dm .k { color: var(--text-3); font-weight: 600; }
+.dm b { font-weight: 800; }
+.dm.stale, .dm.stale .k { color: var(--warn); }
+.details-desc, summary .desc, .sec-toggle .desc { font-size: 12px; color: var(--text-3); line-height: 1.3; display: none; }
+@media (min-width: 700px) { summary .desc, .sec-toggle .desc { display: block; } }
+details.section.sec-rec, .section { margin: 8px 0 4px; }
+@media (min-width: 1024px) {
+  .dash { display: flex; align-items: center; gap: 16px; padding: 8px 10px; margin-bottom: 12px; }
+  .dash-tiles { grid-template-columns: repeat(4, 84px); }
+  .dash-meta { flex: 1; padding: 0; gap: 4px 16px; font-size: 13px; }
+  .view-toggle { flex: none; }
+}
+@media (max-width: 1023.98px) {
+  .banner { padding: 7px 10px; gap: 8px; font-size: 12.5px; line-height: 1.4; margin-bottom: 6px; }
+  .banner svg { width: 16px; height: 16px; }
+  .banner .btn.sm { min-height: 44px; }
+}
+@media (max-width: 1023.98px) {   /* grade chips stay under the header while the list scrolls */
+  .gchips { position: sticky; top: var(--tb); z-index: 15; margin: 0 calc(-14px - var(--sar)) 6px calc(-14px - var(--sal)); padding: 6px calc(14px + var(--sar)) 6px calc(14px + var(--sal));
+    background: color-mix(in srgb, var(--bg) 94%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+
+/* desktop table */
+.rec-tblwrap { margin: 0; background: var(--surface); box-shadow: var(--shadow); }
+.rec-tbl { font-size: 13px; }
+.rec-tbl th, .rec-tbl td { padding: 8px 5px; vertical-align: middle; }
+.rec-tbl th { text-align: right; padding: 4px 3px; white-space: normal; vertical-align: bottom; }
+.rec-tbl th.c-grade, .rec-tbl td.c-grade { text-align: center; width: 46px; }
+.rec-tbl th.c-name, .rec-tbl td.c-name, .rec-tbl th.c-act, .rec-tbl td.c-act { text-align: left; }
+.rec-tbl th.c-opt, .rec-tbl td.c-opt { text-align: center; }
+.th-sort { border: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; padding: 6px 2px; border-radius: 6px; white-space: normal; overflow-wrap: normal; word-break: keep-all; line-height: 1.2; min-height: 32px; text-align: inherit; }
+.th-sort:hover { color: var(--text); background: var(--surface-2); }
+.rec-tbl th[aria-sort="ascending"] .th-sort::after { content: " \25B2"; font-size: 9px; }
+.rec-tbl th[aria-sort="descending"] .th-sort::after { content: " \25BC"; font-size: 9px; }
+.rec-tbl th[aria-sort="ascending"], .rec-tbl th[aria-sort="descending"] { color: var(--accent-text); }
+.rec-row { cursor: pointer; }
+.rec-row:hover td { background: var(--surface-2); }
+.rec-row.selected td { background: var(--accent-soft); }
+.rec-row.selected td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.rec-tbl td.c-name { white-space: normal; min-width: 120px; width: 99%; }
+.rec-tbl td.c-name .tn { display: flex; align-items: center; gap: 8px; width: 0; min-width: 100%; }
+.rec-tbl .thumb.sm { width: 36px; height: 36px; border-radius: 8px; }
+.rec-tbl .tt { min-width: 0; flex: 1; text-align: left; }
+.rec-tbl .tt .t2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; font-weight: 700; line-height: 1.3; white-space: normal; }
+.rec-tbl .tt .sub { display: block; }
+.rec-tbl .gi, .rec-tbl .oi { display: none; }
+.rec-tbl td.c-act { white-space: normal; }
+.rec-tbl td.c-act:has(.act.hp) { min-width: 96px; }
+.rec-tbl td.c-act .act { height: auto; padding: 3px 7px; white-space: nowrap; line-height: 1.25; font-size: 12px; text-align: left; }
+.rec-tbl td.c-act .act.hp { white-space: normal; }
+.rec-tbl .sec-row td { padding: 0; background: var(--bg); text-align: left; border-bottom: 0; }
+.rec-tbl .empty-row td { text-align: left; color: var(--text-3); padding: 14px 10px; }
+.sec-toggle { display: flex; width: 0; min-width: 100%; align-items: center; gap: 8px; min-height: 44px; padding: 0 8px; background: transparent; border: 0; text-align: left; color: inherit; }
+.sec-toggle .grow { overflow: hidden; }
+.sec-toggle .desc { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sec-toggle .chev { transition: transform .15s; color: var(--text-3); width: 20px; height: 20px; flex: none; }
+.sec-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+.sec-toggle .act { height: 28px; font-size: 13.5px; padding: 0 11px; }
+.sec-toggle .n { font-size: 13px; font-weight: 700; color: var(--text-3); }
+/* columns drop out as the list column narrows (the side panel always shows everything) */
+@media (max-width: 1439.98px) { .rec-tbl .c-ns, .rec-tbl .c-t7, .rec-tbl .c-opt { display: none; } .rec-tbl .oi { display: inline; } }
+@media (max-width: 1279.98px) { .rec-tbl .c-cap { display: none; } }
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  .split { grid-template-columns: minmax(0, 1fr) 288px; gap: 16px; }
+  .rec-tbl .c-grade { display: none; }
+  .rec-tbl .gi { display: inline-grid; margin-right: 4px; vertical-align: middle; }
+}
 
 .pay { font-size: 12.5px; color: var(--text-2); display: flex; flex-wrap: wrap; gap: 2px 12px; }
 .pay .lbl { color: var(--text-3); margin-right: 3px; }
@@ -518,6 +669,7 @@ details.section > summary h2 { font-size: 17px; font-weight: 800; }
 .act.watch { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--warn) 50%, transparent); }
 .act.none { background: var(--surface-2); color: var(--text-3); }
 .act.hunt { background: var(--info-soft); color: var(--info); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--info) 45%, transparent); }
+.act.hp { background: var(--hp-soft); color: var(--hp); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--hp) 55%, transparent); }
 .act.wait { background: var(--accent-soft); color: var(--accent-text); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 45%, transparent); }
 .act-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; flex-wrap: wrap; }
 .section-h .act, details.section > summary .act { height: 28px; font-size: 13.5px; padding: 0 11px; }
@@ -1015,6 +1167,10 @@ var S = {
   pick: {},                                // product_id -> { o: 선택 사이즈, s: 선택 구매처 store_id }
   cmp: {},                                 // product_id -> 카드 안 사이즈 비교표 펼침 (기본 접힘)
   showFilters: false,
+  openCard: null,                          // 모바일·태블릿: 그 자리에서 펼쳐진 상품 하나 (새로고침하면 기억하지 않음)
+  recView: null,                           // 데스크톱 보기: null/'table' = 표, 'cards' = 카드 (기억하지 않음)
+  tsort: null,                             // 표 정렬 { k, dir } (null = 섹션 순)
+  secOpen: {},                             // 추천 섹션 접힘 상태 (메모리만, 관찰은 폰에서 기본 접힘)
   storeView: LS.get('storeView', 'rank'),   // 'rank' = 방문 순위순(Store_Priority.visit_rank) · 'region' = 지역별
   sel: { rec: null, stores: null },
   open: LS.get('open', {}),
@@ -1133,17 +1289,19 @@ function matchBox(x, compact) {
   h += '</div>';
   return h;
 }
-/* 6 action labels (RECO_DESIGN D). Date/trip independent. Old BUY_NOW etc. are mapped to 관찰 temporarily (F-5). */
+/* 6 action labels (RECO_DESIGN D) + 고수익 잠재 (H-6). Date/trip independent. Old BUY_NOW etc. are mapped to 관찰 temporarily (F-5). */
 var ACTION = {
   SELL_NOW: { l: '즉시 매도 유리', c: 'buy', sec: 'rec' },
   STORE_HUNT: { l: '현장 탐색 추천', c: 'hunt', sec: 'rec' },
   LIST_WAIT: { l: '매도 대기', c: 'wait', sec: 'rec' },
+  HIGH_POTENTIAL: { l: '고수익 잠재 · 현장 확인 필요', c: 'hp', sec: 'hp' },
   LOTTERY: { l: '추첨·예약', c: 'lot', sec: 'lot' },
   WATCH: { l: '관찰', c: 'watch', sec: 'watch' },
   EXCLUDE: { l: '제외', c: 'none', sec: 'excl' }
 };
 var SECTIONS = [
   { k: 'rec', t: '추천', c: 'buy', d: '게이트와 점수 기준을 통과한 상품 — 즉시 매도 유리 · 현장 탐색 추천 · 매도 대기' },
+  { k: 'hp', t: '고수익 잠재 후보 · 현장 확인 필요', c: 'hp', d: 'ROI가 높고 거래는 충분하지만 모델·정가·재고를 현장에서 확인해야 하는 후보 — 확인 전에는 구매 근거로 쓰지 마세요' },
   { k: 'lot', t: '추첨·예약', c: 'lot', d: '응모·예약 후 구매 — 수령 일정이 여행과 맞는지 확인' },
   { k: 'watch', t: '관찰', c: 'watch', d: '게이트 미달·정보 부족·과거 정가 기준 — 변화를 지켜볼 상품' }
 ];
@@ -1667,16 +1825,17 @@ function renderChrome() {
   var sub = '';
   if (M) {
     if (S.tab === 'rec') {
-      var n = { rec: 0, lot: 0, watch: 0 };
+      var n = { rec: 0, hp: 0, lot: 0, watch: 0 };
       M.cards.forEach(function (c) { var k = ACTION[c.act] && ACTION[c.act].sec; if (n[k] !== undefined) n[k]++; });
       var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
-      sub = M.cards.length ? '추천 ' + n.rec + ' · 추첨·예약 ' + n.lot + ' · 관찰 ' + n.watch + (latest ? ' · 계산 <time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '') : '추천 데이터 갱신 대기 중';
+      sub = M.cards.length ? '추천 ' + n.rec + (n.hp ? ' · 고수익 잠재 ' + n.hp : '') + ' · 추첨·예약 ' + n.lot + ' · 관찰 ' + n.watch + (latest ? ' · 계산 <time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '') : '추천 데이터 갱신 대기 중';
     } else if (S.tab === 'stores') sub = '건물 ' + M.blds.length + '곳 · 상품 ' + uniqProducts(M.blds).length + '개 (중복 제외) · 방문 순위순';
     else if (S.tab === 'criteria') { var cv = crVal('version'), cu = crUpdated(); sub = cv ? '기준 ' + esc(cv) + (cu ? ' · 갱신 ' + ago(cu) : '') : 'Reco_Criteria 대기 중'; }
     else sub = S.fetchedAt ? '수신 <time data-ago="' + new Date(S.fetchedAt).toISOString() + '">' + ago(new Date(S.fetchedAt).toISOString()) + '</time>' : '';
   }
   $('#topbar').innerHTML = '<h1><span class="brand-eyebrow">FLIPATLAS<i>FLIP + ATLAS</i></span>' + TITLES[S.tab] + '<span class="sub">' + (sub || '&nbsp;') + '</span></h1>' +
     '<button class="icon-btn' + (S.loading ? ' spin' : '') + '" type="button" data-act="reload" aria-label="새로고침" title="새로고침">' + IC.refresh + '</button>';
+  syncTopbarH();
   renderStamp();
   // badges
   var st = M ? (M.alerts.filter(function (a) { return !isAcked(a); }).length + M.sources.filter(function (s) { return srcState(s).c === 'bad'; }).length) : 0;
@@ -1687,6 +1846,7 @@ function renderChrome() {
     '<div>' + (S.fetchedAt ? '데이터 수신 <time data-ago="' + new Date(S.fetchedAt).toISOString() + '">' + ago(new Date(S.fetchedAt).toISOString()) + '</time>' : '데이터 수신 전') + (S.fromCache ? ' · 사본' : '') + '</div>' +
     '<div>' + (fx && N(fx.rate) ? 'JPY→KRW <b class="num">' + Number(fx.rate).toFixed(3) + '</b>' : '환율 데이터 없음') + '</div>';
 }
+function syncTopbarH() { var tb = $('#topbar'); if (tb) document.documentElement.style.setProperty('--tb', tb.offsetHeight + 'px'); }
 function renderStamp() {
   var el = $('#pubStamp'); if (!el) return;
   var at = S.fetchedAt ? new Date(S.fetchedAt).toISOString() : null, cls2 = 'pub-stamp', h;
@@ -1809,6 +1969,48 @@ function figs(c, repOnly) {
 function scoreShort(z) { return (z.s === null ? '점수 —' : Math.round(z.s) + '점') + ' · 7일 ' + (z.t7 === null ? '미제공' : z.t7 + '건'); }
 function stripSample(t) { return String(t || '').replace(/\s*\(샘플\)\s*/, ''); }
 
+/* 현장 매입 상한 (engine max_pay_*): the largest tag price (before coupons / guest card) that still leaves the target ROI and
+   minimum profit when sold at the engine's sell basis. Pure display of Opportunities columns -- nothing is computed here. */
+function capInfo(o) {
+  if (!o) return null;
+  var pre = N(o.max_pay_jpy_pre);
+  if (pre === null) return null;
+  return { pre: pre, post: N(o.max_pay_jpy_post), krwPre: N(o.max_pay_krw_pre), krwPost: N(o.max_pay_krw_post), vs: N(o.max_pay_vs_retail_pct),
+    basis: String(o.max_pay_basis || '').toUpperCase(), hint: o.max_pay_after_discount_hint ? String(o.max_pay_after_discount_hint) : '' };
+}
+function capVsHtml(v) {
+  if (v === null) return '';
+  return '<span class="mb-vs num ' + (v < 0 ? 'neg' : 'pos') + '">정가 대비 ' + tPct(v, true) + '</span>';
+}
+function capShort(o) {   // one line: 상한 ¥X (환급 ¥Y)
+  var k = capInfo(o);
+  if (!k) return '';
+  return '상한 ¥' + fmt(k.pre) + (k.post !== null ? ' (환급 ¥' + fmt(k.post) + ')' : '');
+}
+function capRoiNote() { var rm = N(crVal('roi_min')); return rm !== null ? '목표 ROI ' + Math.round(rm * 100) + '%' : '목표 ROI'; }
+function capBox(o, withNote) {
+  if (!o || !o.opp_id) return '';
+  var k = capInfo(o);
+  if (!k) return '<div class="maxbuy na"><label>현장 매입 상한</label><span class="mb-sub">입찰·보수적 예상가가 없어 상한을 계산하지 않았습니다 (0원이 아님)</span></div>';
+  var h = '<div class="maxbuy' + (k.vs !== null && k.vs < 0 ? ' neg' : '') + '" title="이 금액(태그 가격, 쿠폰·게스트카드 할인 전) 이하로 사야 ' + esc(capRoiNote()) + '와 최소 이익이 남습니다.">' +
+    '<label>현장 매입 상한 · ' + esc(BASIS_L[k.basis] || '판매 기준') + '</label><div class="mb-row"><b class="num">¥' + fmt(k.pre) + '</b>' +
+    (k.post !== null ? '<span class="mb-post num">면세 환급 시 ¥' + fmt(k.post) + '</span>' : '<span class="mb-post muted">면세 환급 반영 불가</span>') + capVsHtml(k.vs) + '</div>';
+  if (k.vs !== null && k.vs < 0) h += '<span class="mb-sub">정가가 상한보다 높습니다 — 이 가격에는 목표 수익이 나지 않습니다.</span>';
+  if (withNote) h += '<span class="mb-sub">' + esc(capRoiNote()) + ' · 최소 이익 유지 · 쿠폰·게스트카드 할인 전 태그 기준' + (k.hint ? ' · ' + esc(k.hint) : '') + '</span>';
+  return h + '</div>';
+}
+/* 고수익 잠재: the checklist of what to verify on site (engine todo_checks, " / "-separated) */
+function todoList(c, f) {
+  var t = (f && f.o && f.o.todo_checks) || (c && c.rp && c.rp.todo_checks) || '';
+  return String(t).split(/\s*\/\s*/).filter(Boolean);
+}
+function todoBox(c, f) {
+  if (f.act !== 'HIGH_POTENTIAL') return '';
+  var l = todoList(c, f);
+  return '<div class="todo"><div class="todo-h">현장에서 확인할 것</div>' + (l.length ? '<ul>' + l.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '<p class="todo-n" style="margin:0">확인 항목이 기록되지 않았습니다.</p>') +
+    '<p class="todo-n">확인되기 전에는 구매·판매 결정의 근거로 쓰지 마세요. 매입 상한 이하일 때만 의미가 있습니다.</p></div>';
+}
+
 /* pickers */
 function sizePicker(c, f) {
   if (!c.sizes.length) return '<p class="muted small" style="margin:0">사이즈 정보가 없습니다.</p>';
@@ -1828,7 +2030,8 @@ function storePicker(c, f) {
       var id = String(x.o.store_id || x.id);
       return '<button type="button" class="pk st' + (sold ? ' soldout' : '') + '" data-act="pick-store" data-id="' + esc(c.id) + '" data-s="' + esc(id) + '" aria-pressed="' + (f.x === x) + '">' +
         '<b class="ellip">' + esc(stripSample(x.shopName)) + (i === 0 ? '<i class="tag">최적</i>' : '') + (sold ? '<i class="tag bad">품절</i>' : '') + '</b>' +
-        '<span class="num ellip">' + esc((x.floor ? x.floor + ' · ' : '') + sKrw(x.net, true) + ' · ' + tPct(x.roi)) + '</span></button>';
+        '<span class="num ellip">' + esc((x.floor ? x.floor + ' · ' : '') + sKrw(x.net, true) + ' · ' + tPct(x.roi)) + '</span>' +
+        (capShort(x.o) ? '<span class="num ellip mb">' + esc(capShort(x.o)) + '</span>' : '') + '</button>';
     }).join('') + '</div></div>';
 }
 
@@ -1860,7 +2063,8 @@ function storeBox(c, f) {
     '<dt>결제액</dt><dd><b>' + hJ(first(o.pay_jpy, o.discounted_price_jpy), o.pay_krw, r) + '</b></dd>' +
     '<dt>면세 환급</dt><dd>' + (N(o.refund_expected_jpy) === null ? '—' : (N(o.refund_expected_jpy) === 0 ? '<span class="muted">없음</span>' : hJ(o.refund_expected_jpy, o.refund_expected_krw, N(o.refund_fx_rate) || r))) + '</dd>' +
     (N(o.card_fee_krw) ? '<dt>카드 수수료</dt><dd>' + hKrw(o.card_fee_krw) + '</dd>' : '') +
-    '<dt>원가 환급 전 → 후</dt><dd class="num">' + tKrw(o.cost_pre_refund_krw) + ' → <b>' + tKrw(o.cost_post_refund_krw) + '</b></dd></dl>';
+    '<dt>원가 환급 전 → 후</dt><dd class="num">' + tKrw(o.cost_pre_refund_krw) + ' → <b>' + tKrw(o.cost_post_refund_krw) + '</b></dd>' +
+    (capInfo(o) ? '<dt>현장 매입 상한</dt><dd class="num"><b>¥' + fmt(capInfo(o).pre) + '</b>' + (capInfo(o).post !== null ? ' <span class="muted">(면세 환급 시 ¥' + fmt(capInfo(o).post) + ')</span>' : '') + (capInfo(o).vs !== null ? ' <span class="' + (capInfo(o).vs < 0 ? 'neg' : 'pos') + '">· 정가 대비 ' + tPct(capInfo(o).vs, true) + '</span>' : '') + '</dd>' : '') + '</dl>';
   if (o.payment_promo) h += '<div class="cp-line">' + IC.card + '<span class="ellip">' + esc(o.payment_promo) + '</span></div>';
   return h + '</div>';
 }
@@ -1910,21 +2114,37 @@ function storeCmpTable(c, f) {
       '<td><b>' + esc(stripSample(x.shopName)) + '</b>' + (i === 0 ? '<span class="sub pos strong">최적</span>' : '') + '<span class="sub">' + esc(stripSample(x.bName) + (x.floor ? ' ' + x.floor : '')) + '</span></td>' +
       '<td>' + (ev ? esc(ev.l) : '—') + '<span class="sub">' + (ss ? esc(ss.l) : '') + '</span></td>' +
       '<td class="num">' + sKrw(o.cost_post_refund_krw) + '<span class="sub">전 ' + sKrw(o.cost_pre_refund_krw) + '</span></td>' +
+      '<td class="num">' + (capInfo(o) ? '<b>¥' + fmt(capInfo(o).pre) + '</b>' + (capInfo(o).post !== null ? '<span class="sub">환급 ¥' + fmt(capInfo(o).post) + '</span>' : '') : '<span class="muted xs">—</span>') + '</td>' +
       '<td>' + hKrw(x.net, true) + '</td><td><b>' + hPct(x.roi, true) + '</b><span class="sub num">' + tPct(x.roiPre, true) + '</span></td>' +
       '<td class="num">' + (N(o.resell_score) === null ? '<span class="muted xs">산출 불가</span>' : esc(scoreTxt({ mid: N(o.resell_score), lo: N(o.resell_score_low), hi: N(o.resell_score_high), cov: N(o.score_coverage) }))) + '</td></tr>';
   }).join('');
-  return '<div class="tbl-scroll"><table class="tbl store-tbl"><thead><tr><th>구매처</th><th>근거·재고</th><th>원가<br>환급후</th><th>순이익</th><th>ROI<br>환급후<br><span class="muted">환급전</span></th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+  return '<div class="tbl-scroll"><table class="tbl store-tbl"><thead><tr><th>구매처</th><th>근거·재고</th><th>원가<br>환급후</th><th>매입 상한<br>환급 전</th><th>순이익</th><th>ROI<br>환급후<br><span class="muted">환급전</span></th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
     '<p class="muted xs" style="margin:6px 2px 0">구매처 정렬: 취급 근거 → 점수 → 순이익 → 원가. 재고·품절은 표시 정보이며 추천에서 제외하는 조건이 아닙니다.</p>';
 }
 
 /* ---- list ---- */
 function filteredTopCard() {   // highest 리셀 점수 among recommended (S/A) products, for the budget hint
-  var l = M.cards.filter(function (c) { return c.act !== 'EXCLUDE' && c.act !== 'WATCH' && c.repX; });
+  var l = M.cards.filter(function (c) { return c.act !== 'EXCLUDE' && c.act !== 'WATCH' && c.act !== 'HIGH_POTENTIAL' && c.repX; });
   l.sort(function (a, b) { return (N(b.rp.resell_score) === null ? -1 : N(b.rp.resell_score)) - (N(a.rp.resell_score) === null ? -1 : N(a.rp.resell_score)); });
   return l[0] || null;
 }
-function filteredCards() {
-  var f = S.f, q = f.q.trim().toLowerCase();
+/* grade chips (전체 · S · A · B · 잠재): one state shared with the 행동 dropdown -- 잠재 = action HIGH_POTENTIAL, S/A/B = grade */
+function gradeChipKey() { return S.f.grade ? S.f.grade : (S.f.action === 'HIGH_POTENTIAL' ? 'HP' : ''); }
+function gradeChipCounts() {   // counts honour every OTHER filter (region, category, search ...), never the chip itself
+  var f2 = Object.assign({}, S.f, { grade: '', action: S.f.action === 'HIGH_POTENTIAL' ? '' : S.f.action });
+  var n = { '': 0, S: 0, A: 0, B: 0, HP: 0 };
+  filteredCards(f2).forEach(function (c) { n['']++; if (n[c.grade] !== undefined) n[c.grade]++; if (c.act === 'HIGH_POTENTIAL') n.HP++; });
+  return n;
+}
+function gradeChips() {
+  var n = gradeChipCounts(), cur = gradeChipKey();
+  return '<div class="gchips" role="group" aria-label="등급 필터">' + [['', '전체'], ['S', 'S'], ['A', 'A'], ['B', 'B'], ['HP', '잠재']].map(function (o) {
+    return '<button type="button" class="gchip' + (o[0] ? ' g-' + o[0] : '') + '" data-act="chip-grade" data-v="' + o[0] + '" aria-pressed="' + (cur === o[0]) + '"' +
+      (o[0] === 'HP' ? ' title="고수익 잠재 · 현장 확인 필요"' : '') + '>' + o[1] + ' <b class="num">' + n[o[0]] + '</b></button>';
+  }).join('') + '</div>';
+}
+function filteredCards(fOverride) {
+  var f = fOverride || S.f, q = f.q.trim().toLowerCase();
   var list = M.cards.filter(function (c) {
     if (c.act === 'EXCLUDE') return false;
     if (f.region && !c.regions[f.region]) return false;
@@ -1971,11 +2191,13 @@ function viewRec() {
   var cats = uniq(M.cards.map(function (c) { return c.category; }));
   var nf = activeFilterCount();
   var tripSet = setting('trip_start') && setting('trip_end');
+  h = '<div id="recSummary">' + recSummaryHtml() + '</div>' + h;   // 요약 띠가 맨 위, 경고 배너는 그 아래
   h += '<div class="toolbar"><label class="search"><span class="sr">검색</span>' + IC.search + '<input class="input" id="q" type="search" placeholder="상품·브랜드·사이즈·매장 검색" value="' + esc(S.f.q) + '" autocomplete="off" enterkeyhint="search"></label>' +
-    '<button class="btn filter-btn" type="button" data-act="toggle-filters" aria-expanded="' + S.showFilters + '" aria-controls="filters">' + IC.filter + '필터' + (nf ? '<span class="count">' + nf + '</span>' : '') + '</button></div>';
+    '<button class="btn filter-btn" type="button" data-act="toggle-filters" aria-expanded="' + S.showFilters + '" aria-controls="filters">' + IC.filter + '필터' + (nf ? '<span class="count">' + nf + '</span>' : '') + '</button>' + viewToggle() + '</div>';
+  h += gradeChips();
   h += '<div class="filters" id="filters"' + (S.showFilters ? '' : ' hidden') + '>' +
     sel_('region', '지역', regions, S.f.region) + sel_('category', '카테고리', cats, S.f.category, catL) +
-    sel_('grade', '등급', ['S', 'A', 'B'], S.f.grade) + sel_('action', '행동', ['SELL_NOW', 'STORE_HUNT', 'LIST_WAIT', 'LOTTERY', 'WATCH'], S.f.action, function (k) { return ACTION[k].l; }) +
+    sel_('action', '행동', ['SELL_NOW', 'STORE_HUNT', 'LIST_WAIT', 'HIGH_POTENTIAL', 'LOTTERY', 'WATCH'], S.f.action, function (k) { return ACTION[k].l; }) +
     '<label class="field"><span>정렬</span><select class="select" data-sort>' +
     [['score', '추천 점수순'], ['profit', '순이익 높은 순'], ['roi', 'ROI 높은 순'], ['fresh', '최근 계산 순']].map(function (o) { return '<option value="' + o[0] + '"' + (S.sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>' +
     '<label class="switch full"><input type="checkbox" data-filter="watch"' + (S.f.watch ? ' checked' : '') + '><span class="track"></span><span><span class="star">★</span> 우선감시만</span></label>' +
@@ -1995,39 +2217,173 @@ function sel_(k, label, opts, v, lab) {
     opts.map(function (o) { return '<option value="' + esc(o) + '"' + (o === v ? ' selected' : '') + '>' + esc(lab ? lab(o) : o) + '</option>'; }).join('') + '</select></label>';
 }
 function stat(label, val, sub) { return '<div class="stat"><label>' + label + '</label><b class="num">' + val + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
-function recListHtml() {
+
+/* ---- 추천 목록: 접힌 카드(모바일·태블릿, 탭하면 그 자리에서 펼침) / 표 + 상세 패널(데스크톱) ---- */
+var ACT_ORDER = ['SELL_NOW', 'STORE_HUNT', 'LIST_WAIT', 'HIGH_POTENTIAL', 'LOTTERY', 'WATCH'];
+function secIsOpen(k) { return S.secOpen[k] !== undefined ? S.secOpen[k] : !(k === 'watch' && !isDesk()); }   // 관찰은 폰에서 기본 접힘 (기억하지 않음)
+function recViewMode() { return isDesk() && S.recView !== 'cards' ? 'table' : 'cards'; }
+function recGroups() {
   var list = filteredCards();
-  var G = { rec: [], lot: [], watch: [] };
+  var G = { rec: [], hp: [], lot: [], watch: [] };
   list.forEach(function (c) { var s = ACTION[c.act] && ACTION[c.act].sec; if (G[s]) G[s].push(c); });
   var excl = M.cards.filter(function (c) { return c.act === 'EXCLUDE'; }).length;
-  if (isDesk() && !S.sel.rec && list.length) S.sel.rec = (G.rec[0] || G.lot[0] || G.watch[0]).id;
-  var top = G.rec[0] || G.lot[0] || G.watch[0];
-  var topX = top && top.repX;
-  var bestScore = G.rec[0] ? scoreTxt({ mid: N(G.rec[0].rp.resell_score), lo: N(G.rec[0].rp.resell_score_low), hi: N(G.rec[0].rp.resell_score_high), cov: N(G.rec[0].rp.score_coverage) }) : null;
-  var bestNet = maxOf(G.rec, function (c) { return c.repX && c.repX.net; });
-  var h = '<div class="summary">' +
-    stat('추천 상품', G.rec.length + '개', G.rec.length ? '최고 점수 ' + esc(bestScore) + (bestNet !== null ? ' · 최고 순이익 ' + tKrw(bestNet, true) : '') : '기준 통과 상품 없음') +
-    stat('추첨·예약', G.lot.length + '개', G.lot.length ? (function () { var v = { ok: 0, warn: 0, bad: 0 }; G.lot.forEach(function (c) { if (c.repX) v[lotteryPlan(c.repX).verdict.c]++; }); return [v.ok ? '수령 가능 ' + v.ok : '', v.warn ? '확인 필요 ' + v.warn : '', v.bad ? '불가 ' + v.bad : ''].filter(Boolean).join(' · ') || '일정 확인 필요'; })() : '추첨 상품 없음') +
-    stat('관찰', G.watch.length + '개', excl ? '제외 ' + excl + '개 숨김' : '조건부·정보 부족') +
-    '</div>';
-  if (!list.length) return h + emptyState('조건에 맞는 추천이 없습니다', '필터나 검색어를 바꿔 보세요.' + (S.f.trip ? ' "여행기간 중 구매 가능"은 판매·응모 일정이 확인된 상품만 남깁니다.' : ''), '<button class="btn" data-act="clear-filters" type="button">필터 초기화</button>');
-  SECTIONS.forEach(function (sec) {
+  if (isDesk() && !S.sel.rec && list.length) S.sel.rec = (G.rec[0] || G.hp[0] || G.lot[0] || G.watch[0]).id;
+  return { list: list, G: G, excl: excl };
+}
+function kShort(v, signed) { return isDesk() ? tKrw(v, signed) : (N(v) === null ? '—' : sgn(N(v), signed) + '₩' + sKrw(Math.abs(N(v)))); }   // 폰: ₩176.7만
+function budgetMeta(top) { return ''; }
+/* compact dashboard strip: counts per section, best score, top net profit of ONE product (never a sum), freshness */
+function recSummaryHtml(R) {
+  R = R || recGroups();
+  var G = R.G, pool = G.rec.length ? G.rec : R.list, top = G.rec[0] || G.hp[0] || G.lot[0] || G.watch[0];
+  var best = null; pool.forEach(function (c) { var v = N(c.rp.resell_score); if (v !== null && (best === null || v > N(best.rp.resell_score))) best = c; });
+  var bestNet = maxOf(pool, function (c) { return c.repX && c.repX.net; });
+  var latest = M.cards.reduce(function (a, c) { var t = ts(c.rp.computed_at); return t && t > a ? t : a; }, 0);
+  var ka = kreamAge();
+  var tiles = [['rec', '추천', 'buy'], ['hp', '잠재', 'hp'], ['lot', '추첨·예약', 'lot'], ['watch', '관찰', 'watch']];
+  var h = '<div class="dash" role="region" aria-label="추천 요약"><div class="dash-tiles">' + tiles.map(function (t) {
+    var sec = SECTIONS.filter(function (s) { return s.k === t[0]; })[0];
+    return '<button type="button" class="dt ' + t[2] + (G[t[0]].length ? '' : ' none') + '" data-act="goto-sec" data-k="' + t[0] + '" title="' + esc(sec.t) + '"><b class="num">' + G[t[0]].length + '</b><span>' + t[1] + '</span></button>';
+  }).join('') + '</div><div class="dash-meta">' +
+    '<span class="dm"><span class="k">최고 점수</span> <b class="num">' + (best ? esc(scoreTxt({ mid: N(best.rp.resell_score), lo: N(best.rp.resell_score_low), hi: N(best.rp.resell_score_high), cov: N(best.rp.score_coverage) })) : '—') + '</b></span>' +
+    '<span class="dm" title="상품 1개(대표 사이즈·최적 매장) 기준 최댓값입니다 — 여러 상품의 합이 아닙니다"><span class="k">최고 순이익</span> <b class="num ' + cls(bestNet) + '">' + kShort(bestNet, true) + '</b></span>' +
+    budgetMeta(top) +
+    '<span class="dm' + (latest && (Date.now() - latest) / 60000 > 60 ? ' stale' : '') + '"><span class="k">계산</span> ' + (latest ? '<time data-ago="' + new Date(latest).toISOString() + '">' + ago(new Date(latest).toISOString()) + '</time>' : '<b>—</b>') + '</span>' +
+    '<span class="dm' + (!ka || ka.min > 60 ? ' stale' : '') + '"><span class="k">KREAM</span> ' + (ka ? '<time data-ago="' + esc(ka.at) + '">' + ago(ka.at) + '</time>' : '<b>기록 없음</b>') + '</span>' +
+    '</div></div>';
+  return h;
+}
+function secHead(sec, n) { return '<span class="act ' + sec.c + '">' + sec.t + '</span><div class="grow"><div class="desc">' + sec.d + '</div></div><span class="n">' + n + '</span>'; }
+function recListHtml(R) {
+  R = R || recGroups();
+  var G = R.G, list = R.list, excl = R.excl, h = '';
+  if (!list.length) return emptyState('조건에 맞는 추천이 없습니다', '필터나 검색어를 바꿔 보세요.' + (S.f.trip ? ' "여행기간 중 구매 가능"은 판매·응모 일정이 확인된 상품만 남깁니다.' : ''), '<button class="btn" data-act="clear-filters" type="button">필터 초기화</button>');
+  if (recViewMode() === 'table') h += recTableHtml(R);
+  else SECTIONS.forEach(function (sec) {
     var L = G[sec.k];
     if (!L.length && sec.k !== 'rec') return;
-    var head = '<span class="act ' + sec.c + '">' + sec.t + '</span><div class="grow"><div class="desc">' + sec.d + '</div></div><span class="n">' + L.length + '</span>';
-    if (sec.k === 'watch') h += '<details class="section" data-open-key="recWatch"' + (S.open.recWatch !== false ? ' open' : '') + '><summary>' + IC.chev + head + '</summary><div class="grid">' + L.map(recCard).join('') + '</div></details>';
-    else h += '<section class="section"><div class="section-h">' + head + '</div>' + (L.length ? '<div class="grid">' + L.map(recCard).join('') + '</div>' : '<div class="card empty" style="padding:20px"><p style="margin:0">기준을 통과한 추천 상품이 없습니다.</p></div>') + '</section>';
+    h += '<details class="section sec-' + sec.k + '" data-sec="' + sec.k + '"' + (secIsOpen(sec.k) ? ' open' : '') + '><summary>' + IC.chev + secHead(sec, L.length) + '</summary>' +
+      (L.length ? '<div class="grid">' + L.map(recCard).join('') + '</div>' : '<div class="card empty" style="padding:20px"><p style="margin:0">기준을 통과한 추천 상품이 없습니다.</p></div>') + '</details>';
   });
   if (excl) h += '<p class="muted small" style="margin:16px 4px">수익·매칭 기준 미달로 제외된 ' + excl + '개는 표시하지 않습니다.</p>';
   return h;
 }
+function refreshRecList() {
+  if (!M || S.tab !== 'rec') return;
+  var R = recGroups();
+  var sm = $('#recSummary'); if (sm) sm.innerHTML = recSummaryHtml(R);
+  var rl = $('#recList'); if (rl) rl.innerHTML = recListHtml(R);
+  var gc = $('.gchips'); if (gc) gc.outerHTML = gradeChips();
+}
+function viewToggle() {
+  if (!isDesk()) return '';
+  return '<div class="seg view-toggle" role="group" aria-label="보기 방식">' + [['table', '표'], ['cards', '카드']].map(function (o) {
+    return '<button type="button" data-act="rec-view" data-v="' + o[0] + '" aria-pressed="' + (recViewMode() === o[0]) + '">' + o[1] + '</button>';
+  }).join('') + '</div>';
+}
+
+/* desktop table: one row per product (representative size + best store, engine values), click header to sort, click row to select */
+function storeCount(c) {
+  var n = N(c.rp.n_stores); if (n !== null) return n;
+  var ids = {}; c.sizes.forEach(function (z) { z.stores.forEach(function (x) { ids[x.o.store_id || x.id] = 1; }); });
+  return Object.keys(ids).length;
+}
+var TCOLS = [
+  { k: 'grade', l: '등급', cls: 'c-grade', dir: 'asc', v: function (r) { return 'SAB'.indexOf(r.c.grade); } },
+  { k: 'name', l: '상품', cls: 'c-name', dir: 'asc', v: function (r) { return r.c.name; } },
+  { k: 'opt', l: '대표 사이즈', cls: 'c-opt', dir: 'asc', v: function (r) { return r.c.rep ? r.c.rep.opt : null; } },
+  { k: 'act', l: '추천 상태', cls: 'c-act', dir: 'asc', v: function (r) { var i = ACT_ORDER.indexOf(r.f.act); return i < 0 ? null : i; } },
+  { k: 'score', l: '점수', cls: 'c-score', dir: 'desc', v: function (r) { return N(r.c.rp.resell_score); } },
+  { k: 'net', l: '순이익', cls: 'c-net', dir: 'desc', v: function (r) { return r.f.net; } },
+  { k: 'roi', l: 'ROI', cls: 'c-roi', dir: 'desc', v: function (r) { return r.f.roi; } },
+  { k: 'cap', l: '매입 상한 ¥', cls: 'c-cap', dir: 'desc', v: function (r) { var k = capInfo(r.f.o); return k ? k.pre : null; } },
+  { k: 't7', l: '7일 체결', cls: 'c-t7', dir: 'desc', v: function (r) { return r.f.t7; } },
+  { k: 'ns', l: '구매처 수', cls: 'c-ns', dir: 'desc', v: function (r) { return storeCount(r.c); } }
+];
+function tCol(k) { return TCOLS.filter(function (c) { return c.k === k; })[0] || null; }
+function tableRowsSorted(list) {
+  var col = tCol(S.tsort.k), sg = S.tsort.dir === 'asc' ? 1 : -1;
+  var rows = list.map(function (c) { return { c: c, f: figs(c, true) }; });
+  function sc(r) { var v = N(r.c.rp.resell_score); return v === null ? -1 : v; }
+  rows.sort(function (a, b) {
+    var x = col.v(a), y = col.v(b), nx = x === null || x === undefined, ny = y === null || y === undefined;
+    if (nx !== ny) return nx ? 1 : -1;   // no value -> always last
+    var d = 0;
+    if (!nx) d = (typeof x === 'number' && typeof y === 'number') ? x - y : (col.k === 'opt' ? optSort(String(x), String(y)) : String(x).localeCompare(String(y), 'ko'));
+    return d * sg || (sc(b) - sc(a));
+  });
+  return rows;
+}
+function tableSort(k) {
+  var col = tCol(k); if (!col) return;
+  var cur = S.tsort, opp = col.dir === 'asc' ? 'desc' : 'asc';
+  if (!cur || cur.k !== k) S.tsort = { k: k, dir: col.dir };
+  else if (cur.dir === col.dir) S.tsort = { k: k, dir: opp };
+  else S.tsort = null;   // 세 번째 클릭 = 섹션 순으로 되돌림
+  refreshRecList();
+  var b = $('.th-sort[data-k="' + k + '"]'); if (b) b.focus({ preventScroll: true });
+}
+function tRow(c, f) {
+  var o = f.o, k = capInfo(o), net = f.net, basis = f.hist ? '가정' : (f.basis === 'BID' ? '입찰' : f.basis === 'CONSERVATIVE' ? '보수' : '');
+  var sp = scoreParts(f.score);
+  return '<tr class="rec-row g-' + c.grade + (f.act === 'HIGH_POTENTIAL' ? ' hp' : '') + (S.sel.rec === c.id ? ' selected' : '') + '" data-act="open-rec" data-id="' + esc(c.id) + '" data-pid="' + esc(c.id) + '" tabindex="0" role="button" aria-label="' + esc(c.name + ' 상세 보기') + '"' +
+    ' data-score="' + (N(c.rp.resell_score) === null ? '' : N(c.rp.resell_score)) + '" data-net="' + (net === null ? '' : net) + '" data-roi="' + (f.roi === null ? '' : f.roi) + '">' +
+    '<td class="c-grade"><span class="grade sm ' + c.grade + '" aria-label="등급 ' + c.grade + '">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span></td>' +
+    '<td class="c-name"><div class="tn">' + imgTile(c.p, c.name, c.brand, 'sm') + '<div class="tt"><b class="t2"><span class="grade xs gi ' + c.grade + '" aria-hidden="true">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + (c.watch ? '<span class="star" title="우선감시">★</span> ' : '') + esc(c.name) + '</b><span class="sub ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ') || '브랜드 미확인') + '<span class="oi"> · 대표 ' + esc(c.rep ? c.rep.opt || '—' : '—') + '</span></span></div></div></td>' +
+    '<td class="c-opt">' + esc(c.rep ? c.rep.opt || '—' : '—') + '</td>' +
+    '<td class="c-act">' + actBadge(f.act) + '</td>' +
+    '<td class="c-score num"><b>' + esc(sp.main) + '</b>' + (sp.range ? '<span class="sub">' + esc(sp.range) + '</span>' : '') + '</td>' +
+    '<td class="c-net">' + (net === null ? DASH : '<b class="num ' + cls(net) + '">' + tKrw(net, true) + '</b>') + (basis ? '<span class="sub">' + basis + '</span>' : '') + '</td>' +
+    '<td class="c-roi">' + hPct(f.roi, true) + '</td>' +
+    '<td class="c-cap num">' + (k ? '<b>¥' + fmt(k.pre) + '</b>' + (k.post !== null ? '<span class="sub">환급 ¥' + fmt(k.post) + '</span>' : '') : DASH) + '</td>' +
+    '<td class="c-t7 num">' + (f.t7 === null ? '<span class="muted xs">미제공</span>' : '<b>' + f.t7 + '</b>' + (f.t30 !== null ? '<span class="sub">30일 ' + f.t30 + '</span>' : '')) + '</td>' +
+    '<td class="c-ns num">' + storeCount(c) + '</td></tr>';
+}
+function recTableHtml(R) {
+  var G = R.G;
+  var head = '<tr>' + TCOLS.map(function (col) {
+    var on = S.tsort && S.tsort.k === col.k, ar = on ? (S.tsort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
+    return '<th scope="col" class="' + col.cls + '" aria-sort="' + ar + '"><button type="button" class="th-sort" data-act="tsort" data-k="' + col.k + '" title="' + col.l + ' 순으로 정렬">' + col.l + '</button></th>';
+  }).join('') + '</tr>';
+  var body = '';
+  if (S.tsort) body = tableRowsSorted(R.list).map(function (r) { return tRow(r.c, r.f); }).join('');
+  else SECTIONS.forEach(function (sec) {
+    var L = G[sec.k];
+    if (!L.length && sec.k !== 'rec') return;
+    var open = secIsOpen(sec.k);
+    body += '<tr class="sec-row" data-sec="' + sec.k + '"><td colspan="' + TCOLS.length + '"><button type="button" class="sec-toggle" data-act="toggle-sec" data-k="' + sec.k + '" aria-expanded="' + open + '">' + IC.chev + secHead(sec, L.length) + '</button></td></tr>';
+    if (!open) return;
+    body += L.length ? L.map(function (c) { return tRow(c, figs(c, true)); }).join('') : '<tr class="empty-row"><td colspan="' + TCOLS.length + '">기준을 통과한 추천 상품이 없습니다.</td></tr>';
+  });
+  return '<div class="tbl-scroll rec-tblwrap"><table class="tbl rec-tbl"><caption class="sr">추천 상품 표 — 열 제목을 누르면 정렬됩니다</caption><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>' +
+    '<p class="muted xs" style="margin:6px 2px 0">값은 상품별 대표 사이즈·최적 구매처 기준(엔진 계산)입니다. 열 제목을 누르면 정렬, 한 번 더 누르면 반대 순서, 세 번째는 섹션 순으로 돌아갑니다. 행을 누르면 오른쪽에 상세가 열립니다.</p>';
+}
+
+/* collapsed card (default): thumbnail + grade, name, brand · size, score, ONE chip row (label · net profit · ROI · 매입 상한).
+   Tap anywhere on it -> the full detail (recBody) opens below, in place; only one card is open at a time. */
+function mchip(cl, label, val, title) { return '<span class="mc ' + cl + '" title="' + esc(title) + '">' + (label ? '<i>' + label + '</i>' : '') + val + '</span>'; }
 function recCard(c) {
-  var f = figs(c), x = f.x, o = f.o, z = f.z, mk = f.mk || {};
+  var desk = isDesk(), open = !desk && S.openCard === c.id;
+  var f = figs(c, !open), x = f.x, o = f.o, k = capInfo(o);
+  var net = f.net, tag = f.hist ? '가정' : (f.basis === 'BID' ? '입찰' : f.basis === 'CONSERVATIVE' ? '보수' : '');
+  var h = '<article class="card rec g-' + c.grade + (f.act === 'HIGH_POTENTIAL' ? ' hp' : '') + (S.sel.rec === c.id && desk ? ' selected' : '') + (open ? ' open' : '') + '" data-pid="' + esc(c.id) + '">';
+  h += '<div class="rc' + (desk ? '' : ' has-chev') + '" data-act="' + (desk ? 'open-rec' : 'toggle-card') + '" data-id="' + esc(c.id) + '" tabindex="0" role="button"' + (desk ? '' : ' aria-expanded="' + open + '"') + ' aria-label="' + esc(c.name + (desk ? ' 상세 보기' : (open ? ' 접기' : ' 펼치기'))) + '">' +
+    thumbWrap(c, '', 'sm') +
+    '<div class="rc-main"><h3>' + esc(c.name) + '</h3><div class="rc-meta">' + (c.watch ? '<span class="star" title="우선감시">★</span>' : '') + '<span class="bn ellip">' + esc(c.brand || '브랜드 미확인') + '</span><span class="sz">· ' + (f.z === c.rep || !open ? '대표 ' : '선택 ') + esc(f.z.opt || '—') + '</span></div></div>' +
+    scoreBox(f.score) + (desk ? '' : IC.chev.replace('class="chev"', 'class="chev rc-chev"')) +
+    '<div class="rc-chips">' + actBadge(f.act) +
+    mchip('net ' + (net === null ? 'muted' : net < 0 ? 'neg' : 'pos'), '', '<b class="num">' + (net === null ? '순이익 —' : sKrw(net, true)) + '</b>' + (tag && net !== null ? '<em>' + tag + '</em>' : ''), '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + (net === null ? '' : ' · ' + tKrw(net, true))) +
+    mchip('roi', 'ROI', '<b class="num ' + cls(f.roi) + '">' + tPct(f.roi, true) + '</b>', 'ROI · 환급 후' + (f.roiPre !== null ? ' (환급 전 ' + tPct(f.roiPre, true) + ')' : '')) +
+    (x || k ? mchip('cap' + (k ? '' : ' na'), '매입 상한', '<b class="num">' + (k ? '¥' + fmt(k.pre) : '—') + '</b>', k ? '이 금액(태그 가격, 쿠폰·게스트카드 할인 전) 이하로 사야 ' + capRoiNote() + '와 최소 이익이 남습니다' + (k.post !== null ? ' · 면세 환급 시 ¥' + fmt(k.post) : '') : '입찰·보수적 예상가가 없어 상한을 계산하지 않았습니다') : '') +
+    '</div></div>';
+  if (open) h += recBody(c, f);
+  return h + '</article>';
+}
+/* everything that used to sit on the card, now shown only after the tap */
+function recBody(c, f) {
+  var x = f.x, o = f.o, z = f.z, mk = f.mk || {};
   var open = !!S.cmp[c.id];
-  var h = '<article class="card rec g-' + c.grade + (S.sel.rec === c.id && isDesk() ? ' selected' : '') + '" data-act="open-rec" data-id="' + esc(c.id) + '" data-pid="' + esc(c.id) + '" tabindex="0" role="button" aria-label="' + esc(c.name + ' 상세 보기') + '">';
-  h += '<div class="rec-top">' + thumbWrap(c, '', 'sm') + '<div class="rec-title"><div class="act-row">' + actBadge(f.act) + '</div>' +
-    '<div class="eyebrow">' + (c.watch ? '<span class="star" title="우선감시">★</span><span>우선감시</span><span>·</span>' : '') + '<span class="ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ') || '브랜드 미확인') + '</span></div>' +
-    '<h3>' + esc(c.name) + '</h3></div>' + scoreBox(f.score) + '</div>';
+  var h = '<div class="rec-body">';
   if (c.rp.why_top) h += '<p class="why" title="' + esc(c.rp.why_top) + '"><b>대표 근거</b> ' + esc(c.rp.why_top) + '</p>';
   h += '<div class="chips">' + statusChips(c, f) + '</div>';
   h += sizePicker(c, f);
@@ -2036,6 +2392,7 @@ function recCard(c) {
   var pre = f.hist ? '정가 매입 가정 · ' : '';
   h += '<div class="profit"><div class="kpi main' + (f.net !== null && f.net < 0 ? ' is-neg' : '') + '"><label>' + pre + '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + '</label><b class="num ' + cls(f.net) + '">' + tKrw(f.net, true) + '</b><span class="roi num ' + cls(f.roi) + '">ROI ' + tPct(f.roi, true) + '</span></div>' +
     '<div class="kpi secondary"><label>' + pre + 'ROI 환급 전</label><b class="num ' + cls(f.roiPre) + '">' + tPct(f.roiPre, true) + '</b><span class="roi muted">환급 후 ' + tPct(f.roi, true) + '</span></div></div>';
+  h += capBox(o, f.act === 'HIGH_POTENTIAL') + todoBox(c, f);
   if (f.hist) h += '<p class="note-hist">과거 발매 정가를 참고 원가로 계산한 가정입니다. 현재 정가로 살 수 있다는 뜻이 아니며, 실구매 가능성은 별도로 확인해야 합니다.</p>';
   h += '<div class="figs">' +
     figHtml('KREAM 입찰가', f.bid === null ? '입찰 없음' : tKrw(f.bid), f.target !== null ? '목표가 ' + sKrw(f.target) : '') +
@@ -2051,10 +2408,12 @@ function recCard(c) {
   if (open) h += '<div data-stop>' + sizeCmpTable(c, f, true) + '</div>';
   var rv = x && reviewOf(x);
   if (x && String(o.match_level).toUpperCase() !== 'EXACT' && !(rv && rv.reviewer === 'user')) h += matchBox(x, true);
+  h += '<div class="why-inline"><h4>왜 이 순위인가</h4>' + whyBlock(c, f) + '</div>';
   h += '<div class="rec-foot"><div class="loc">' + (x ? IC.pin + '<span class="ellip">' + esc(stripSample(x.bName)) + (x.floor ? ' · <b>' + esc(x.floor) + '</b>' : '') + '</span>' : '') + '</div>' +
     '<button class="chip acc cmp-btn" type="button" data-act="toggle-cmp" data-id="' + esc(c.id) + '" aria-expanded="' + open + '">사이즈 비교표 ' + (open ? '접기' : '펼치기') + '</button>' +
     '</div>';
-  return h + '</article>';
+  h += '<button class="btn block" type="button" data-act="open-sheet" data-id="' + esc(c.id) + '">전체 상세 보기 (할인·쿠폰·시세·구매 방법)</button>';
+  return h + '</div>';
 }
 function figHtml(l, v, sub) { return '<div class="fig"><label>' + l + '</label><b class="num">' + v + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
 
@@ -2121,6 +2480,8 @@ function recDetail(c) {
   if (!x) return h + '<div class="d-sec"><div class="note">' + esc(snapFull()) + '</div></div>';
   h += '<div class="d-sec" id="matchSec">' + matchBox(x, false) + '</div>';
 
+  h += capDetail(x, f);
+  if (f.act === 'HIGH_POTENTIAL') h += '<div class="d-sec" id="todoSec"><h4>고수익 잠재 · 현장 확인 필요</h4>' + todoBox(c, f) + '</div>';
   var rows = [['현재 입찰<span class="sub">빠른 매도</span>', o.price_bid, o.net_bid, o.roi_bid_post, o.roi_bid_pre], ['최근 체결', o.price_recent, o.net_recent, o.roi_recent_post, null],
     ['보수적 예상<span class="sub">일반 매도</span>', o.price_conservative, o.net_conservative, o.roi_conservative_post, o.roi_conservative_pre], ['스트레스', o.price_stress, o.net_stress, o.roi_stress_post, null]];
   h += '<div class="d-sec"><h4>판매가 시나리오 · 순이익 (통관비 제외)</h4>' + (f.basis ? '<p class="xs muted" style="margin:0 0 6px">카드에 표시한 값 = <b>' + BASIS_L[f.basis] + '</b>' + (f.target !== null ? ' · 목표가(ROI·최소이익 충족 최저 판매가) ' + tKrw(f.target) : '') + '</p>' : '') +
@@ -2167,6 +2528,17 @@ function recDetail(c) {
   return h;
 }
 
+function capDetail(x, f) {
+  var o = x.o, k = capInfo(o);
+  var h = '<div class="d-sec" id="capSec"><h4>현장 매입 상한 · ' + esc(stripSample(x.shopName)) + '</h4>';
+  if (!k) return h + '<p class="muted small" style="margin:0">판매 기준가(입찰·보수적 예상가)가 없어 상한을 계산하지 않았습니다.</p></div>';
+  h += '<dl class="kv"><dt>상한 · 면세 환급 전</dt><dd><b class="num">¥' + fmt(k.pre) + '</b>' + (k.krwPre !== null ? ' <span class="muted small">카드 청구 ' + tKrw(k.krwPre) + '</span>' : '') + '</dd>' +
+    '<dt>상한 · 면세 환급 시</dt><dd>' + (k.post !== null ? '<b class="num">¥' + fmt(k.post) + '</b>' + (k.krwPost !== null ? ' <span class="muted small">카드 청구 ' + tKrw(k.krwPost) + '</span>' : '') : '<span class="muted">환급 불가·미확인</span>') + '</dd>' +
+    '<dt>정가 대비</dt><dd>' + (k.vs !== null ? '<b class="num ' + (k.vs < 0 ? 'neg' : 'pos') + '">' + tPct(k.vs, true) + '</b> <span class="muted small">정가 ¥' + fmt(first(o.list_price_jpy, 0)) + ' 기준 (환급 전 상한)</span>' : '—') + '</dd>' +
+    '<dt>판매 기준</dt><dd>' + esc(BASIS_L[k.basis] || '—') + '</dd>' + (k.hint ? '<dt>할인 적용 시</dt><dd>' + esc(k.hint) + '</dd>' : '') + '</dl>' +
+    '<p class="muted xs" style="margin:6px 2px 0">' + esc(capRoiNote()) + '과 최소 이익을 남기는 가장 비싼 태그 가격입니다. 쿠폰·게스트카드 할인은 상한에 포함하지 않았고, 환급은 실제 수령 전까지 예상치입니다.</p></div>';
+  return h;
+}
 function pmHtml(pm, x) {
   if (!pm) return '<p class="muted small">' + (x.methodRaw ? esc(x.methodRaw) + ' — ' : '') + '세부 절차가 Purchase_Methods에 없습니다. 현장에서 직원에게 확인하세요.</p>';
   var steps = String(pm.steps || '').split(/\r?\n|\s*→\s*|\s*;\s*|(?:^|\s)\d+[.)]\s+/).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -2196,7 +2568,7 @@ function pmHtml(pm, x) {
   return h;
 }
 function refreshRecViews() {
-  var rl = $('#recList'); if (rl) rl.innerHTML = recListHtml();
+  refreshRecList();
   var pane = $('#detailPane'); if (pane && S.sel.rec) { var st = pane.scrollTop; pane.innerHTML = recDetailPane(); pane.scrollTop = st; }
   if (S.sheet && S.sheet.kind === 'rec') openRec(S.sheet.id, true);
 }
@@ -2232,11 +2604,38 @@ function openRec(id, refreshOnly) {
   if (isDesk() && !refreshOnly) {
     S.sel.rec = id;
     var pane = $('#detailPane'); if (pane) { pane.innerHTML = recDetailPane(); pane.scrollTop = 0; }
-    $$('.rec').forEach(function (el) { el.classList.toggle('selected', el.dataset.pid === id); });
+    $$('.rec, .rec-row').forEach(function (el) { el.classList.toggle('selected', el.dataset.pid === id); });
     return;
   }
   if (refreshOnly && !(S.sheet && S.sheet.kind === 'rec')) return;
   openSheet({ kind: 'rec', id: id, title: c.name, body: recDetail(c) }, refreshOnly);
+}
+function scrollOpts() { return { block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }; }
+/* 모바일·태블릿: 카드를 탭하면 그 자리에서 펼치고, 다른 카드를 펼치면 이전 카드는 접힌다 (한 번에 하나) */
+function toggleCard(pid) {
+  if (isDesk()) { openRec(pid); return; }
+  var prev = S.openCard, opening = prev !== pid;
+  S.openCard = opening ? pid : null;
+  if (prev) { delete S.pick[prev]; redrawProduct(prev); }   // 접히면 사이즈·구매처 선택은 대표값으로 돌아간다
+  if (opening) redrawProduct(pid);
+  var el = $('.rec[data-pid="' + CSS.escape(pid) + '"]');
+  if (!el) return;
+  var head = $('.rc', el); if (head) head.focus({ preventScroll: true });
+  if (opening || el.getBoundingClientRect().top < 0) el.scrollIntoView(scrollOpts());
+}
+/* open one card from elsewhere (평가 기준 -> 상품), also opening its section */
+function focusCard(pid) {
+  var c = M && M.cardById[pid]; if (!c || isDesk()) return;
+  var sec = ACTION[c.act] && ACTION[c.act].sec; if (sec) S.secOpen[sec] = true;
+  S.openCard = pid; renderMain();
+  var el = $('.rec[data-pid="' + CSS.escape(pid) + '"]'); if (el) el.scrollIntoView(scrollOpts());
+}
+function gotoSection(k) {
+  S.secOpen[k] = true;
+  var d = $('details[data-sec="' + k + '"]');
+  if (d) d.open = true; else refreshRecList();
+  var t = $('details[data-sec="' + k + '"], tr[data-sec="' + k + '"]');
+  if (t) t.scrollIntoView(scrollOpts());
 }
 /* from the 매장·동선 tab: open the product detail with that row's size and store selected */
 function openRecForOpp(oppId) {
@@ -2527,7 +2926,8 @@ var ACT_RULE = {
   EXCLUDE: '등급이 제외인 상품', WATCH: '등급 B (관찰)', LOTTERY: '등급 S·A 이면서 추첨·예약 판매',
   SELL_NOW: '등급 S·A · 현재 입찰이 목표가 이상 · 판매 중 확인 또는 매장 재고 확인',
   STORE_HUNT: '등급 S·A · 판매 근거는 있으나 확보 경로 미확인 → 현장 탐색',
-  LIST_WAIT: '등급 S·A · 보수적 예상 기준(입찰이 목표가 미만) · 판매 중 확인 또는 매장 재고 확인'
+  LIST_WAIT: '등급 S·A · 보수적 예상 기준(입찰이 목표가 미만) · 판매 중 확인 또는 매장 재고 확인',
+  HIGH_POTENTIAL: '등급 B · ROI 기준 이상 · 체결·입찰깊이 게이트 통과 · 남은 항목은 현장 확인뿐 (모델·정가·매장·사이즈·재고)'
 };
 function crUpdated() {
   var m = null; Object.keys(M.CR || {}).forEach(function (k) { var t = ts(M.CR[k].updated_at); if (t !== null && (m === null || t > m)) m = t; });
@@ -2620,8 +3020,10 @@ function critDefs() {
   if (g) h += ['S', 'A', 'B', 'EXCLUDE'].map(function (k) { return g.rules_ko && g.rules_ko[k] ? crItem('<span class="grade sm ' + k + '">' + (k === 'EXCLUDE' ? '제외' : k) + '</span><span class="grow small">' + esc(g.rules_ko[k]) + '</span>') : ''; }).join(''); else h += crNa('grade');
   h += '<div class="wb-h">행동 라벨 · 날짜·여행기간과 무관</div>';
   h += Object.keys(ACTION).map(function (k) {
-    return crItem(actBadge(k) + '<b class="grow">' + esc(L[k] || ACTION[k].l) + '</b><span class="chip line">' + ({ rec: '추천', lot: '추첨·예약', watch: '관찰', excl: '숨김' }[ACTION[k].sec]) + ' 구역</span>', esc(ACT_RULE[k] || ''));
+    return crItem(actBadge(k) + '<b class="grow">' + esc(L[k] || ACTION[k].l) + '</b><span class="chip line">' + ({ rec: '추천', hp: '고수익 잠재', lot: '추첨·예약', watch: '관찰', excl: '숨김' }[ACTION[k].sec]) + ' 구역</span>', esc(ACT_RULE[k] || ''));
   }).join('');
+  var hpc = crVal('high_potential');
+  if (hpc && hpc.rules_ko) h += '<div class="note"><b>고수익 잠재 기준</b><ul class="crit-list">' + hpc.rules_ko.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
   h += '<p class="muted xs" style="margin:0">여행 기간은 추첨 수령 가능 여부 표시와 “여행기간 중 구매 가능” 필터에만 쓰이고 행동 라벨에는 쓰이지 않습니다.</p>';
   h += '<div class="wb-h">정가(원가) 분류</div>';
   if (pcd && pcd.definitions_ko) h += Object.keys(pcd.definitions_ko).map(function (k) {
@@ -2846,14 +3248,27 @@ document.addEventListener('click', function (e) {
     case 'reload': load(true); break;
     case 'goto': setTab(a.dataset.tab); break;
     case 'open-rec': openRec(id); break;
+    case 'toggle-card': toggleCard(id); break;
+    case 'open-sheet': openRec(id); break;
+    case 'rec-view': S.recView = a.dataset.v === 'cards' ? 'cards' : 'table'; renderMain(); break;
+    case 'tsort': tableSort(a.dataset.k); break;
+    case 'toggle-sec': S.secOpen[a.dataset.k] = !secIsOpen(a.dataset.k); refreshRecList(); break;
+    case 'goto-sec': gotoSection(a.dataset.k); break;
     case 'open-rec-sheet': openRecForOpp(id); break;
     case 'pick-size': e.stopPropagation(); pickSize(id, a.dataset.o); break;
     case 'pick-store': e.stopPropagation(); pickStore(id, a.dataset.s); break;
     case 'toggle-cmp': e.stopPropagation(); S.cmp[id] = !S.cmp[id]; redrawProduct(id); break;
     case 'open-store': openStore(id); break;
     case 'store-view': S.storeView = a.dataset.v === 'region' ? 'region' : 'rank'; LS.set('storeView', S.storeView); renderMain(); break;
-    case 'crit-open': S.sel.rec = id; setTab('rec'); if (!isDesk()) openRec(id); break;
+    case 'crit-open': S.sel.rec = id; setTab('rec'); if (!isDesk()) focusCard(id); break;
     case 'toggle-filters': S.showFilters = !S.showFilters; renderMain(); break;
+    case 'chip-grade': {
+      var v = a.dataset.v || '';
+      if (v === 'HP') { S.f.grade = ''; S.f.action = 'HIGH_POTENTIAL'; }
+      else { S.f.grade = v; if (S.f.action === 'HIGH_POTENTIAL') S.f.action = ''; }
+      LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, action: S.f.action, trip: S.f.trip, watch: S.f.watch });
+      S.sel.rec = null; renderMain(); break;
+    }
     case 'clear-filters': S.f = { q: '', region: '', category: '', grade: '', action: '', trip: false, watch: false }; LS.set('filters', S.f); renderMain(); break;
     case 'copy-memo': { var g = M.bmap[id]; if (!g) break; var ta = $('#note-' + CSS.escape(id)); copyText(composeNote(g, ta ? ta.value : personalNote(g))); break; }
     case 'reset-check': {
@@ -2867,12 +3282,12 @@ document.addEventListener('keydown', function (e) {
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"][data-act]')) { e.preventDefault(); e.target.click(); }
 });
 document.addEventListener('input', function (e) {
-  if (e.target.id === 'q') { S.f.q = e.target.value; var rl = $('#recList'); if (rl) rl.innerHTML = recListHtml(); return; }
+  if (e.target.id === 'q') { S.f.q = e.target.value; refreshRecList(); return; }
 });
 document.addEventListener('change', function (e) {
   var t = e.target;
-  if (t.dataset.filter) { S.f[t.dataset.filter] = t.type === 'checkbox' ? t.checked : t.value; LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, action: S.f.action, trip: S.f.trip, watch: S.f.watch }); S.sel.rec = null; renderMain(); return; }
-  if (t.hasAttribute('data-sort')) { S.sort = t.value; LS.set('sort2', S.sort); renderMain(); return; }
+  if (t.dataset.filter) { S.f[t.dataset.filter] = t.type === 'checkbox' ? t.checked : t.value; if (t.dataset.filter === 'action' && t.value === 'HIGH_POTENTIAL') S.f.grade = '';   /* chips and 행동 share one state */ LS.set('filters', { region: S.f.region, category: S.f.category, grade: S.f.grade, action: S.f.action, trip: S.f.trip, watch: S.f.watch }); S.sel.rec = null; renderMain(); return; }
+  if (t.hasAttribute('data-sort')) { S.sort = t.value; S.tsort = null; LS.set('sort2', S.sort); renderMain(); return; }
   if (t.dataset.check) {
     var ck = LS.get('check', {}); if (t.checked) ck[t.dataset.check] = 1; else delete ck[t.dataset.check]; LS.set('check', ck);
     var id = (S.sheet && S.sheet.kind === 'store') ? S.sheet.id : S.sel.stores;
@@ -2881,10 +3296,13 @@ document.addEventListener('change', function (e) {
   }
 });
 document.addEventListener('toggle', function (e) {
-  var d = e.target; if (!d.dataset || !d.dataset.openKey) return;
+  var d = e.target; if (!d.dataset) return;
+  if (d.dataset.sec) { S.secOpen[d.dataset.sec] = d.open; return; }   // 추천 섹션 접힘은 메모리에만 둔다
+  if (!d.dataset.openKey) return;
   S.open[d.dataset.openKey] = d.open; LS.set('open', S.open);
 }, true);
 mqDesk.addEventListener ? mqDesk.addEventListener('change', function () { closeSheet(); renderMain(); }) : mqDesk.addListener(function () { closeSheet(); renderMain(); });
+window.addEventListener('resize', syncTopbarH);
 document.addEventListener('visibilitychange', function () { if (!document.hidden && S.fetchedAt && Date.now() - S.fetchedAt > 120000) load(false); });
 setInterval(function () { if (!document.hidden) load(false); }, 300000);
 setInterval(function () {
