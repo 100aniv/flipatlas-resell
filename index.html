@@ -795,6 +795,12 @@ details.section.sec-rec, .section { margin: 8px 0 4px; }
 .bld-stats b { font-size: 14.5px; font-weight: 600; white-space: nowrap; }
 
 details.floor { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); margin-top: 8px; }
+details.pq { margin: 8px 0 4px; }
+.pq-list { list-style: none; margin: 0; padding: 0; }
+.pq-i { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--border); }
+.pq-i:first-child { border-top: 0; }
+.pq-t { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.pq-i .chip { flex: none; }
 details.floor > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 12px; }
 details.floor > summary::-webkit-details-marker { display: none; }
 details.floor > summary .fl { flex: none; min-width: 44px; height: 30px; padding: 0 8px; border-radius: 8px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 14px; display: grid; place-items: center; }
@@ -2381,7 +2387,8 @@ function viewRec() {
   var cats = uniq(M.cards.map(function (c) { return c.category; }));
   var nf = activeFilterCount();
   var tripSet = setting('trip_start') && setting('trip_end');
-  h += '<div id="recSummary">' + recSummaryHtml() + '</div>';   // 상태 바 바로 아래 요약 한 줄
+  h += '<div id="recSummary">' + recSummaryHtml() + '</div>';
+  h += pqSectionHtml();   // 상태 바 바로 아래 요약 한 줄
   h += '<div class="toolbar"><label class="search"><span class="sr">검색</span>' + IC.search + '<input class="input" id="q" type="search" placeholder="상품·브랜드·사이즈·매장 검색" value="' + esc(S.f.q) + '" autocomplete="off" enterkeyhint="search"></label>' +
     '<button class="btn filter-btn" type="button" data-act="toggle-filters" aria-expanded="' + S.showFilters + '" aria-controls="filters">' + IC.filter + '필터' + (nf ? '<span class="count">' + nf + '</span>' : '') + '</button>' + viewToggle() + '</div>';
   h += chipRows();
@@ -2394,6 +2401,36 @@ function viewRec() {
   if (nf) h += '<div class="active-filters">' + activeChips() + '<button class="chip line" type="button" data-act="clear-filters">초기화</button></div>';
   h += '<div class="split"><div id="recList">' + recListHtml() + '</div>' + (isDesk() ? '<aside class="detail-pane" id="detailPane" aria-label="상세">' + recDetailPane() + '</aside>' : '') + '</div>';
   return h;
+}
+/* ---- KREAM 수요 높음 · 일본 가격 조사 중 (Price_Queue). 일본 정가가 없으므로 수익·ROI 계산 없이 KREAM 수요 신호만 보여 준다. ---- */
+var PQ_MAX = 30;
+function pqRows() {
+  return table('Price_Queue').filter(function (r) { return r.product_id !== null && r.product_id !== ''; }).sort(function (a, b) {
+    var x = N(a.queue_rank), y = N(b.queue_rank); return (x === null ? 1e9 : x) - (y === null ? 1e9 : y);
+  });
+}
+function pqItem(r) {
+  var name = r.name_ko || '이름 없음', sig = [];
+  if (N(r.trades_7d) !== null) sig.push('7일 체결 ' + fmt(N(r.trades_7d)) + '건');
+  else if (N(r.trade_count) !== null) sig.push('누적 체결 ' + fmt(N(r.trade_count)) + '건');
+  if (N(r.wish_count) !== null) sig.push('관심 ' + fmt(N(r.wish_count)));
+  if (N(r.kream_ask_krw) !== null) sig.push('KREAM 즉시구매 ₩' + fmt(N(r.kream_ask_krw)));
+  if (N(r.best_bid) !== null) sig.push('구매입찰 ₩' + fmt(N(r.best_bid)));
+  var link = r.kream_url && /^https:\/\//.test(String(r.kream_url)) ? ' <a class="xs" href="' + esc(safeUrl(r.kream_url)) + '" target="_blank" rel="noopener noreferrer">KREAM</a>' : '';
+  return '<li class="pq-i">' + imgTile(r, name, r.brand, 'sm') + '<div class="pq-t"><b class="small">' + esc(name) + '</b>' + link +
+    '<div class="xs muted">' + esc([r.brand, catL(r.category)].filter(function (v) { return v; }).join(' · ')) + '</div>' +
+    '<div class="xs num">' + (sig.length ? esc(sig.join(' · ')) : 'KREAM 수요 정보 없음') + '</div>' +
+    (r.reason_ko ? '<div class="xs muted">' + esc(r.reason_ko) + '</div>' : '') + '</div>' +
+    '<span class="chip info">' + esc(r.state_label_ko || '조사 중') + '</span></li>';
+}
+function pqSectionHtml() {
+  var info = sheetInfo('Price_Queue');
+  if (info.state === 'missing' || info.state === 'unknown') return '';
+  var rows = pqRows(); if (!rows.length) return '';
+  return '<details class="floor pq" data-open-key="pq"' + (S.open.pq ? ' open' : '') + '><summary><b class="small">KREAM 수요 높음 · 일본 가격 조사 중</b><span class="xs muted grow num">' + rows.length + '개</span>' + IC.chev + '</summary>' +
+    '<div class="floor-body"><p class="xs muted" style="margin:8px 0">일본 정가 미확인 — 수익 계산 안 함. KREAM 수요 신호만 표시하며, 가격이 확인되면 추천 계산에 들어옵니다.</p>' +
+    '<ul class="pq-list">' + rows.slice(0, PQ_MAX).map(pqItem).join('') + '</ul>' +
+    (rows.length > PQ_MAX ? '<p class="xs muted" style="margin:8px 0 0">수요 순위 상위 ' + PQ_MAX + '개만 표시합니다 (전체 ' + rows.length + '개).</p>' : '') + '</div></details>';
 }
 function activeChips() {
   var f = S.f, out = [];
