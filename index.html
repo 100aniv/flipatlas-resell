@@ -519,6 +519,11 @@ details.section > summary h2 { font-size: 17px; font-weight: 600; }
 .rc-meta { display: flex; gap: 4px; align-items: baseline; min-width: 0; font-size: 11.5px; font-weight: 400; color: var(--text-3); margin-top: 1px; }
 .rc-meta .bn { flex: 0 1 auto; min-width: 0; }
 .rc-meta .sz { flex: none; white-space: nowrap; }
+.rc-code { font-size: 11px; font-weight: 400; line-height: 1.25; color: var(--text-3); margin-top: 1px; min-width: 0; font-variant-numeric: tabular-nums; }
+.rc-code.na { opacity: .8; }
+.rec-tbl td.c-code { white-space: nowrap; max-width: 160px; font-size: 11.5px; }
+.rec-tbl td.c-code .sub { display: block; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; }
+.rec-tbl th.c-code, .rec-tbl td.c-code { text-align: left; }
 .rc .score { min-width: 0; align-self: center; }
 .rc .score b { font-size: 20px; }
 .rc-chev { width: 14px; height: 14px; align-self: center; color: var(--text-3); transition: transform .15s; }
@@ -1161,6 +1166,13 @@ function $(s, el) { return (el || document).querySelector(s); }
 function $$(s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
 function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 function safeUrl(u) { u = String(u === null || u === undefined ? '' : u).trim(); return /^https?:\/\//i.test(u) ? u : '#'; }  // only http(s) links reach href
+function searchKey(v) { return String(v === null || v === undefined ? '' : v).normalize('NFKC').toLowerCase().replace(/[^0-9a-z぀-ヿ㐀-鿿가-힣]/g, ''); }
+function codeOf(p) { var s = String((p && p.style_code) === null || (p && p.style_code) === undefined ? '' : p.style_code).trim(); return s === '-' ? '' : s; }
+function modelOf(p) { return String((p && p.model_name) === null || (p && p.model_name) === undefined ? '' : p.model_name).trim(); }
+function janOf(p) { var j = String((p && p.jan) === null || (p && p.jan) === undefined ? '' : p.jan).replace(/\D/g, ''); return j.length === 13 ? j : ''; }
+/* card line: "모델명 · 품번" (either part may be missing; nothing at all -> 품번 미확인) */
+function codeLine(p) { var m = modelOf(p), s = codeOf(p); return [m, s || (m ? '품번 미확인' : '')].filter(Boolean).join(' · ') || '품번 미확인'; }
+function jpSearchUrl(q) { return 'https://www.google.co.jp/search?q=' + encodeURIComponent(q); }
 function isNum(v) { return v !== null && v !== undefined && v !== '' && typeof v !== 'boolean' && isFinite(Number(v)); }
 function N(v) { return isNum(v) ? Number(v) : null; }
 function bool(v) { return v === true || /^(true|1|yes|y)$/i.test(String(v === null || v === undefined ? '' : v).trim()); }
@@ -1174,6 +1186,9 @@ function tPct(v, signed) { var n = N(v); return n === null ? '—' : sgn(n, sign
 function cls(n) { n = N(n); return n === null ? 'muted' : n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero'; }
 function hKrw(v, signed) { var n = N(v); return n === null ? DASH : '<span class="num ' + (signed ? cls(n) : '') + '">' + tKrw(n, signed) + '</span>'; }
 function hPct(v, signed) { var n = N(v); return n === null ? DASH : '<span class="num ' + (signed ? cls(n) : '') + '">' + tPct(n, signed) + '</span>'; }
+/** ROI cells (K-5): an ROI that was not computed is the WORD '미산정', never 0%, never a dash placeholder. */
+function tRoi(v, signed) { return N(v) === null ? '미산정' : tPct(v, signed); }
+function hRoi(v, signed) { var n = N(v); return n === null ? '<span class="muted">미산정</span>' : '<span class="num ' + (signed ? cls(n) : '') + '">' + tPct(n, signed) + '</span>'; }
 /** short KRW for tight cells: ≥1만 → "18.2만" */
 function sKrw(v, signed) {
   var n = N(v); if (n === null) return '—';
@@ -1830,7 +1845,8 @@ function build() {
       name: p.name_ko || p.name_en || p.name_ja || pid, brand: p.brand || '', category: p.category || '',
       watch: bool(p.priority_watch) || (repX ? repX.watch : false)
     };
-    c.hay = [c.name, p.name_en, p.name_ja, c.brand, p.style_code, c.category].concat(hay).join(' ').toLowerCase();
+    c.hay = [c.name, p.name_en, p.name_ja, c.brand, p.model_name, p.style_code, p.jan, c.category].concat(hay).join(' ').toLowerCase();
+    c.hayN = [c.name, p.name_ko, p.name_en, p.name_ja, p.model_name, p.style_code, p.jan].map(searchKey).join('|');   // 하이픈·공백·대소문자 무시
     return c;
   });
   var cardById = byKey(cards, 'id');
@@ -2222,7 +2238,7 @@ function storePicker(c, f) {
       var id = String(x.o.store_id || x.id);
       return '<button type="button" class="pk st' + (sold ? ' soldout' : '') + '" data-act="pick-store" data-id="' + esc(c.id) + '" data-s="' + esc(id) + '" aria-pressed="' + (f.x === x) + '">' +
         '<b class="ellip">' + esc(stripSample(x.shopName)) + (i === 0 ? '<i class="tag">최적</i>' : '') + (sold ? '<i class="tag bad">품절</i>' : '') + '</b>' +
-        '<span class="num ellip">' + esc((x.floor ? x.floor + ' · ' : '') + sKrw(x.net, true) + ' · ' + tPct(x.roi)) + '</span>' +
+        '<span class="num ellip">' + esc((x.floor ? x.floor + ' · ' : '') + sKrw(x.net, true) + ' · ' + tRoi(x.roi)) + '</span>' +
         (capShort(x.o) ? '<span class="num ellip mb">' + esc(capShort(x.o)) + '</span>' : '') + '</button>';
     }).join('') + '</div></div>';
 }
@@ -2290,7 +2306,7 @@ function sizeCmpTable(c, f, compact) {
       '<td class="num">' + (z.t7 === null ? '<span class="muted xs">미제공</span>' : z.t7) + ' / ' + (z.t30 === null ? '<span class="muted xs">미제공</span>' : z.t30) + '</td>' +
       (compact ? '' : '<td class="num">' + (z.h === null ? '—' : z.h + '시간 전') + '</td>') +
       '<td class="num">' + sKrw(z.bid) + (z.q !== null ? '<span class="sub">목표가↑ ' + z.q + '건</span>' : '') + '</td>' +
-      '<td>' + hKrw(z.net, true) + '</td><td><b>' + hPct(z.roi, true) + '</b>' + (bx && N(bx.roiPre) !== null ? '<span class="sub num">' + tPct(bx.roiPre, true) + '</span>' : '') + '</td>' +
+      '<td>' + hKrw(z.net, true) + '</td><td><b>' + hRoi(z.roi, true) + '</b>' + (bx && N(bx.roiPre) !== null ? '<span class="sub num">' + tRoi(bx.roiPre, true) + '</span>' : '') + '</td>' +
       (compact ? '' : '<td>' + (sd.conf ? esc(sd.t) + '<span class="sub">' + sd.conf + '</span>' : '<span class="muted xs">예측 불가</span>') + '</td>') +
       '<td class="gcell">' + (fail ? '<span class="neg xs">' + esc(gateTxt(gateList(z.gate))) + '</span>' : '<span class="pos xs">통과</span>') + '</td></tr>';
   }).join('');
@@ -2307,7 +2323,7 @@ function storeCmpTable(c, f) {
       '<td>' + (ev ? esc(ev.l) : '—') + '<span class="sub">' + (ss ? esc(ss.l) : '') + '</span></td>' +
       '<td class="num">' + sKrw(o.cost_post_refund_krw) + '<span class="sub">전 ' + sKrw(o.cost_pre_refund_krw) + '</span></td>' +
       '<td class="num">' + (capInfo(o) ? '<b>¥' + fmt(capInfo(o).pre) + '</b>' + (capInfo(o).post !== null ? '<span class="sub">환급 ¥' + fmt(capInfo(o).post) + '</span>' : '') : '<span class="muted xs">—</span>') + '</td>' +
-      '<td>' + hKrw(x.net, true) + '</td><td><b>' + hPct(x.roi, true) + '</b><span class="sub num">' + tPct(x.roiPre, true) + '</span></td>' +
+      '<td>' + hKrw(x.net, true) + '</td><td><b>' + hRoi(x.roi, true) + '</b><span class="sub num">' + tRoi(x.roiPre, true) + '</span></td>' +
       '<td class="num">' + (N(o.resell_score) === null ? '<span class="muted xs">산출 불가</span>' : esc(scoreTxt({ mid: N(o.resell_score), lo: N(o.resell_score_low), hi: N(o.resell_score_high), cov: N(o.score_coverage) }))) + '</td></tr>';
   }).join('');
   return '<div class="tbl-scroll"><table class="tbl store-tbl"><thead><tr><th>구매처</th><th>근거·재고</th><th>원가<br>환급후</th><th>매입 상한<br>환급 전</th><th>순이익</th><th>ROI<br>환급후<br><span class="muted">환급전</span></th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
@@ -2346,7 +2362,7 @@ function chipRows() {
   return '<div class="chiprows">' + g + t + '</div>';
 }
 function filteredCards(fOverride, noSort) {
-  var f = fOverride || S.f, q = f.q.trim().toLowerCase(), tags = f.tags || [];
+  var f = fOverride || S.f, q = f.q.trim().toLowerCase(), qn = searchKey(q), tags = f.tags || [];
   var list = M.cards.filter(function (c) {
     if (c.grade === 'EXCLUDE') return false;   // H-11: EXCLUDE is hidden (only counted)
     if (f.region && !c.regions[f.region]) return false;
@@ -2355,7 +2371,7 @@ function filteredCards(fOverride, noSort) {
     if (tags.length && !tags.every(function (t) { return cardHasTag(c, t); })) return false;
     if (f.watch && !c.watch) return false;
     if (f.trip && !(c.repX && tripOk(c.repX) === true)) return false;
-    if (q && c.hay.indexOf(q) < 0) return false;
+    if (q && c.hay.indexOf(q) < 0 && !(qn && c.hayN.indexOf(qn) >= 0)) return false;
     return true;
   });
   if (noSort) return list;
@@ -2409,6 +2425,16 @@ function pqRows() {
     var x = N(a.queue_rank), y = N(b.queue_rank); return (x === null ? 1e9 : x) - (y === null ? 1e9 : y);
   });
 }
+/* K-5: an unavailable ROI is shown as a REASON ('ROI 미산정(사유)'), never as a number: no 0 percent, no dash placeholder. Labels = config/price_taxonomy.yaml roi_status (test-enforced). */
+var PQ_ROI_LABEL = {
+  UNAVAILABLE_NO_JP_PRICE: 'ROI 미산정(일본 가격 없음)',
+  UNAVAILABLE_MATCH_PENDING: 'ROI 미산정(매칭 확인 중)',
+  UNAVAILABLE_NO_KREAM_DETAIL: 'ROI 미산정(KREAM 상세 미수집)'
+};
+function pqRoiNote(r) {
+  var k = String(r.roi_status || '');
+  return PQ_ROI_LABEL[k] || (k ? '' : PQ_ROI_LABEL.UNAVAILABLE_NO_JP_PRICE);
+}
 function pqItem(r) {
   var name = r.name_ko || '이름 없음', sig = [];
   if (N(r.trades_7d) !== null) sig.push('7일 체결 ' + fmt(N(r.trades_7d)) + '건');
@@ -2419,7 +2445,8 @@ function pqItem(r) {
   var link = r.kream_url && /^https:\/\//.test(String(r.kream_url)) ? ' <a class="xs" href="' + esc(safeUrl(r.kream_url)) + '" target="_blank" rel="noopener noreferrer">KREAM</a>' : '';
   return '<li class="pq-i">' + imgTile(r, name, r.brand, 'sm') + '<div class="pq-t"><b class="small">' + esc(name) + '</b>' + link +
     '<div class="xs muted">' + esc([r.brand, catL(r.category)].filter(function (v) { return v; }).join(' · ')) + '</div>' +
-    '<div class="xs num">' + (sig.length ? esc(sig.join(' · ')) : 'KREAM 수요 정보 없음') + '</div>' +
+    '<div class="xs num">' + (r.demand_label_ko ? '<span class="chip line">' + esc(r.demand_label_ko) + '</span> ' : '') + (sig.length ? esc(sig.join(' · ')) : 'KREAM 수요 정보 없음') + '</div>' +
+    '<div class="xs muted">' + esc(pqRoiNote(r)) + (r.fail_reason_ko ? ' · ' + esc(r.fail_reason_ko) : '') + '</div>' +
     (r.reason_ko ? '<div class="xs muted">' + esc(r.reason_ko) + '</div>' : '') + '</div>' +
     '<span class="chip info">' + esc(r.state_label_ko || '조사 중') + '</span></li>';
 }
@@ -2505,6 +2532,7 @@ function storeCount(c) {
 var TCOLS = [
   { k: 'grade', l: '등급', cls: 'c-grade', dir: 'asc', v: function (r) { return 'SAB'.indexOf(r.c.grade); } },
   { k: 'name', l: '상품', cls: 'c-name', dir: 'asc', v: function (r) { return r.c.name; } },
+  { k: 'code', l: '모델번호', cls: 'c-code', dir: 'asc', v: function (r) { return codeOf(r.c.p) || null; } },
   { k: 'opt', l: '대표 사이즈', cls: 'c-opt', dir: 'asc', v: function (r) { return r.c.rep ? r.c.rep.opt : null; } },
   { k: 'bv', l: '판정', cls: 'c-act', dir: 'asc', v: function (r) { var i = VERDICT_ORDER.indexOf(r.f.ax.bv); return i < 0 ? null : i; } },
   { k: 'score', l: '점수', cls: 'c-score', dir: 'desc', v: function (r) { return N(r.c.rp.resell_score); } },
@@ -2544,11 +2572,12 @@ function tRow(c, f) {
     ' data-score="' + (N(c.rp.resell_score) === null ? '' : N(c.rp.resell_score)) + '" data-net="' + (net === null ? '' : net) + '" data-roi="' + (f.roi === null ? '' : f.roi) + '">' +
     '<td class="c-grade"><span class="grade sm ' + c.grade + '" aria-label="등급 ' + c.grade + (f.ax.ga ? ' 가정' : '') + '">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + gaMark(f.ax, 'blk') + '</td>' +
     '<td class="c-name"><div class="tn">' + imgTile(c.p, c.name, c.brand, 'sm') + '<div class="tt"><b class="t2"><span class="grade xs gi ' + c.grade + '" aria-hidden="true">' + (c.grade === 'EXCLUDE' ? '제외' : c.grade) + '</span>' + gaMark(f.ax, 'gi') + (c.watch ? '<span class="star" title="우선감시">★</span> ' : '') + esc(c.name) + '</b><span class="sub ellip">' + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ') || '브랜드 미확인') + '<span class="oi"> · 대표 ' + esc(c.rep ? c.rep.opt || '—' : '—') + '</span></span></div></div></td>' +
+    '<td class="c-code" title="' + esc(codeLine(c.p)) + '">' + (codeOf(c.p) ? '<b class="num">' + esc(codeOf(c.p)) + '</b>' : '<span class="muted xs">품번 미확인</span>') + (modelOf(c.p) ? '<span class="sub ellip">' + esc(modelOf(c.p)) + '</span>' : '') + '</td>' +
     '<td class="c-opt">' + esc(c.rep ? c.rep.opt || '—' : '—') + '</td>' +
     '<td class="c-act">' + (buyChip(f.ax) || DASH) + '<span class="tgs">' + methodChips(f.ax) + potChip(f.ax) + '</span></td>' +
     '<td class="c-score num"><b>' + esc(sp.main) + '</b>' + (sp.range ? '<span class="sub">' + esc(sp.range) + '</span>' : '') + '</td>' +
     '<td class="c-net">' + (net === null ? DASH : '<b class="num ' + cls(net) + '">' + tKrw(net, true) + '</b>') + (basis ? '<span class="sub">' + basis + '</span>' : '') + '</td>' +
-    '<td class="c-roi">' + hPct(f.roi, true) + '</td>' +
+    '<td class="c-roi">' + hRoi(f.roi, true) + '</td>' +
     '<td class="c-cap num">' + (k ? '<b>¥' + fmt(k.pre) + '</b>' + (k.post !== null ? '<span class="sub">환급 ¥' + fmt(k.post) + '</span>' : '') : DASH) + '</td>' +
     '<td class="c-t7 num">' + (f.t7 === null ? '<span class="muted xs">미제공</span>' : '<b>' + f.t7 + '</b>' + (f.t30 !== null ? '<span class="sub">30일 ' + f.t30 + '</span>' : '')) + '</td>' +
     '<td class="c-ns num">' + storeCount(c) + '</td></tr>';
@@ -2586,11 +2615,11 @@ function recCard(c) {
   var h = '<article class="card rec g-' + f.grade + (f.ax.pt ? ' hp' : '') + (S.sel.rec === c.id && desk ? ' selected' : '') + (open ? ' open' : '') + '" data-pid="' + esc(c.id) + '">';
   h += '<div class="rc' + (desk ? '' : ' has-chev') + '" data-act="' + (desk ? 'open-rec' : 'toggle-card') + '" data-id="' + esc(c.id) + '" tabindex="0" role="button"' + (desk ? '' : ' aria-expanded="' + open + '"') + ' aria-label="' + esc(c.name + (desk ? ' 상세 보기' : (open ? ' 접기' : ' 펼치기'))) + '">' +
     thumbWrap(c, '', 'sm', f) +
-    '<div class="rc-main"><h3>' + esc(c.name) + '</h3><div class="rc-meta">' + (c.watch ? '<span class="star" title="우선감시">★</span>' : '') + '<span class="bn ellip">' + esc(c.brand || '브랜드 미확인') + '</span><span class="sz">· ' + (f.z === c.rep || !open ? '대표 ' : '선택 ') + esc(f.z.opt || '—') + '</span></div></div>' +
+    '<div class="rc-main"><h3>' + esc(c.name) + '</h3><div class="rc-code ellip' + (codeOf(c.p) ? '' : ' na') + '" title="' + esc('모델명 · 품번: ' + codeLine(c.p)) + '">' + esc(codeLine(c.p)) + '</div><div class="rc-meta">' + (c.watch ? '<span class="star" title="우선감시">★</span>' : '') + '<span class="bn ellip">' + esc(c.brand || '브랜드 미확인') + '</span><span class="sz">· ' + (f.z === c.rep || !open ? '대표 ' : '선택 ') + esc(f.z.opt || '—') + '</span></div></div>' +
     scoreBox(f.score) + (desk ? '' : IC.chev.replace('class="chev"', 'class="chev rc-chev"')) +
     '<div class="rc-chips">' + axisChips(f, 1) +
     mchip('net ' + (net === null ? 'muted' : net < 0 ? 'neg' : 'pos'), '', '<b class="num">' + (net === null ? '순이익 —' : sKrw(net, true)) + '</b>' + (tag && net !== null ? '<em>' + tag + '</em>' : ''), '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + (net === null ? '' : ' · ' + tKrw(net, true))) +
-    mchip('roi', 'ROI', '<b class="num ' + cls(f.roi) + '">' + tPct(f.roi, true) + '</b>', 'ROI · 환급 후' + (f.roiPre !== null ? ' (환급 전 ' + tPct(f.roiPre, true) + ')' : '')) +
+    mchip('roi', 'ROI', '<b class="num ' + cls(f.roi) + '">' + tRoi(f.roi, true) + '</b>', 'ROI · 환급 후' + (f.roiPre !== null ? ' (환급 전 ' + tRoi(f.roiPre, true) + ')' : '')) +
     (x || k ? mchip('cap' + (k ? '' : ' na'), '매입 상한', '<b class="num">' + (k ? '¥' + fmt(k.pre) : '—') + '</b>', k ? '이 금액(태그 가격, 쿠폰·게스트카드 할인 전) 이하로 사야 ' + capRoiNote() + '와 최소 이익이 남습니다' + (k.post !== null ? ' · 면세 환급 시 ¥' + fmt(k.post) : '') : '입찰·보수적 예상가가 없어 상한을 계산하지 않았습니다') : '') +
     demandChip(c, f) +
     '</div></div>';
@@ -2608,8 +2637,8 @@ function recBody(c, f) {
   if (isLot(f.ax) && x) h += lotteryHtml(x, false, true);
   // numbers of the selected (size, store) — all engine values
   var pre = f.hist ? '정가 매입 가정 · ' : '';
-  h += '<div class="profit"><div class="kpi main' + (f.net !== null && f.net < 0 ? ' is-neg' : '') + '"><label>' + pre + '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + '</label><b class="num ' + cls(f.net) + '">' + tKrw(f.net, true) + '</b><span class="roi num ' + cls(f.roi) + '">ROI ' + tPct(f.roi, true) + '</span></div>' +
-    '<div class="kpi secondary"><label>' + pre + 'ROI 환급 전</label><b class="num ' + cls(f.roiPre) + '">' + tPct(f.roiPre, true) + '</b><span class="roi muted">환급 후 ' + tPct(f.roi, true) + '</span></div></div>';
+  h += '<div class="profit"><div class="kpi main' + (f.net !== null && f.net < 0 ? ' is-neg' : '') + '"><label>' + pre + '순이익 · 환급 후' + (f.basis ? ' · ' + BASIS_L[f.basis] : '') + '</label><b class="num ' + cls(f.net) + '">' + tKrw(f.net, true) + '</b><span class="roi num ' + cls(f.roi) + '">ROI ' + tRoi(f.roi, true) + '</span></div>' +
+    '<div class="kpi secondary"><label>' + pre + 'ROI 환급 전</label><b class="num ' + cls(f.roiPre) + '">' + tRoi(f.roiPre, true) + '</b><span class="roi muted">환급 후 ' + tRoi(f.roi, true) + '</span></div></div>';
   h += capBox(o, f.ax.pt) + todoBox(c, f);
   if (f.hist) h += '<p class="note-hist">과거 발매 정가를 참고 원가로 계산한 가정입니다. 현재 정가로 살 수 있다는 뜻이 아니며, 실구매 가능성은 별도로 확인해야 합니다.</p>';
   h += '<div class="figs">' +
@@ -2687,12 +2716,26 @@ function whyBlock(c, f) {
   h += '<p class="snap">' + IC.clock + '<span>' + SNAP_SHORT + (mk.collected_at ? ' · ' + esc(ago(mk.collected_at)) + ' 수집' : '') + '</span></p></div>';
   return h;
 }
+/* 모델명 · 품번 · JAN + copy / Japan search helpers.  Links are plain Google JP searches (no store-specific URLs). */
+function codeBox(c) {
+  var p = c.p, code = codeOf(p), model = modelOf(p), jan = janOf(p), brand = c.brand || '';
+  var key = code || model || p.name_en || c.name, src = { catalog: '카탈로그', official: '공식', jp_offer: '일본 판매처' }[String(p.model_name_src || '')] || '';
+  var h = '<div class="d-sec" id="codeSec"><h4>모델명 · 품번</h4><dl class="kv">' +
+    '<dt>모델명</dt><dd>' + (model ? '<b>' + esc(model) + '</b>' + (src ? ' <span class="muted small">출처 ' + src + '</span>' : '') : '<span class="muted">모델명 미확인</span>') + '</dd>' +
+    '<dt>품번</dt><dd>' + (code ? '<b class="num">' + esc(code) + '</b>' : '<span class="muted">품번 미확인</span>') + '</dd>' +
+    (jan ? '<dt>JAN</dt><dd class="num">' + esc(jan) + '</dd>' : '') + '</dl><div class="actions" style="margin-top:8px">' +
+    (code ? '<button class="btn sm" type="button" data-act="copy-code" data-id="' + esc(c.id) + '">' + IC.copy + '품번 복사</button>' : '') +
+    '<a class="btn sm" href="' + esc(safeUrl(jpSearchUrl([key, brand, '公式'].filter(Boolean).join(' ')))) + '" target="_blank" rel="noopener">일본 공식몰 검색 ' + IC.ext + '</a>' +
+    '<a class="btn sm ghost" href="' + esc(safeUrl(jpSearchUrl([key, brand, '価格'].filter(Boolean).join(' ')))) + '" target="_blank" rel="noopener">일본 포털 검색 ' + IC.ext + '</a></div></div>';
+  return h;
+}
 function recDetail(c) {
   var f = figs(c), x = f.x, o = f.o, z = f.z, mk = f.mk || {}, off = x ? x.off || {} : {}, pm = x ? x.pm : null, sd = f.sd;
   var h = '<div class="d-head">' + thumbWrap(c, 'lg', '', f) + '<div class="grow"><div class="act-row">' + axisChips(f, 99) + '</div><div class="eyebrow">' + (c.watch ? '<span class="star">★</span> 우선감시 · ' : '') + esc([c.brand, catL(c.category)].filter(Boolean).join(' · ')) + '</div><h2>' + esc(c.name) + '</h2>' +
     '<div class="opt small" style="margin-top:4px">선택 <b>' + esc(z.opt || '—') + '</b>' + (z === c.rep ? ' <span class="chip ok">대표 사이즈</span>' : '') + (x ? ' · ' + esc(stripSample(x.shopName)) : '') + '</div></div>' + scoreBox(f.score) + '</div>';
   if (f.ax.bv && f.ax.bvr) h += '<p class="vd-why"><b>' + esc(BUY_VERDICT[f.ax.bv].l) + '</b> · ' + esc(f.ax.bvr) + '</p>';
   h += '<div class="chips" style="margin-top:10px">' + statusChips(c, f) + '</div>';
+  h += codeBox(c);
   h += '<div class="d-sec" id="whySec"><h4>왜 이 순위인가</h4>' + whyBlock(c, f) + '</div>';
   h += '<div class="d-sec" id="sizeSec"><h4>사이즈 비교 · ' + c.sizes.length + '개</h4>' + sizeCmpTable(c, f, false) + '</div>';
   h += '<div class="d-sec" id="storeSec"><h4>구매처 비교 · 사이즈 ' + esc(z.opt || '—') + '</h4>' + storeCmpTable(c, f) + '</div>';
@@ -3447,15 +3490,16 @@ function closeSheet() {
 }
 var toastT = null;
 function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 2600); }
-function copyText(text) {
+function copyText(text, okMsg) {
+  okMsg = okMsg || '메모를 복사했습니다';
   function fallback() {
     var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
     document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
     var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
     document.body.removeChild(ta);
-    if (ok) toast('메모를 복사했습니다'); else openSheet({ kind: 'copy', title: '메모 복사', body: '<p class="small muted">자동 복사가 막혀 있습니다. 아래 내용을 길게 눌러 복사하세요.</p><textarea class="input" rows="12" readonly>' + esc(text) + '</textarea>' });
+    if (ok) toast(okMsg); else openSheet({ kind: 'copy', title: '복사', body: '<p class="small muted">자동 복사가 막혀 있습니다. 아래 내용을 길게 눌러 복사하세요.</p><textarea class="input" rows="12" readonly>' + esc(text) + '</textarea>' });
   }
-  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast('메모를 복사했습니다'); }, fallback);
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
   else fallback();
 }
 
